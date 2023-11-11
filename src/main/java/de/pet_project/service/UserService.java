@@ -1,6 +1,6 @@
 package de.pet_project.service;
 
-import de.pet_project.entity.User;
+import de.pet_project.domain.User;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

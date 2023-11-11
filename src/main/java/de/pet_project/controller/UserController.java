@@ -1,6 +1,6 @@
 package de.pet_project.controller;
 
-import de.pet_project.entity.User;
+import de.pet_project.domain.User;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

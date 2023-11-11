@@ -1,4 +1,4 @@
-package de.pet_project.entity;
+package de.pet_project.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
