@@ -1,6 +1,3 @@
-application.properties
-.gitignore
-
 HELP.md
 .gradle
 build/
