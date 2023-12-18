@@ -6,43 +6,39 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="#1" author="stalker">
+        <createTable tableName="users">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="avatar" type="varchar"/>
+            <column name="nickname" type="varchar(20)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="firstname" type="varchar(20)"/>
+            <column name="lastname" type="varchar(20)"/>
+            <column name="birth_date" type="date"/>
+            <column name="email" type="varchar(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(20)"/>
+            <column name="role" type="varchar(20)"/>
+            <column name="state" type="varchar(20)"/>
+            <column name="created_at" type="timestamp"/>
+        </createTable>
         <createTable tableName="games">
             <column name="game_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="image" type="varchar(100)"/>
-            <column name="title" type="varchar(20)"/>
-            <column name="description" type="varchar(2000)"/>
+            <column name="image" type="varchar"/>
+            <column name="video" type="varchar"/>
+            <column name="title" type="varchar(40)"/>
+            <column name="description" type="varchar"/>
             <column name="genres" type="varchar(20)"/>
-            <column name="map_id" type="int"/>
-            <column name="releaseDate" type="timestamp"/>
+            <column name="release_date" type="date"/>
         </createTable>
-        <createTable tableName="maps">
-            <column name="map_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="image" type="varchar(100)"/>
-            <column name="title" type="varchar(20)"/>
-            <column name="description" type="varchar(2000)"/>
-            <column name="genres" type="varchar(20)"/>
-            <column name="complexity" type="varchar(100)"/>
-            <column name="releaseDate" type="timestamp"/>
-        </createTable>
-        <createTable tableName="sessions">
-            <column name="session_id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="game_id" type="int"/>
-            <column name="startTime" type="timestamp"/>
-            <column name="endTime" type="timestamp"/>
-            <column name="price" type="numeric(10,2)"/>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="games" baseColumnNames="map_id"
-                                 constraintName="fk_games_maps"
-                                 referencedTableName="maps" referencedColumnNames="map_id"/>
-        <addForeignKeyConstraint baseTableName="sessions" baseColumnNames="game_id"
-                                 constraintName="fk_sessions_games"
-                                 referencedTableName="games" referencedColumnNames="game_id"/>
     </changeSet>
 
 </databaseChangeLog>
