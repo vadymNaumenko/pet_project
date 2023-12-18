@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="#1" author="stalker">
+        <createTable tableName="games">
+            <column name="game_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image" type="varchar(100)"/>
+            <column name="title" type="varchar(20)"/>
+            <column name="description" type="varchar(2000)"/>
+            <column name="genres" type="varchar(20)"/>
+            <column name="map_id" type="int"/>
+            <column name="releaseDate" type="timestamp"/>
+        </createTable>
+        <createTable tableName="maps">
+            <column name="map_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image" type="varchar(100)"/>
+            <column name="title" type="varchar(20)"/>
+            <column name="description" type="varchar(2000)"/>
+            <column name="genres" type="varchar(20)"/>
+            <column name="complexity" type="varchar(100)"/>
+            <column name="releaseDate" type="timestamp"/>
+        </createTable>
+        <createTable tableName="sessions">
+            <column name="session_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="game_id" type="int"/>
+            <column name="startTime" type="timestamp"/>
+            <column name="endTime" type="timestamp"/>
+            <column name="price" type="numeric(10,2)"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="games" baseColumnNames="map_id"
+                                 constraintName="fk_games_maps"
+                                 referencedTableName="maps" referencedColumnNames="map_id"/>
+        <addForeignKeyConstraint baseTableName="sessions" baseColumnNames="game_id"
+                                 constraintName="fk_sessions_games"
+                                 referencedTableName="games" referencedColumnNames="game_id"/>
+    </changeSet>
+
+</databaseChangeLog>
