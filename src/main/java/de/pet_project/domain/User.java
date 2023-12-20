@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -53,6 +54,9 @@ public class User {
     private State state;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+   @OneToMany(mappedBy = "user")
+    private List<TicketOrders> orders;
 
     public User(String nickname, String email, String password, State state) {
         this.nickname = nickname;

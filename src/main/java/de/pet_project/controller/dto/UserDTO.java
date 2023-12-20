@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
     private Integer id;
     private String avatar;
     private String nickname;
     private LocalDateTime createdAt;
 
-    public static UserDto getInstance(User user){
-        return new UserDto(user.getId(), user.getAvatar(), user.getNickname(), user.getCreatedAt());
+    public static UserDTO getInstance(User user){
+        return new UserDTO(user.getId(), user.getAvatar(), user.getNickname(), user.getCreatedAt());
     }
 }

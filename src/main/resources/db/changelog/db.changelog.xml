@@ -33,10 +33,12 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="image" type="varchar"/>
-            <column name="video" type="varchar"/>
             <column name="title" type="varchar(40)"/>
             <column name="description" type="varchar"/>
+            <column name="number_of_players" type="int"/>
+            <column name="min_age" type="varchar(10)"/>
             <column name="genres" type="varchar(20)"/>
+            <column name="price" type="numeric(10,2)"/>
             <column name="release_date" type="date"/>
         </createTable>
     </changeSet>
