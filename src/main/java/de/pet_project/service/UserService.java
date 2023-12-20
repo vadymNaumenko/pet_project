@@ -1,6 +1,6 @@
 package de.pet_project.service;
 
-import de.pet_project.domain.dto.UserDto;
+import de.pet_project.controller.dto.UserDTO;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class UserService {
    private final UserRepository userRepository;
 
-    public List<UserDto> findAll() {
+    public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
-                .map(UserDto::getInstance)
+                .map(UserDTO::getInstance)
                 .collect(Collectors.toList());
     }
 }

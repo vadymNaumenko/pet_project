@@ -40,5 +40,24 @@
             <column name="release_date" type="date"/>
         </createTable>
     </changeSet>
-
+    <changeSet id="#2" author="stalker">
+        <dropColumn tableName="games">
+            <column name="video"/>
+        </dropColumn>
+        <createTable tableName="game">
+            <column name="price" type="numeric(10,2)"/>
+            <column name="session" type="varchar(20)"/>
+            <column name="number_of_players" type="varchar(10)"/>
+            <column name="min_age" type="varchar(10)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="#3" author="stalker">
+        <dropTable tableName="game"/>
+        <addColumn tableName="games">
+            <column name="price" type="numeric(10,2)"/>
+            <column name="session" type="varchar(20)"/>
+            <column name="number_of_players" type="varchar(10)"/>
+            <column name="min_age" type="varchar(10)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
