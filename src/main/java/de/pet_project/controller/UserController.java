@@ -1,7 +1,6 @@
 package de.pet_project.controller;
 
 import de.pet_project.domain.User;
-import de.pet_project.domain.dto.UserDto;
 import de.pet_project.repository.UserRepository;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;

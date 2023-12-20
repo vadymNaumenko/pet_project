@@ -11,8 +11,8 @@ values ('https://portal-vr.ru/wp-content/uploads/2023/02/skgev4xstvwl9qdwux96p3-
 
 INSERT INTO users (state,avatar,created_at,"birth_date",nickname,firstname, lastname,phone, role, email, password)
     values  ('CONFIRMED','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU','2004-10-19 10:23:54','1990-01-10','Fishka' ,'Ivan', 'Ivanov','+38096584402', 'ADMIN', 'ivan@gmail.com', '{noop}123'),
-            ('NOT_CONFIRM','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU','2021-01-12 10:23:54','1995-10-19','Stalker' ,'Petr', 'Petrov','+38096384403', 'USER', 'petr@gmail.com', '{noop}123'),
-            ('NOT_CONFIRM','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU','2020-06-5 10:23:54','2001-12-23','hunter' ,'Sveta', 'Svetikova','+38091884404', 'USER', 'sveta@gmail.com', '{noop}123'),
-            ('CONFIRMED','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU','2023-03-25 10:23:54','1984-03-14','kolobok' ,'Vlad', 'Vladikov','+38095674405', 'USER', 'vlad@gmail.com', '{noop}123'),
+            ('NOT_CONFIRM','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4slJmC44juXOVibQ0hnx5KCCpmv9Pbi4jrA&usqp=CAU','2021-01-12 10:23:54','1995-10-19','Stalker' ,'Petr', 'Petrov','+38096384403', 'USER', 'petr@gmail.com', '{noop}123'),
+            ('NOT_CONFIRM','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGTWzonowUOz5cu8HOh6Z2rKOgMO-5hE0Trw&usqp=CAU','2020-06-5 10:23:54','2001-12-23','hunter' ,'Sveta', 'Svetikova','+38091884404', 'USER', 'sveta@gmail.com', '{noop}123'),
+            ('CONFIRMED','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIeBYp5sjm31vMJW2hElma9RFKHVwK2XhQkQ&usqp=CAU','2023-03-25 10:23:54','1984-03-14','kolobok' ,'Vlad', 'Vladikov','+38095674405', 'USER', 'vlad@gmail.com', '{noop}123'),
             ('CONFIRMED','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU','2022-02-24 10:23:54','1984-03-14','nika88' ,'Kate', 'Smith','+38096114467', 'ADMIN', 'kate@gmail.com', '{noop}123');
 

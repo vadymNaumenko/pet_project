@@ -1,6 +1,6 @@
 package de.pet_project.service;
 
-import de.pet_project.domain.dto.UserDto;
+import de.pet_project.controller.dto.UserDto;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

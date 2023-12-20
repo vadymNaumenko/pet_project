@@ -1,7 +1,6 @@
-package de.pet_project.domain.dto;
+package de.pet_project.controller.dto;
 
 import de.pet_project.domain.User;
-import jakarta.persistence.Entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
