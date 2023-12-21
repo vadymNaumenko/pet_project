@@ -29,16 +29,10 @@ public class UserDTO {
 
     public static UserDTO getInstance(User user){
         return new UserDTO(
-                user.getId(), user.getAvatar(), user.getNickname(),
-                user.getFirstname(), user.getLastname(),null, user.getBirthDate(), //todo password null
-                user.getEmail(), user.getPhone(), user.getRole(),user.getState(),user.getCreatedAt()
+                user.getId(), user.getAvatar(), user.getNickname(), //todo should be default avatar
+                user.getFirstname(), user.getLastname(),"******", user.getBirthDate(), //todo password "*******"
+                user.getEmail(), user.getPhone(), user.getRole().name(),user.getState().name(),user.getCreatedAt()
         );
     }
-//    public static User getInstance(UserDTO user){
-//        return new User(
-//                user.getId(), user.getAvatar(), user.getNickname(),
-//                user.getFirstname(), user.getLastname(), user.getBirthDate(),
-//                user.getEmail(), user.getPhone(), user.getRole(),user.getState(),user.getCreatedAt()
-//        );
-//    }
+
 }

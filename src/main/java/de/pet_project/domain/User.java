@@ -25,7 +25,7 @@ public class User {
         DELETED,
         BANNED
     }
-    enum Role{
+   public enum Role{
         ADMIN,
         USER
     }
@@ -58,18 +58,28 @@ public class User {
    @OneToMany(mappedBy = "user")
     private List<TicketOrders> orders;
 
-    public User(String nickname, String email, String password, State state) {
+//    public User(String nickname, String email, String password, State state) {
+//        this.nickname = nickname;
+//        this.email = email;
+//        this.password = password;
+//        this.state = state;
+//    }
+
+    public User(String nickname, String email, String password, State state, LocalDateTime createdAt,Role role) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
         this.state = state;
+        this.createdAt = createdAt;
+        this.role = role;
     }
 
-    public String getRole() {
-        return role.name();
-    }
 
-    public String getState() {
-        return state.name();
-    }
+//    public String getRole() {
+//        return role.name();
+//    }
+//
+//    public String getState() {
+//        return state.name();
+//    }
 }

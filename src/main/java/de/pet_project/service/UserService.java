@@ -2,6 +2,7 @@ package de.pet_project.service;
 
 import de.pet_project.controller.dto.user.UserCreateDTO;
 import de.pet_project.controller.dto.user.UserDTO;
+import de.pet_project.controller.dto.user.UserEditeDTO;
 import de.pet_project.controller.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
@@ -34,6 +35,7 @@ public class UserService {
                 .map(UserDTO::getInstance)
                 .findFirst().orElse(null);
     }
+
     @Transactional
     public UserReadDTO save(UserCreateDTO userCreateDTO) {
         return Optional.of(userCreateDTO)
@@ -44,14 +46,15 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<UserDTO> update(Integer id, UserDTO userUpdateDTO) {
+    public Optional<UserEditeDTO> update(Integer id, UserEditeDTO userUpdateDTO) {
         return userRepository.findById(id)
                 .map(user -> userCreateEditMapper.map(userUpdateDTO, user))
                 .map(userRepository::save)
-                .map(UserDTO::getInstance);
+                .map(UserEditeDTO::getInstance);
 
     }
 
+    @Transactional
     public boolean delete(Integer id) {
         return userRepository.findById(id)
                 .map(user -> {

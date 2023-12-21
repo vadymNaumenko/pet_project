@@ -18,12 +18,4 @@ public class UserCreateDTO {
     private String email;
     private String password;
 
-
-//    public static UserCreateDTO getInstance(User user){
-//        return new UserCreateDTO(
-//                user.getId(), user.getAvatar(), user.getNickname(),
-//                user.getFirstname(), user.getLastname(), user.getBirthDate(),
-//                user.getEmail(), user.getPhone(), user.getRole(),user.getState(),user.getCreatedAt()
-//        );
-//    }
 }

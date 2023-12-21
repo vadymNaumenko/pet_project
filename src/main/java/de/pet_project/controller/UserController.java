@@ -3,6 +3,7 @@ package de.pet_project.controller;
 
 import de.pet_project.controller.dto.user.UserCreateDTO;
 import de.pet_project.controller.dto.user.UserDTO;
+import de.pet_project.controller.dto.user.UserEditeDTO;
 import de.pet_project.controller.dto.user.UserReadDTO;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO update(@PathVariable Integer id, @RequestBody UserDTO userUpdateDTO) {
-        return userService.update(id,userUpdateDTO)
+    public UserEditeDTO update(@PathVariable Integer id, @RequestBody UserEditeDTO userEditeDTO) {
+        return userService.update(id,userEditeDTO)
                 .orElseThrow();
     }
 
