@@ -19,7 +19,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-     enum State {
+     public enum State {
         NOT_CONFIRM,
         CONFIRMED,
         DELETED,
@@ -63,5 +63,13 @@ public class User {
         this.email = email;
         this.password = password;
         this.state = state;
+    }
+
+    public String getRole() {
+        return role.name();
+    }
+
+    public String getState() {
+        return state.name();
     }
 }
