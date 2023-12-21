@@ -14,17 +14,20 @@ public class GameDTO {
     private String title;
     private Double price;
     private Genre genre;
+
     private String numberOfPlayers;
     private String minAge;
     private String description;
     private LocalDate releaseDate;
 
     public static GameDTO getInstance(Game game) {
+
         return new GameDTO(
                 game.getImage(), game.getTitle(),
                 game.getPrice(), game.getGenre(),
                 game.getNumberOfPlayers(), game.getMinAge(),
                 game.getDescription(), game.getReleaseDate()
         );
+
     }
 }

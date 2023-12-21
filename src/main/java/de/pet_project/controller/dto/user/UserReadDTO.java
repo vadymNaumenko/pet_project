@@ -1,5 +1,4 @@
 package de.pet_project.controller.dto.user;
-
 import de.pet_project.domain.User;
 import lombok.*;
 
@@ -14,7 +13,8 @@ public class UserReadDTO {
     private String nickname;
     private LocalDateTime createdAt;
 
-    public static UserReadDTO getInstance(User user){
+    public static UserReadDTO getInstance(User user) {
         return new UserReadDTO(user.getId(), user.getAvatar(), user.getNickname(), user.getCreatedAt());
     }
+
 }

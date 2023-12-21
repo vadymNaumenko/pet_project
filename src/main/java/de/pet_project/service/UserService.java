@@ -21,6 +21,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
 
+
     //todo add page in param
     public List<UserReadDTO> findAll() {
         return userRepository.findAll().stream()

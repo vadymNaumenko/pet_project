@@ -42,5 +42,7 @@
             <column name="release_date" type="date"/>
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
+
+
+

@@ -2,9 +2,10 @@ package de.pet_project.controller;
 
 
 import de.pet_project.controller.dto.user.UserCreateDTO;
-import de.pet_project.controller.dto.user.UserDTO;
 import de.pet_project.controller.dto.user.UserEditeDTO;
 import de.pet_project.controller.dto.user.UserReadDTO;
+import de.pet_project.domain.User;
+import de.pet_project.repository.UserRepository;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
