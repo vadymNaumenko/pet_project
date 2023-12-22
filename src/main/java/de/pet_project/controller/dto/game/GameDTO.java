@@ -10,24 +10,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 public class GameDTO {
+    private Integer id;
     private String image;
     private String title;
     private Double price;
-    private Genre genre;
-
+    private String genre;
+    private String session;
     private String numberOfPlayers;
     private String minAge;
     private String description;
     private LocalDate releaseDate;
 
     public static GameDTO getInstance(Game game) {
-
-        return new GameDTO(
-                game.getImage(), game.getTitle(),
-                game.getPrice(), game.getGenre(),
-                game.getNumberOfPlayers(), game.getMinAge(),
-                game.getDescription(), game.getReleaseDate()
-        );
-
+        return new GameDTO(game.getId(), game.getImage(), game.getTitle(), game.getPrice(), game.getGenre().name(),
+                game.getSession(), game.getNumberOfPlayers(), game.getMinAge(), game.getDescription(),
+                game.getReleaseDate());
     }
 }

@@ -34,11 +34,12 @@
             </column>
             <column name="image" type="varchar"/>
             <column name="title" type="varchar(40)"/>
-            <column name="description" type="varchar"/>
+            <column name="price" type="numeric(10,2)"/>
+            <column name="genre" type="varchar(20)"/>
+            <column name="session" type="varchar(20)"/>
             <column name="number_of_players" type="int"/>
             <column name="min_age" type="varchar(10)"/>
-            <column name="genres" type="varchar(20)"/>
-            <column name="price" type="numeric(10,2)"/>
+            <column name="description" type="varchar"/>
             <column name="release_date" type="date"/>
         </createTable>
     </changeSet>
