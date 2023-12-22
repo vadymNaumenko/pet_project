@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +26,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
+
     private final UserService userService;
 
 
     @GetMapping
     public List<UserReadDTO> getUsers() {
+        userService.findById()
         return userService.findAll();
     }
 
@@ -44,7 +45,7 @@ public class UserController {
         return userService.findById(id);
     }
     @PutMapping("/{id}")
-    public UserEditeDTO update(@PathVariable Integer id, @RequestBody UserEditeDTO userEditeDTO) {
+    public UserEditeDTO update(@PathVariable Integer id, @Validated @RequestBody UserEditeDTO userEditeDTO) {
         return userService.update(id, userEditeDTO)
                 .orElseThrow();
     }
