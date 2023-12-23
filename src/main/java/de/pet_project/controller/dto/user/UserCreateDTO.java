@@ -18,15 +18,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCreateDTO {
-    @NotBlank(message = "nickname должен быть заполнен")
-    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "Некорректный nickname должна быть не меньше 4 символов и не больше 20")
+    @NotBlank(message = "nickname: должен быть заполнен")
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "nickname: Некорректный должна быть не меньше 4 символов и не больше 20")
     private String nickname;
-    @NotBlank(message = "email должен быть заполнен и без пробелов")
-    @Email(message = "Некорректный email")
+    @NotBlank(message = "email: должен быть заполнен и без пробелов")
+    @Email(message = "email: Некорректный")
     private String email;
-    @NotBlank(message = "password должен быть заполнен и без пробелов")
+    @NotBlank(message = "password: должен быть заполнен")
 
-    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я.,:; _?!+=/'\\\\\"*(){}\\[\\]\\-]{8,100}$",message = "password должна быть не меньше 8 символов," +
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я.,:;_?!+=/'\\\\\"*(){}\\[\\]\\-]{8,100}$",message = "password: должна быть не меньше 8 символов," +
                                                                                   " содержать как минимум 1 большую букву," + " одну маленькую букву и  спец. символ либо цифру.")
     private String password;
 
