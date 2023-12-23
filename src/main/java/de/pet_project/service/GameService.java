@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -22,6 +24,9 @@ public class GameService {
     @Autowired
     public GameRepository gameRepository;
 
+    public List<Genre> getAllGenres() {
+        return Arrays.asList(Genre.class.getEnumConstants());
+    }
 
     public Page<GameDTO> findTopTen(Pageable pageable) {
         return new PageImpl<>(gameRepository.findAll(pageable).stream()
@@ -51,20 +56,6 @@ public class GameService {
         return Optional.of(fillAndSave(gameDTO, new Game())).orElseThrow();
     }
 
-    private GameDTO fillAndSave(GameDTO gameDTO, Game game) {
-        game.setImage(gameDTO.getImage());
-        game.setTitle(gameDTO.getTitle());
-        game.setPrice(gameDTO.getPrice());
-        game.setGenre(Genre.valueOf(gameDTO.getGenre()));
-        game.setSession(gameDTO.getSession());
-        game.setNumberOfPlayers(gameDTO.getNumberOfPlayers());
-        game.setMinAge(gameDTO.getMinAge());
-        game.setDescription(gameDTO.getDescription());
-        game.setReleaseDate(gameDTO.getReleaseDate());
-        game = gameRepository.save(game);
-        return GameDTO.getInstance(game);
-    }
-
     @Transactional
     public GameDTO update(GameDTO gameDTO) {
         Validate.notNull(gameDTO.getId(), "Field id can't be null");
@@ -85,6 +76,20 @@ public class GameService {
         }
         log.error("Item from game table not found, gameId={}", gameId);
         return null;
+    }
+
+    private GameDTO fillAndSave(GameDTO gameDTO, Game game) {
+        game.setImage(gameDTO.getImage());
+        game.setTitle(gameDTO.getTitle());
+        game.setPrice(gameDTO.getPrice());
+        game.setGenre(Genre.valueOf(gameDTO.getGenre()));
+        game.setSession(gameDTO.getSession());
+        game.setNumberOfPlayers(gameDTO.getNumberOfPlayers());
+        game.setMinAge(gameDTO.getMinAge());
+        game.setDescription(gameDTO.getDescription());
+        game.setReleaseDate(gameDTO.getReleaseDate());
+        game = gameRepository.save(game);
+        return GameDTO.getInstance(game);
     }
 
 }

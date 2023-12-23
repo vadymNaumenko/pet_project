@@ -2,6 +2,7 @@ package de.pet_project.controller;
 
 import de.pet_project.controller.dto.game.GameDTO;
 import de.pet_project.controller.dto.game.GameShortDTO;
+import de.pet_project.domain.Genre;
 import de.pet_project.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,11 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/games")
 public class GameController {
     @Autowired
     public GameService gameService;
+
+    @GetMapping("/genres/all")
+    public List<Genre> getAllGenres(){
+        return gameService.getAllGenres();
+    }
 
     //TODO create top10
     @GetMapping("/lenta/page{pageNum}/{pageSize}")
@@ -29,12 +37,12 @@ public class GameController {
         return gameService.findAll(pageable);
     }
 
-    @GetMapping("game{id}")
+    @GetMapping("/game/more/game{id}")
     public GameDTO findById(@PathVariable Integer id) {
         return gameService.findById(id);
     }
 
-    @PostMapping("game/createNew")
+    @PostMapping("/game/createNew")
     public GameDTO create(@RequestBody GameDTO gameDTO) {
         return gameService.save(gameDTO);
     }
@@ -47,7 +55,7 @@ public class GameController {
         }
         return ResponseEntity.ok(response);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/game/delete/{id}")
     public ResponseEntity<GameDTO> delete(@PathVariable Integer id) {
         GameDTO response = gameService.delete(id);
         if (response == null) {

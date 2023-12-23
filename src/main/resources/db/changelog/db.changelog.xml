@@ -20,7 +20,7 @@
             <column name="email" type="varchar(50)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="password" type="varchar(50)">
+            <column name="password" type="varchar">
                 <constraints nullable="false"/>
             </column>
             <column name="phone" type="varchar(20)"/>
@@ -37,10 +37,22 @@
             <column name="price" type="numeric(10,2)"/>
             <column name="genre" type="varchar(20)"/>
             <column name="session" type="varchar(20)"/>
-            <column name="number_of_players" type="int"/>
+            <column name="number_of_players" type="varchar(10)"/>
             <column name="min_age" type="varchar(10)"/>
             <column name="description" type="varchar"/>
             <column name="release_date" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="stalker">
+        <createTable tableName="addresses">
+            <column name="address_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="country" type="varchar(20)"/>
+            <column name="city" type="varchar(20)"/>
+            <column name="street" type="varchar(20)"/>
+            <column name="street_number" type="varchar(10)"/>
+            <column name="house_number" type="int"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
