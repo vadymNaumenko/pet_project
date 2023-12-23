@@ -7,17 +7,17 @@ import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,6 +36,18 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> registration(@Validated @RequestBody UserCreateDTO userCreateDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.save(userCreateDTO));
+    }
+
+    @GetMapping(value = "/{id}/avatar")
+    public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
+
+        return userService.findAvatar(id)
+                .map(content -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                        .contentLength(content.length)
+                        .body(content))
+                .orElseGet(ResponseEntity.notFound()::build);
+
     }
 
     @PutMapping("/{id}")

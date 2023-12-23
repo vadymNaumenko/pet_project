@@ -8,20 +8,22 @@ import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
+    private final ImageService imageService;
 
 
     public Page<UserReadDTO> findAll(Pageable pageable) {
@@ -50,9 +52,12 @@ public class UserService {
     @Transactional
     public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
         return userRepository.findById(userUpdateDTO.getId())
-                .map(user -> userCreateEditMapper.map(userUpdateDTO, user))
+                .map(user ->{
+                    uploadImage(userUpdateDTO.getAvatar());
+                   return userCreateEditMapper.map(userUpdateDTO, user);
+                })
                 .map(userRepository::save)
-                .map(UserEditeDTO::getInstance);
+                .map(userCreateEditMapper::UserToUserEditeDTO);
 
     }
     public boolean existsNickname(String nickname){
@@ -67,6 +72,20 @@ public class UserService {
                     userRepository.save(user);
                     return true;
                 }).orElse(false);
+    }
+
+    public Optional<byte[]> findAvatar(Integer id) {
+        return userRepository.findById(id)
+                .map(User::getAvatar)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
+    }
+
+    @SneakyThrows
+    private void uploadImage(MultipartFile image) {
+        if (!image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+        }
     }
 
 //    public Optional<UserDTO> update(Integer id, UserDTO user){

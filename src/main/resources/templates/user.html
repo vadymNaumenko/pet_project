@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+
+</form>
+<form th:action="@{/users/{userId}/update(userId=${1})}" enctype="multipart/form-data" method="post">
+    <!--        asdfasdfasdfaa-->
+    <label for="nickname">Username:
+        <input id="nickname" type="text" name="nickname">
+    </label><br>
+    <label for="avatar">Image:
+        <input id="avatar" type="file" name="avatar">
+    </label><br>
+
+    <button type="submit">Update</button>
+</form>
+<div >
+    <img th:src="@{/api/v1/users/1/avatar}" alt="avatar">
+</div>
+</body>
+</html>
