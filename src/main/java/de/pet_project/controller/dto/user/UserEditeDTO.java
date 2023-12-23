@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserEditeDTO {
     private Integer id;
-    private String avatar;
+    private MultipartFile avatar;
     @NotBlank(message = "nickname должен быть заполнен")
     @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "Некорректный nickname должна быть не меньше 4 символов и не больше 20")
     private String nickname;
@@ -34,12 +35,17 @@ public class UserEditeDTO {
     private String email;
     private String phone;
 
-
-    public static UserEditeDTO getInstance(User user){
-        return new UserEditeDTO(
-                user.getId(), user.getAvatar(), user.getNickname(),
-                user.getFirstname(), user.getLastname(),"******", user.getBirthDate(), //todo password *****
-                user.getEmail(), user.getPhone()
-        );
+    public UserEditeDTO(Integer id, String nickname,
+                        String firstname, String lastname,
+                        String password, LocalDate birthDate,
+                        String email, String phone) {
+        this.id = id;
+        this.nickname = nickname;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+        this.birthDate = birthDate;
+        this.email = email;
+        this.phone = phone;
     }
 }

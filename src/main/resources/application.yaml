@@ -8,3 +8,7 @@ spring:
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+
+#app:
+#  image:
+#    bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images/
