@@ -19,7 +19,6 @@ public class UserDTO {
     private String nickname;
     private String firstname;
     private String lastname;
-    private String password;
     private LocalDate birthDate;
     private String email;
     private String phone;
@@ -30,7 +29,7 @@ public class UserDTO {
     public static UserDTO getInstance(User user){
         return new UserDTO(
                 user.getId(), user.getAvatar(), user.getNickname(), //todo should be default avatar
-                user.getFirstname(), user.getLastname(),"******", user.getBirthDate(), //todo password "*******"
+                user.getFirstname(), user.getLastname(), user.getBirthDate(),
                 user.getEmail(), user.getPhone(), user.getRole().name(),user.getState().name(),user.getCreatedAt()
         );
     }

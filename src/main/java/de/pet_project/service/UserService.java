@@ -47,12 +47,15 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<UserEditeDTO> update(Integer id, UserEditeDTO userUpdateDTO) {
-        return userRepository.findById(id)
+    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
+        return userRepository.findById(userUpdateDTO.getId())
                 .map(user -> userCreateEditMapper.map(userUpdateDTO, user))
                 .map(userRepository::save)
                 .map(UserEditeDTO::getInstance);
 
+    }
+    public boolean existsNickname(String nickname){
+        return userRepository.existsByNickname(nickname);
     }
 
     @Transactional

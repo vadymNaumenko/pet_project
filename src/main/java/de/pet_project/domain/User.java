@@ -58,6 +58,7 @@ public class User {
    @OneToMany(mappedBy = "user")
     private List<TicketOrders> orders;
 
+
 //    public User(String nickname, String email, String password, State state) {
 //        this.nickname = nickname;
 //        this.email = email;
