@@ -5,6 +5,8 @@ import de.pet_project.controller.dto.user.UserEditeDTO;
 import de.pet_project.controller.dto.user.UserReadDTO;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -25,9 +27,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    public List<UserReadDTO> getUsers() {
-        return userService.findAll();
+    @GetMapping()
+    public Page<UserReadDTO> getUsers(Pageable pageable) {
+
+        return userService.findAll(pageable);
     }
 
     @PostMapping

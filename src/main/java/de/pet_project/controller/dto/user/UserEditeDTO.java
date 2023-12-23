@@ -1,6 +1,5 @@
 package de.pet_project.controller.dto.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import de.pet_project.domain.User;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

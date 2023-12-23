@@ -26,7 +26,7 @@ public class UserCreateDTO {
     private String email;
     @NotBlank(message = "password: должен быть заполнен")
 
-    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я.,:;_?!+=/'\\\\\"*(){}\\[\\]\\-]{8,100}$",message = "password: должна быть не меньше 8 символов," +
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я.,:;_?!+=/'\\\\\"*(){}\\[\\]\\-]{8,49}$",message = "password: должна быть не меньше 8 символов," +
                                                                                   " содержать как минимум 1 большую букву," + " одну маленькую букву и  спец. символ либо цифру.")
     private String password;
 
