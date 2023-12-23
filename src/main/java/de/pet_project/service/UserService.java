@@ -8,6 +8,8 @@ import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +24,10 @@ public class UserService {
     private final UserCreateEditMapper userCreateEditMapper;
 
 
-    //todo add page in param
-    public List<UserReadDTO> findAll() {
-        return userRepository.findAll().stream()
-                .map(UserReadDTO::getInstance)
-                .collect(Collectors.toList());
+    public Page<UserReadDTO> findAll(Pageable pageable) {
+
+        return userRepository.findAll(pageable).map(UserReadDTO::getInstance);
+
     }
 
     //todo this method for admin
@@ -47,12 +48,15 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<UserEditeDTO> update(Integer id, UserEditeDTO userUpdateDTO) {
-        return userRepository.findById(id)
+    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
+        return userRepository.findById(userUpdateDTO.getId())
                 .map(user -> userCreateEditMapper.map(userUpdateDTO, user))
                 .map(userRepository::save)
                 .map(UserEditeDTO::getInstance);
 
+    }
+    public boolean existsNickname(String nickname){
+        return userRepository.existsByNickname(nickname);
     }
 
     @Transactional

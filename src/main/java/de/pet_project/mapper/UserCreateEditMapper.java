@@ -29,4 +29,16 @@ public class UserCreateEditMapper implements Mapper<UserCreateDTO, User>{
         toUser.setPhone(userUpdateDTO.getPhone());
         return toUser;
     }
+    public User mapUserDtoToUser(UserDTO userDTO, User toUser){
+        toUser.setAvatar(userDTO.getAvatar());
+        toUser.setEmail(userDTO.getEmail());
+        toUser.setFirstname(userDTO.getFirstname());
+        toUser.setLastname(userDTO.getLastname());
+        toUser.setNickname(userDTO.getNickname());
+        toUser.setBirthDate(userDTO.getBirthDate());
+        toUser.setPhone(userDTO.getPhone());
+        toUser.setState(User.State.valueOf(userDTO.getState().toUpperCase()));
+        toUser.setRole(User.Role.valueOf(userDTO.getRole().toUpperCase()));
+        return toUser;
+    }
 }
