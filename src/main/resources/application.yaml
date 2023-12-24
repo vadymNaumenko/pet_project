@@ -3,12 +3,12 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pet_project
     username: postgres
-    password: ROOT
+    password: root
 #spring.jpa.hibernate.ddl-auto=update
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
 
-#app:
-#  image:
-#    bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images/
+app:
+  image:
+    bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
