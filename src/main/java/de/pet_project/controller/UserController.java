@@ -27,6 +27,11 @@ public class UserController {
 
     private final UserService userService;
 
+    @PostMapping("/admin")
+    public String getAdmin(){
+        return "ADMIN";
+    }
+
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
 

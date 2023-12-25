@@ -4,7 +4,9 @@ import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -36,33 +38,45 @@ public class SecurityConfiguration {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/mvc/test/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/**").permitAll()
-                                .requestMatchers("/admin/**","**/{\\d+}/delete").hasAuthority("ADMIN")
-                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
-                                .anyRequest().authenticated()
+                        auth -> {
+                            auth.requestMatchers("/user", "/api/v1/auth/**", "/mvc/test/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
+                            auth.requestMatchers("/api/v1/users/admin").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.POST, "/api/game/users/**").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/game/users/**").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.PUT, "/api/game/users/**").hasAuthority("ADMIN");
+
+                            auth.requestMatchers(HttpMethod.POST, "/api/address/**").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.DELETE, "/api/address/**").hasAuthority("ADMIN");
+                            auth.requestMatchers(HttpMethod.PUT, "/api/address/**").hasAuthority("ADMIN");
+
+//                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
+                            auth.anyRequest().permitAll();
+                        }
                 )
                 .authenticationProvider(authenticationProvider)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(Customizer.withDefaults())
+
 //                .oauth2Login(config-> config
 //                        .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService())))
                 .build();
     }
 
-    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
-        return userRequest -> {
-            String email = userRequest.getIdToken().getClaims().get("email").toString();
-            //todo create user userService.create
-            UserDetails userDetails = userService.loadUserByUsername(email);
-//            new OidcUserService().loadUser()
-            DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
-            Set<Method> userDetailsMethods = Set.of(UserDetails.class.getMethods());
-            return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(), new Class[]{UserDetails.class, OidcUser.class},
-                    (proxy, method, args) -> userDetailsMethods.contains(method)
-                            ? method.invoke(userDetails, args)
-                            : method.invoke(oidcUser, args));
-        };
-    }
+//    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
+//        return userRequest -> {
+//            String email = userRequest.getIdToken().getClaims().get("email").toString();
+//            //todo create user userService.create
+//            UserDetails userDetails = userService.loadUserByUsername(email);
+////            new OidcUserService().loadUser()
+//            DefaultOidcUser oidcUser = new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
+//            Set<Method> userDetailsMethods = Set.of(UserDetails.class.getMethods());
+//            return (OidcUser) Proxy.newProxyInstance(SecurityConfiguration.class.getClassLoader(), new Class[]{UserDetails.class, OidcUser.class},
+//                    (proxy, method, args) -> userDetailsMethods.contains(method)
+//                            ? method.invoke(userDetails, args)
+//                            : method.invoke(oidcUser, args));
+//        };
+//    }
 
 }
