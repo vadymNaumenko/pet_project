@@ -30,6 +30,7 @@ public class AuthenticationService {
         var user = User.builder()
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
                 .role(de.pet_project.domain.User.Role.USER)
                 .state(de.pet_project.domain.User.State.NOT_CONFIRM)
                 .build();

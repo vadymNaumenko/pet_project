@@ -33,10 +33,10 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
-    @PostMapping
-    public ResponseEntity<?> registration(@Validated @RequestBody UserCreateDTO userCreateDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userCreateDTO));
-    }
+//    @PostMapping
+//    public ResponseEntity<?> registration(@Validated @RequestBody UserCreateDTO userCreateDTO) {
+//        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userCreateDTO));
+//    }
 
     @GetMapping(value = "/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
@@ -71,7 +71,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handlerValidationExceptions(MethodArgumentNotValidException ex) {
-
 
         Map<String, String> errors = new HashMap<>();
 

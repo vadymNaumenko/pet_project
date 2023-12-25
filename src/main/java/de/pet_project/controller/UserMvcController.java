@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/mvc")
 public class UserMvcController {
 
     private final UserService userService;
@@ -34,7 +34,7 @@ public class UserMvcController {
 
         return userService.findAll(pageable);
     }
-    @GetMapping("/update")
+    @GetMapping("/test")
     public String update() {
         System.out.println();
 //        if (userService.existsNickname(userEditeDTO.getNickname())){

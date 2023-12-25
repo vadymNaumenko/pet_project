@@ -11,16 +11,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
     private final ImageService imageService;
@@ -60,7 +64,7 @@ public class UserService {
                 .map(userCreateEditMapper::UserToUserEditeDTO);
 
     }
-    public boolean existsNickname(String nickname){
+    public boolean existsNickname(String nickname){ // todo mast be add check nickname
         return userRepository.existsByNickname(nickname);
     }
 
@@ -86,6 +90,17 @@ public class UserService {
         if (!image.isEmpty()) {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+        return userRepository.findByEmail(email)
+                .map(user -> new org.springframework.security.core.userdetails.User(
+                        user.getUsername(),
+                        user.getPassword(),
+                        Collections.singleton(user.getRole())
+                )).orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
     }
 
 //    public Optional<UserDTO> update(Integer id, UserDTO user){

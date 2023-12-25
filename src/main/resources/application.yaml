@@ -12,3 +12,19 @@ spring:
 app:
   image:
     bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: http://localhost:8080/login/oauth2/code/google
+
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
+      client-secret: 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
+    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html

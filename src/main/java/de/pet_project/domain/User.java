@@ -28,9 +28,14 @@ public class User implements UserDetails {
         BANNED
     }
 
-    public enum Role {
+    public enum Role implements GrantedAuthority{
         ADMIN,
-        USER
+        USER;
+
+        @Override
+        public String getAuthority() {
+            return name();
+        }
     }
 
     @Id
