@@ -24,6 +24,7 @@ public class AuthenticationController {
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
+        // todo if email not found make redirect and find by nickname
         return ResponseEntity.ok(service.authenticate(request));
 
     }

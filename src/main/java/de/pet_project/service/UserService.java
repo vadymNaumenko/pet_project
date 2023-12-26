@@ -24,7 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService /*implements UserDetailsService*/ {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
     private final ImageService imageService;
@@ -92,16 +92,16 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        return userRepository.findByNickname(email) // todo nickname
-                .map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        Collections.singleton(user.getRole())
-                )).orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + email));
-    }
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//
+//        return userRepository.findByEmail(email) // todo nickname
+//                .map(user -> new org.springframework.security.core.userdetails.User(
+//                        user.getUsername(),
+//                        user.getPassword(),
+//                        Collections.singleton(user.getRole())
+//                )).orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user with email: " + email));
+//    }
 
 //    public Optional<UserDTO> update(Integer id, UserDTO user){
 //        return userRepository.findById(id)

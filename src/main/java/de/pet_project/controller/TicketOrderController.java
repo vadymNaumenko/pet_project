@@ -26,7 +26,7 @@ public class TicketOrderController {
     @PostMapping("/game/{id}")
     public TicketReadDTO create(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Integer id
                                   ){
-
+        System.out.println();
          //todo add gmail message for user
          return ticketOrdersService.save(userDetails,id);
     }
@@ -38,6 +38,6 @@ public class TicketOrderController {
     }
     @DeleteMapping("/{id}")
     public TicketReadDTO cansel(@PathVariable Integer id){
-        return ticketOrdersService.cansel(id);
+        return ticketOrdersService.cancel(id);
     }
 }

@@ -51,7 +51,7 @@ public class SecurityConfiguration {
                             auth.requestMatchers(HttpMethod.PUT, "/api/address/**").hasAuthority("ADMIN");
 
 //                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
-                            auth.anyRequest().permitAll();
+                            auth.anyRequest().authenticated();
                         }
                 )
                 .authenticationProvider(authenticationProvider)
