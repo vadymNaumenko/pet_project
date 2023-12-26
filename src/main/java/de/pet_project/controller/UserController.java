@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,21 +27,10 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/admin")
-    public String getAdmin(){
-        return "ADMIN";
-    }
-
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
-
         return userService.findAll(pageable);
     }
-
-//    @PostMapping
-//    public ResponseEntity<?> registration(@Validated @RequestBody UserCreateDTO userCreateDTO) {
-//        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userCreateDTO));
-//    }
 
     @GetMapping(value = "/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
@@ -55,13 +45,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated @RequestBody UserEditeDTO userEditeDTO /*,MethodArgumentNotValidException ex */) {
+    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO /*,MethodArgumentNotValidException ex */) {
 
 //        if (userService.existsNickname(userEditeDTO.getNickname())){
 //        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
 //        }
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(userEditeDTO));
+        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
+        if (user.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        }
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userEditeDTO);
     }
 
     @DeleteMapping("/{id}")

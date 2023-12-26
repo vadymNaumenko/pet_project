@@ -18,12 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class TicketOrdersService {
+public class TicketOrderService {
 
     private final TicketDtoConvert ticketDtoConvert;
     private final UserRepository userRepository;
@@ -33,7 +34,13 @@ public class TicketOrdersService {
 
     public Page<TicketReadDTO> findByPage(Pageable pageable) {
         log.info("Executing findByPage method");
-        return ticketOrdersRepository.findAll(pageable).map(ticketDtoConvert::convertToTicketReadDTO);
+        Page<TicketReadDTO> ticketReadDTOS = Page.empty();
+        Page<TicketOrder> result = ticketOrdersRepository.findAll(pageable);
+        if (!result.isEmpty()) {
+           ticketReadDTOS = result.map(TicketReadDTO::getInstance); //todo has error with add user
+         return ticketReadDTOS;
+        }
+        return ticketReadDTOS;
     }
 
     @Transactional
@@ -45,14 +52,22 @@ public class TicketOrdersService {
         ticketOrder.setState(TicketOrder.OrderState.NEW);
         ticketOrder.setCreateAt(LocalDateTime.now());
         ticketOrder.setPrice(game.getPrice());
-        ticketOrder.setUser(userRepository.findByNickname(userDetails.getUsername())
+        ticketOrder.setGame(game);
+        ticketOrder.setUser(userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow());
 
         TicketOrder save = ticketOrdersRepository.save(ticketOrder);
         log.info("TicketOrder saved with id: {}", save.getId());
 
-//        return ticketDtoConvert.convertToTicketReadDTO(save);
-        return new TicketReadDTO();
+         TicketReadDTO ticketReadDTO = new TicketReadDTO();
+         ticketReadDTO.setId(save.getId());
+         ticketReadDTO.setGame(save.getGame());
+         ticketReadDTO.setState(save.getState().name());
+         ticketReadDTO.setCreateAt(save.getCreateAt());
+         ticketReadDTO.setNumber("00024gda"); // todo mast add random generation
+         ticketReadDTO.setPrice(save.getPrice());
+//         ticketReadDTO.setUser(ticketOrder.getUser()); // todo has error with add user
+        return ticketReadDTO;
     }
 
     public TicketReadDTO findById(Integer id) {
@@ -66,7 +81,7 @@ public class TicketOrdersService {
     }
 
     @Transactional
-    public TicketReadDTO update(TicketUpdateDTO ticketOrdersUpdateDTO) {
+    public TicketReadDTO update(TicketUpdateDTO ticketOrdersUpdateDTO) { //todo this method is bead ' delete'
         log.info("Executing update method");
 
         TicketOrder hasTicket = ticketOrdersRepository.findById(ticketOrdersUpdateDTO.getId()).orElseThrow();
@@ -78,17 +93,27 @@ public class TicketOrdersService {
 
         return ticketDtoConvert.convertToTicketReadDTO(ticketOrder);
     }
-
+    @Transactional
     public TicketReadDTO cancel(Integer id) {
         log.info("Executing cancel method");
 
+        TicketReadDTO ticketReadDTO = new TicketReadDTO();
         Optional<TicketOrder> ticketOrder = ticketOrdersRepository.findById(id);
         ticketOrder.ifPresent(t -> {
+
             t.setState(TicketOrder.OrderState.CANCELED);
+            ticketReadDTO.setId(t.getId());
+            ticketReadDTO.setGame(t.getGame());
+            ticketReadDTO.setState(t.getState().name());
+            ticketReadDTO.setCreateAt(t.getCreateAt());
+            ticketReadDTO.setNumber("00024gda");
+            ticketReadDTO.setPrice(t.getPrice());
+//         ticketReadDTO.setUser(t.getUser()); // todo has error with add user
+
             ticketOrdersRepository.save(t);
             log.info("TicketOrder canceled with id: {}", t.getId());
         });
 
-        return ticketDtoConvert.convertToTicketReadDTO(ticketOrder.orElseThrow());
+        return ticketReadDTO;
     }
 }
