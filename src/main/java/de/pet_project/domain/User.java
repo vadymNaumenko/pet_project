@@ -28,7 +28,7 @@ public class User implements UserDetails {
         BANNED
     }
 
-    public enum Role implements GrantedAuthority{
+    public enum Role implements GrantedAuthority {
         ADMIN,
         USER;
 
@@ -63,7 +63,7 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "user")
-    private List<TicketOrders> orders;
+    private List<TicketOrder> orders;
 
     public User(String nickname, String email, String password, State state, LocalDateTime createdAt, Role role) {
         this.nickname = nickname;
@@ -73,6 +73,7 @@ public class User implements UserDetails {
         this.createdAt = createdAt;
         this.role = role;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

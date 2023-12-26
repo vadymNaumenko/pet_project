@@ -1,7 +1,7 @@
 package de.pet_project.controller;
 
-import de.pet_project.controller.dto.address.AddressDTO;
-import de.pet_project.controller.dto.address.CityDTO;
+import de.pet_project.dto.address.AddressDTO;
+import de.pet_project.dto.address.CityDTO;
 import de.pet_project.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

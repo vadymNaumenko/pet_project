@@ -22,12 +22,12 @@ public class ApplicationConfig {
 
     private final UserRepository userRepository;
 
-    @Bean
-    UserDetailsManager inMemoryUserDetailsManager() {
-        var user1 = User.withUsername("user").password("{noop}user").roles("USER").build();
-        var user2 = User.withUsername("admin").password("{noop}admin").roles("USER", "ADMIN").build();
-        return new InMemoryUserDetailsManager(user1, user2);
-    }
+//    @Bean
+//    UserDetailsManager inMemoryUserDetailsManager() {
+//        var user1 = User.withUsername("user").password("{noop}user").roles("USER").build();
+//        var user2 = User.withUsername("admin").password("{noop}admin").roles("USER", "ADMIN").build();
+//        return new InMemoryUserDetailsManager(user1, user2);
+//    }
 
     @Bean
     public UserDetailsService userDetailsService() {

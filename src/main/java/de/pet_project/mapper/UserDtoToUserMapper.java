@@ -1,6 +1,6 @@
 package de.pet_project.mapper;
 
-import de.pet_project.controller.dto.user.UserDTO;
+import de.pet_project.dto.user.UserDTO;
 import de.pet_project.domain.User;
 import org.springframework.stereotype.Component;
 

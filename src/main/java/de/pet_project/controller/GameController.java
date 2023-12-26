@@ -1,7 +1,7 @@
 package de.pet_project.controller;
 
-import de.pet_project.controller.dto.game.GameDTO;
-import de.pet_project.controller.dto.game.GameShortDTO;
+import de.pet_project.dto.game.GameDTO;
+import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.Genre;
 import de.pet_project.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package de.pet_project.service;
 
-import de.pet_project.controller.dto.user.UserCreateDTO;
-import de.pet_project.controller.dto.user.UserDTO;
-import de.pet_project.controller.dto.user.UserEditeDTO;
-import de.pet_project.controller.dto.user.UserReadDTO;
+import de.pet_project.dto.user.UserCreateDTO;
+import de.pet_project.dto.user.UserDTO;
+import de.pet_project.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
 import de.pet_project.repository.UserRepository;
@@ -95,7 +95,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        return userRepository.findByEmail(email)
+        return userRepository.findByNickname(email) // todo nickname
                 .map(user -> new org.springframework.security.core.userdetails.User(
                         user.getUsername(),
                         user.getPassword(),

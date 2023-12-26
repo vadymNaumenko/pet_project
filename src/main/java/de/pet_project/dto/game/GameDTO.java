@@ -1,7 +1,6 @@
-package de.pet_project.controller.dto.game;
+package de.pet_project.dto.game;
 
 import de.pet_project.domain.Game;
-import de.pet_project.domain.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ticket_orders")
-public class TicketOrders {
-    enum OrderState {
-        NEW, SENT, PAID,
-        DELIVERED, CANCELED
+public class TicketOrder {
+    public enum OrderState {
+        NEW, PAID,
+        CANCELED
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
-    private Integer id;
+    private Integer id; //todo Long
 
     @ManyToOne
     @JoinColumn(name = "game_id")
@@ -39,7 +39,7 @@ public class TicketOrders {
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
     private OrderState state;
-    @Column(name = "created_at")
+    @Column(name = "create_at")
     private LocalDateTime createAt;
 
 
