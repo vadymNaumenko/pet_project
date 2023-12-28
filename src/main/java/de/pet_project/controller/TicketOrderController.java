@@ -1,7 +1,7 @@
 package de.pet_project.controller;
 
 import de.pet_project.dto.ticket.TicketReadDTO;
-import de.pet_project.dto.ticket.TicketUpdateDTO;
+import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.service.TicketOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,21 +24,33 @@ public class TicketOrderController {
         return ticketOrdersService.findByPage(pageable);
     }
 
-    @PostMapping("/game/{id}")
-    public ResponseEntity<TicketReadDTO> create(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id
-                                  ){
-        System.out.println();
-         //todo add gmail message for user
-//         return ticketOrdersService.save(userDetails,id);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(ticketOrdersService.save(userDetails,id));
+    @GetMapping("/{id}")
+    public TicketReadDTO findById(@PathVariable Integer id){
+      return ticketOrdersService.findById(id)
+              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+    @GetMapping("/{id}/user")
+    public UserReadDTO findUserByTicket(@PathVariable Integer id){
+       return ticketOrdersService.findUserByTicketId(id);
     }
 
-    @PutMapping()
-    public ResponseEntity <TicketReadDTO> update(@RequestBody TicketUpdateDTO ticketOrdersUpdateDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(ticketOrdersService.update(ticketOrdersUpdateDTO));
+    @PostMapping("/game/{id}")
+    public ResponseEntity<TicketReadDTO> create(@AuthenticationPrincipal UserDetails userDetails,
+                                                @PathVariable Integer id ){
+         //todo add gmail message for user
+//         return ticketOrdersService.save(userDetails,id);
+        return  ResponseEntity.status(HttpStatus.CREATED)
+                .body(ticketOrdersService.save(userDetails.getUsername(),id));
     }
+    //todo add method update ticket
+    @GetMapping("/user/{id}")
+    public Page<TicketReadDTO> findAllByUser(@PathVariable Integer id, Pageable pageable){
+        return ticketOrdersService.findAllByUser(id, pageable);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<TicketReadDTO> cansel(@PathVariable Integer id){
         return ResponseEntity.status(HttpStatus.OK).body(ticketOrdersService.cancel(id));
     }
+
 }

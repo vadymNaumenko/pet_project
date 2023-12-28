@@ -3,11 +3,13 @@ package de.pet_project.dto.game;
 import de.pet_project.domain.Game;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @Data
+@NoArgsConstructor
 public class GameDTO {
     private Integer id;
     private String image;

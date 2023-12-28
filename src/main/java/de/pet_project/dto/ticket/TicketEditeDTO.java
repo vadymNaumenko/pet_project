@@ -1,6 +1,7 @@
 package de.pet_project.dto.ticket;
 
-import de.pet_project.domain.Game;
+import de.pet_project.dto.game.GameDTO;
+import de.pet_project.dto.user.UserDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,10 +10,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketCreateDTO {
-    private Game game;
-    private String number;
+public class TicketEditeDTO {
+    private GameDTO gameDTO;
     private double price;
     private String state;
-    private LocalDateTime createAt;
 }
