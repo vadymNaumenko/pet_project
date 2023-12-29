@@ -10,9 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -21,8 +18,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-//    private final ConfirmationCodeRepository confirmationCodeRepository;
-//    private final TemplateMailSender templateMailSender;
 
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
@@ -31,21 +26,11 @@ public class AuthenticationService {
                 .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .role(de.pet_project.domain.User.Role.USER)
-                .state(de.pet_project.domain.User.State.NOT_CONFIRM)
+                .role(User.Role.USER)
+                .state(User.State.CONFIRMED) // todo mast be  NOT_CONFIRM
                 .build();
         userRepository.save(user);
-//// mail sender
-//        String codValid = UUID.randomUUID().toString();
-//        ConfirmationCode code = ConfirmationCode.builder()
-//                .code(codValid)
-//                .user(user)
-//                .expiredDateTime(LocalDateTime.now().plusMinutes(15))
-//                .build();
-//
-//        confirmationCodeRepository.save(code);
-//        templateMailSender.sendMail(user.getUsername(), "Registration","http://localhost:8080/"+ codValid); //todo mast be add baseUrl/+codValid
-// end
+
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()

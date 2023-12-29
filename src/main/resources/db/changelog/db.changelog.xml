@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="#1" author="stalker">
+    <changeSet id="#1" author="punisher">
         <createTable tableName="users">
             <column name="user_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -33,17 +33,17 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="image" type="varchar"/>
-            <column name="title" type="varchar(40)"/>
+            <column name="title" type="varchar"/>
             <column name="price" type="numeric(10,2)"/>
             <column name="genre" type="varchar(20)"/>
             <column name="session" type="varchar(20)"/>
-            <column name="number_of_players" type="varchar(10)"/>
-            <column name="min_age" type="varchar(10)"/>
+            <column name="number_of_players" type="varchar(20)"/>
+            <column name="min_age" type="varchar(20)"/>
             <column name="description" type="varchar"/>
             <column name="release_date" type="date"/>
         </createTable>
     </changeSet>
-    <changeSet id="2" author="stalker">
+    <changeSet id="2" author="punisher">
         <createTable tableName="addresses">
             <column name="address_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -54,6 +54,11 @@
             <column name="street_number" type="varchar(10)"/>
             <column name="house_number" type="int"/>
         </createTable>
+    </changeSet>
+    <changeSet id="#3" author="punisher">
+        <addColumn tableName="games">
+            <column name="state" type="varchar(10)"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>
 

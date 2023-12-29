@@ -1,7 +1,7 @@
 package de.pet_project.convertor;
 
 import de.pet_project.domain.Game;
-import de.pet_project.domain.Genre;
+import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.dto.game.GameDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

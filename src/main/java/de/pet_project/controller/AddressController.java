@@ -3,17 +3,17 @@ package de.pet_project.controller;
 import de.pet_project.dto.address.AddressDTO;
 import de.pet_project.dto.address.CityDTO;
 import de.pet_project.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
-    @Autowired
-    public AddressService addressService;
+    public final AddressService addressService;
 
     @GetMapping("/all/addresses")
     public List<AddressDTO> findAll() {

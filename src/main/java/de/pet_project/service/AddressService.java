@@ -5,8 +5,8 @@ import de.pet_project.dto.address.CityDTO;
 import de.pet_project.domain.Address;
 import de.pet_project.repository.AddressRepository;
 import liquibase.util.Validate;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +15,9 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AddressService {
-    @Autowired
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
 
     public List<AddressDTO> findAll() {
         return addressRepository.findAll().stream().map(AddressDTO::getInstance).toList();
