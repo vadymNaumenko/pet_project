@@ -1,9 +1,9 @@
 package de.pet_project.domain;
 
 import de.pet_project.domain.enums.game.MinAge;
-import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.vr_event.quest.Genre;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,11 +11,11 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@Table(name = "games")
-public class Game {
+@Table(name = "quests")
+public class Quest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "game_id")
+    @Column(name = "quest_id")
     private Integer id;
 
     private String image;
@@ -38,6 +38,4 @@ public class Game {
 
     private String description;
     private LocalDate releaseDate;
-
-
 }

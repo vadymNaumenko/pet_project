@@ -3,29 +3,73 @@ package de.pet_project.service;
 import de.pet_project.controller.dto.game.GameDTO;
 import de.pet_project.controller.dto.game.GameShortDTO;
 import de.pet_project.domain.Game;
-import de.pet_project.domain.Genre;
+import de.pet_project.domain.enums.game.Genre;
+import de.pet_project.domain.enums.game.MinAge;
+import de.pet_project.domain.enums.game.NumberOfPlayers;
+import de.pet_project.domain.enums.game.State;
 import de.pet_project.repository.GameRepository;
 import liquibase.util.Validate;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GameService {
-    @Autowired
-    public GameRepository gameRepository;
+    public final GameRepository gameRepository;
+    public final ImageService imageService;
 
-    public List<Genre> getAllGenres() {
-        return Arrays.asList(Genre.class.getEnumConstants());
+    public List<String> findAllGenre() {
+        return Arrays.stream(Genre.class.getEnumConstants()).map(genre -> genre.genre).toList();
+    }
+
+    public Page<GameShortDTO> findAllByGenre(Genre genre, Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAllByGenre(genre, pageable).stream()
+                .map(GameShortDTO::getInstance).toList());
+    }
+
+    public List<String> findAllState() {
+        return Arrays.stream(State.class.getEnumConstants()).map(state -> state.state).toList();
+    }
+
+    public String findState(Integer id) {
+        return gameRepository.findState(id).state;
+    }
+
+    public Page<GameShortDTO> findAllByState(State state, Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAllByState(state, pageable).stream()
+                .map(GameShortDTO::getInstance).toList());
+    }
+
+    public List<String> findAllNumberOfPlayers() {
+        return Arrays.stream(NumberOfPlayers.class.getEnumConstants()).map(number -> number.number).toList();
+    }
+
+    public Page<GameShortDTO> findAllByNumberOfPlayers(NumberOfPlayers numberOfPlayers, Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAllByNumberOfPlayers(numberOfPlayers, pageable)
+                .stream().map(GameShortDTO::getInstance).toList());
+    }
+
+    public List<String> findAllMinAge() {
+        return Arrays.stream(MinAge.class.getEnumConstants()).map(minAge -> minAge.age).toList();
+    }
+
+    public Page<GameShortDTO> findAllByMinAge(MinAge minAge, Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAllByMinAge(minAge, pageable)
+                .stream().map(GameShortDTO::getInstance).toList());
     }
 
     public Page<GameDTO> findTopTen(Pageable pageable) {
@@ -48,6 +92,13 @@ public class GameService {
         }
         log.error("Item from game table not found, gameId={}", gameId);
         return null;
+    }
+
+    public Optional<byte[]> findImage(Integer id) {
+        return gameRepository.findById(id)
+                .map(Game::getImage)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
     }
 
     @Transactional
@@ -78,18 +129,35 @@ public class GameService {
         return null;
     }
 
+    @Transactional
+    public void deleteAll() {
+        gameRepository.deleteAll();
+    }
+
     private GameDTO fillAndSave(GameDTO gameDTO, Game game) {
-        game.setImage(gameDTO.getImage());
+        Game finalGame = game;
+        Optional.ofNullable(gameDTO.getImage())
+                .filter(Predicate.not(MultipartFile::isEmpty))
+                .ifPresent(image -> finalGame.setImage(image.getOriginalFilename()));//toString
+        game.setImage(finalGame.getImage());
         game.setTitle(gameDTO.getTitle());
         game.setPrice(gameDTO.getPrice());
         game.setGenre(Genre.valueOf(gameDTO.getGenre()));
+        game.setState(State.valueOf(gameDTO.getState()));
         game.setSession(gameDTO.getSession());
-        game.setNumberOfPlayers(gameDTO.getNumberOfPlayers());
-        game.setMinAge(gameDTO.getMinAge());
+        game.setNumberOfPlayers(NumberOfPlayers.valueOf(gameDTO.getNumberOfPlayers()));
+        game.setMinAge(MinAge.valueOf(gameDTO.getMinAge()));
         game.setDescription(gameDTO.getDescription());
         game.setReleaseDate(gameDTO.getReleaseDate());
         game = gameRepository.save(game);
+        uploadImage(gameDTO.getImage());
         return GameDTO.getInstance(game);
     }
 
+    @SneakyThrows
+    private void uploadImage(MultipartFile image) {
+        if (!image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+        }
+    }
 }
