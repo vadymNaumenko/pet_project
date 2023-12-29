@@ -1,7 +1,10 @@
 package de.pet_project.controller.auth;
 
 import de.pet_project.config.JwtService;
+import de.pet_project.domain.ConfirmationCode;
 import de.pet_project.domain.User;
+import de.pet_project.mail.TemplateMailSender;
+import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -18,21 +24,33 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
+    private final ConfirmationCodeRepository confirmationCodeRepository;
+    private final TemplateMailSender templateMailSender;
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
 
         var user = User.builder()
-                .nickname(request.getNickname())
+//                .nickname(request.getNickname())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .role(User.Role.USER)
-                .state(User.State.CONFIRMED) // todo mast be  NOT_CONFIRM
+                .state(User.State.NOT_CONFIRM)
                 .build();
         userRepository.save(user);
 
-        var jwtToken = jwtService.generateToken(user);
 
+// mail sender
+        String codValid = UUID.randomUUID().toString();
+        ConfirmationCode code = ConfirmationCode.builder()
+                .code(codValid)
+                .user(user)
+                .expiredDateTime(LocalDateTime.now().plusMinutes(15))
+                .build();
+
+        confirmationCodeRepository.save(code);
+        templateMailSender.sendMail(user.getUsername(), "Registration","http://localhost:8080/"+ codValid); //todo mast be add baseUrl/+codValid
+// end
+        var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

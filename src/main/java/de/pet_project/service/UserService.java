@@ -1,11 +1,13 @@
 package de.pet_project.service;
 
+import de.pet_project.domain.ConfirmationCode;
 import de.pet_project.dto.user.UserCreateDTO;
 import de.pet_project.dto.user.UserDTO;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
+import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -28,6 +31,7 @@ public class UserService /*implements UserDetailsService*/ {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
     private final ImageService imageService;
+    private final ConfirmationCodeRepository confirmationCodeRepository;
 
 
     public Page<UserReadDTO> findAll(Pageable pageable) {
@@ -56,15 +60,16 @@ public class UserService /*implements UserDetailsService*/ {
     @Transactional
     public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
         return userRepository.findById(userUpdateDTO.getId())
-                .map(user ->{
+                .map(user -> {
                     uploadImage(userUpdateDTO.getAvatar());
-                   return userCreateEditMapper.map(userUpdateDTO, user);
+                    return userCreateEditMapper.map(userUpdateDTO, user);
                 })
                 .map(userRepository::save)
                 .map(userCreateEditMapper::UserToUserEditeDTO);
 
     }
-    public boolean existsNickname(String nickname){ // todo mast be add check nickname
+
+    public boolean existsNickname(String nickname) { // todo mast be add check nickname
         return userRepository.existsByNickname(nickname);
     }
 
@@ -90,6 +95,17 @@ public class UserService /*implements UserDetailsService*/ {
         if (!image.isEmpty()) {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
         }
+    }
+
+    public boolean codIsValid(String code) {
+        Optional<ConfirmationCode> confirmationCode = confirmationCodeRepository.findByCode(code);
+       return confirmationCode.map(c -> {
+            if (c.getExpiredDateTime().isBefore(LocalDateTime.now())) {
+                c.getUser().setState(User.State.CONFIRMED);
+                userRepository.save(c.getUser());
+            }
+            return true;
+        }).orElse(false);
     }
 
 //    @Override

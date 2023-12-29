@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> {
-                            auth.requestMatchers("/user", "/api/v1/auth/**", "/mvc/test/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
+                            auth.requestMatchers("/mail/cod/**","/user", "/api/v1/auth/**", "/mvc/test/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
                             auth.requestMatchers("/api/v1/users/admin").hasAuthority("ADMIN");
                             auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN");
                             auth.requestMatchers(HttpMethod.POST, "/api/game/users/**").hasAuthority("ADMIN");
