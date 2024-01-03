@@ -55,8 +55,8 @@ public class User {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-   @OneToMany(mappedBy = "user")
-    private List<TicketOrders> orders;
+   //@OneToMany(mappedBy = "user")
+    //private List<TicketOrder> orders;
 
 
 //    public User(String nickname, String email, String password, State state) {

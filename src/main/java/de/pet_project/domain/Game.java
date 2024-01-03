@@ -3,7 +3,7 @@ package de.pet_project.domain;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
-import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.State;
 import jakarta.persistence.*;
 import lombok.Data;
 

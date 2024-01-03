@@ -4,7 +4,7 @@ import de.pet_project.domain.Game;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
-import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.State;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,9 +18,6 @@ public interface GameRepository extends  JpaRepository<Game, Integer> {
 
     @Query("SELECT g FROM Game g WHERE g.state =:state")
     Page<Game> findAllByState(@Param("state")State state, Pageable pageable);
-
-    @Query("SELECT g.state FROM Game g WHERE g.id =:id")
-    State findState(@Param("id") Integer id);
 
     @Query("SELECT g FROM Game g WHERE g.minAge =:minAge")
     Page<Game> findAllByMinAge(@Param("minAge")MinAge minAge, Pageable pageable);

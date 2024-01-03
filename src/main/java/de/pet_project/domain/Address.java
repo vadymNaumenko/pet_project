@@ -1,12 +1,17 @@
 package de.pet_project.domain;
 
+import de.pet_project.domain.enums.State;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "addresses")
-public class Address {
+public class Address {//TODO podvyazat game and promo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
@@ -19,4 +24,8 @@ public class Address {
     private String street;
     private String streetNumber;
     private Integer houseNumber;
+
+    //TODO add to changeSet
+    @Enumerated(EnumType.STRING)
+    private State state;
 }

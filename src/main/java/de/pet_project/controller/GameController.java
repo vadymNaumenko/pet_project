@@ -1,11 +1,11 @@
 package de.pet_project.controller;
 
-import de.pet_project.controller.dto.game.GameDTO;
-import de.pet_project.controller.dto.game.GameShortDTO;
+import de.pet_project.dto.game.GameDTO;
+import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
-import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.State;
 import de.pet_project.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,10 +20,11 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/api/v1/games")
 public class GameController {
-    public final GameService gameService;
-    @GetMapping("/genre/all")
+    private final GameService gameService;
+
+    @GetMapping("/genres")
     public List<String> findAllGenres(){
         return gameService.findAllGenre();
     }
@@ -35,14 +36,9 @@ public class GameController {
         return gameService.findAllByGenre(genre, pageable);
     }
 
-    @GetMapping("/state/all")
+    @GetMapping("/states")
     public List<String> findAllState(){
         return gameService.findAllState();
-    }
-
-    @GetMapping("/{id}/state")
-    public String findState(@PathVariable Integer id) {
-        return gameService.findState(id);
     }
 
     @GetMapping("/state/{state}/page/{pageNum}/{pageSize}")//added
@@ -51,7 +47,7 @@ public class GameController {
         return gameService.findAllByState(state, pageable);
     }
 
-    @GetMapping("/numberOfPlayers/all")
+    @GetMapping("/numberOfPlayers")
     public List<String> findAllNumberOfPlayers(){
         return gameService.findAllNumberOfPlayers();
     }
@@ -63,7 +59,7 @@ public class GameController {
         return gameService.findAllByNumberOfPlayers(numberOfPlayers, pageable);
     }
 
-    @GetMapping("/minAge/all")
+    @GetMapping("/minAges")
     public List<String> findAllMinAge(){
         return gameService.findAllMinAge();
     }
@@ -83,18 +79,17 @@ public class GameController {
         return gameService.findTopTen(pageable);
     }
 
-    @GetMapping("/all/page/{pageNum}/{pageSize}")
+    @GetMapping("/pages/{pageNum}/{pageSize}")
     public Page<GameShortDTO> findAll(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return gameService.findAll(pageable);
     }
 
-    @GetMapping("/game/more/game{id}")
+    @GetMapping("/game{id}")
     public GameDTO findById(@PathVariable Integer id) {
         return gameService.findById(id);
     }
 
-    //TODO ask "make also genre and status"
     @GetMapping(value = "/{id}/image")
     public ResponseEntity<byte[]> findImage(@PathVariable Integer id) {
         return gameService.findImage(id)
@@ -105,12 +100,12 @@ public class GameController {
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    @PostMapping("/game/createNew")
+    @PostMapping()
     public GameDTO create(@RequestBody GameDTO gameDTO) {
         return gameService.save(gameDTO);
     }
 
-    @PutMapping("/game/update")
+    @PutMapping()
     public ResponseEntity<GameDTO> update(@RequestBody GameDTO gameDTO) {
         GameDTO response = gameService.update(gameDTO);
         if (response == null) {
@@ -118,17 +113,12 @@ public class GameController {
         }
         return ResponseEntity.ok(response);
     }
-    @DeleteMapping("/game/delete/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<GameDTO> delete(@PathVariable Integer id) {
         GameDTO response = gameService.delete(id);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("/game/delete/all")
-    public void deleteAll() {
-        gameService.deleteAll();
     }
 }
