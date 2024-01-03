@@ -28,7 +28,8 @@ public class UserMvcController {
 //        if (userService.existsNickname(userEditeDTO.getNickname())){
 //        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
 //        }
-        return "user";
+//        return "user";
+        return "/mail_page/registration_page";
 
     }
 

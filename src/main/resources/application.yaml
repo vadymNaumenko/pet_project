@@ -39,6 +39,8 @@ spring:
 #    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
 
 app:
+  sender:
+    url: http://localhost:8080/
   image:
    bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
 #    bucket: C:/myPetProject/back_end/pet_project/images

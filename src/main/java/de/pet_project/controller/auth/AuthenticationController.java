@@ -26,7 +26,6 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request){
         // todo if email not found make redirect and find by nickname
         return ResponseEntity.ok(service.authenticate(request));
-
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
