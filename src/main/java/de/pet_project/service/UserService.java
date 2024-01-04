@@ -1,29 +1,37 @@
 package de.pet_project.service;
 
-import de.pet_project.controller.dto.user.UserCreateDTO;
-import de.pet_project.controller.dto.user.UserDTO;
-import de.pet_project.controller.dto.user.UserEditeDTO;
-import de.pet_project.controller.dto.user.UserReadDTO;
+import de.pet_project.domain.ConfirmationCode;
+import de.pet_project.dto.user.UserCreateDTO;
+import de.pet_project.dto.user.UserDTO;
+import de.pet_project.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.mapper.UserCreateEditMapper;
+import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService /*implements UserDetailsService*/ {
     private final UserRepository userRepository;
     private final UserCreateEditMapper userCreateEditMapper;
     private final ImageService imageService;
+    private final ConfirmationCodeRepository confirmationCodeRepository;
 
 
     public Page<UserReadDTO> findAll(Pageable pageable) {
@@ -52,15 +60,16 @@ public class UserService {
     @Transactional
     public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
         return userRepository.findById(userUpdateDTO.getId())
-                .map(user ->{
+                .map(user -> {
                     uploadImage(userUpdateDTO.getAvatar());
-                   return userCreateEditMapper.map(userUpdateDTO, user);
+                    return userCreateEditMapper.map(userUpdateDTO, user);
                 })
                 .map(userRepository::save)
                 .map(userCreateEditMapper::UserToUserEditeDTO);
 
     }
-    public boolean existsNickname(String nickname){
+
+    public boolean existsNickname(String nickname) { // todo mast be add check nickname
         return userRepository.existsByNickname(nickname);
     }
 
@@ -87,6 +96,28 @@ public class UserService {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
         }
     }
+
+    public boolean codIsValid(String code) {
+        Optional<ConfirmationCode> confirmationCode = confirmationCodeRepository.findByCode(code);
+       return confirmationCode.map(c -> {
+            if (c.getExpiredDateTime().isBefore(LocalDateTime.now())) {
+                c.getUser().setState(User.State.CONFIRMED);
+                userRepository.save(c.getUser());
+            }
+            return true;
+        }).orElse(false);
+    }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//
+//        return userRepository.findByEmail(email) // todo nickname
+//                .map(user -> new org.springframework.security.core.userdetails.User(
+//                        user.getUsername(),
+//                        user.getPassword(),
+//                        Collections.singleton(user.getRole())
+//                )).orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user with email: " + email));
+//    }
 
 //    public Optional<UserDTO> update(Integer id, UserDTO user){
 //        return userRepository.findById(id)

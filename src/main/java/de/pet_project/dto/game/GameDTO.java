@@ -1,17 +1,19 @@
-package de.pet_project.controller.dto.game;
+package de.pet_project.dto.game;
 
 import de.pet_project.domain.Game;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class GameDTO {
     private Integer id;
     private MultipartFile image;

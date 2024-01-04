@@ -1,4 +1,4 @@
-package de.pet_project.controller.dto.user;
+package de.pet_project.dto.user;
 
 import de.pet_project.domain.User;
 import jakarta.validation.constraints.*;

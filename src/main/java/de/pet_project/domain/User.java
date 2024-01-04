@@ -2,32 +2,40 @@ package de.pet_project.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
-     public enum State {
+    public enum State {
         NOT_CONFIRM,
         CONFIRMED,
         DELETED,
         BANNED
     }
-   public enum Role{
+
+    public enum Role implements GrantedAuthority {
         ADMIN,
-        USER
+        USER;
+
+        @Override
+        public String getAuthority() {
+            return name();
+        }
     }
 
     @Id
@@ -42,7 +50,7 @@ public class User {
     @Column(name = "birth_date")
     private LocalDate birthDate;
     @Email
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String password;
@@ -54,19 +62,10 @@ public class User {
     private State state;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "user")
+    private List<TicketOrder> orders;
 
-   @OneToMany(mappedBy = "user")
-    private List<TicketOrders> orders;
-
-
-//    public User(String nickname, String email, String password, State state) {
-//        this.nickname = nickname;
-//        this.email = email;
-//        this.password = password;
-//        this.state = state;
-//    }
-
-    public User(String nickname, String email, String password, State state, LocalDateTime createdAt,Role role) {
+    public User(String nickname, String email, String password, State state, LocalDateTime createdAt, Role role) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
@@ -76,11 +75,39 @@ public class User {
     }
 
 
-//    public String getRole() {
-//        return role.name();
-//    }
-//
-//    public String getState() {
-//        return state.name();
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !state.equals(State.BANNED);
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return state.equals(State.CONFIRMED);
+    }
+
 }

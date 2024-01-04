@@ -1,7 +1,7 @@
 package de.pet_project.service;
 
-import de.pet_project.controller.dto.game.GameDTO;
-import de.pet_project.controller.dto.game.GameShortDTO;
+import de.pet_project.dto.game.GameDTO;
+import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.Game;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;

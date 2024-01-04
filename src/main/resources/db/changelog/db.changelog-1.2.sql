@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS ticket_orders
     user_id INT REFERENCES users (user_id),
     price int,
     state VARCHAR(64),
+    number VARCHAR(64),
     create_at timestamp
 );
 

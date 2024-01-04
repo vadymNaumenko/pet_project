@@ -1,8 +1,7 @@
 package de.pet_project.controller;
 
-import de.pet_project.controller.dto.user.UserCreateDTO;
-import de.pet_project.controller.dto.user.UserEditeDTO;
-import de.pet_project.controller.dto.user.UserReadDTO;
+import de.pet_project.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,13 +29,7 @@ public class UserController {
 
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
-
         return userService.findAll(pageable);
-    }
-
-    @PostMapping
-    public ResponseEntity<?> registration(@Validated @RequestBody UserCreateDTO userCreateDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.save(userCreateDTO));
     }
 
     @GetMapping(value = "/{id}/avatar")
@@ -51,13 +45,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated @RequestBody UserEditeDTO userEditeDTO /*,MethodArgumentNotValidException ex */) {
+    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO /*,MethodArgumentNotValidException ex */) {
 
 //        if (userService.existsNickname(userEditeDTO.getNickname())){
 //        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
 //        }
-        return ResponseEntity.status(HttpStatus.OK).body(userService.update(userEditeDTO));
+        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
+        if (user.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        }
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userEditeDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -71,7 +69,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handlerValidationExceptions(MethodArgumentNotValidException ex) {
-
 
         Map<String, String> errors = new HashMap<>();
 

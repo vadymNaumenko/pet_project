@@ -1,15 +1,14 @@
 package de.pet_project.mapper;
 
-import de.pet_project.controller.dto.user.UserCreateDTO;
-import de.pet_project.controller.dto.user.UserDTO;
-import de.pet_project.controller.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserCreateDTO;
+import de.pet_project.dto.user.UserDTO;
+import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.domain.User;
 import de.pet_project.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -47,6 +46,7 @@ public class UserCreateEditMapper implements Mapper<UserCreateDTO, User> {
         Optional.ofNullable(userUpdateDTO.getAvatar())
                 .filter(Predicate.not(MultipartFile::isEmpty))
                 .ifPresent(image -> toUser.setAvatar(image.getOriginalFilename()));
+
         if (userUpdateDTO.getEmail() != null)
             toUser.setEmail(userUpdateDTO.getEmail());
         if (userUpdateDTO.getFirstname() != null)

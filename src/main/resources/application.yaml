@@ -3,13 +3,44 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pet_project
     username: postgres
-    password: ROOT
+    password: root
 #spring.jpa.hibernate.ddl-auto=update
   jpa:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
+            clientSecret: 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
+            redirectUri: http://localhost:8080/login/oauth2/code/google
+  mail:
+    password: gqqcjkijfmvgteux
+    username: vadimnaumnaum@gmail.com
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+
+
+#springdoc:
+#  swagger-ui:
+#    oauth:
+#      client-id: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
+#      client-secret: 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
+#    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
+
 app:
+  sender:
+    url: http://localhost:8080/
   image:
-#   bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images/#app:
-    bucket: C:/myPetProject/back_end/pet_project/images
+   bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
+#    bucket: C:/myPetProject/back_end/pet_project/images

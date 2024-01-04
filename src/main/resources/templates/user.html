@@ -5,10 +5,9 @@
     <title>User</title>
 </head>
 <body>
-
-</form>
+<h1 style="color: green" >Update user</h1>
 <form th:action="@{/users/{userId}/update(userId=${1})}" enctype="multipart/form-data" method="post">
-    <!--        asdfasdfasdfaa-->
+
     <label for="nickname">Username:
         <input id="nickname" type="text" name="nickname">
     </label><br>
@@ -18,8 +17,37 @@
 
     <button type="submit">Update</button>
 </form>
+<h1 style="color: green">Login user</h1>
+<form th:action="@{/api/v1/auth/login}" method="post">
+
+    <label for="log_nickname">Nickname:
+        <input id="log_nickname" type="text" name="nickname">
+    </label><br>
+    <label for="log_password">Password:
+        <input id="log_password" type="password" name="password">
+    </label><br>
+
+    <button type="submit">Login</button>
+</form>
+<h1 style="color: green">Registration user</h1>
+<form th:action="@{/api/v1/auth/authenticate}" method="post">
+
+    <label for="reg_nickname">Nickname:
+        <input id="reg_nickname" type="text" name="nickname">
+    </label><br>
+    <label for="reg_email">Email:
+        <input id="reg_email" type="email" name="email">
+    </label><br>
+    <label for="reg_password">Password:
+        <input id="reg_password" type="password" name="password">
+    </label><br>
+
+    <button type="submit">Registration</button>
+</form>
 <div >
     <img th:src="@{/api/v1/users/1/avatar}" alt="avatar">
 </div>
+<h1 style="color: green">Login and registration with: Google</h1>
+<a href="/oauth2/authorization/google">Google</a>
 </body>
 </html>

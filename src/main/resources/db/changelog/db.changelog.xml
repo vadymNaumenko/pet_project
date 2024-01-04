@@ -12,7 +12,7 @@
             </column>
             <column name="avatar" type="varchar"/>
             <column name="nickname" type="varchar(20)">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true"/>
             </column>
             <column name="firstname" type="varchar(20)"/>
             <column name="lastname" type="varchar(20)"/>
