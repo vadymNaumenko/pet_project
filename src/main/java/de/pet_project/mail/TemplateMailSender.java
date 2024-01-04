@@ -1,6 +1,8 @@
 package de.pet_project.mail;
 
 import de.pet_project.domain.ConfirmationCode;
+import de.pet_project.domain.Game;
+import de.pet_project.domain.TicketOrder;
 import de.pet_project.domain.User;
 import de.pet_project.repository.ConfirmationCodeRepository;
 import freemarker.template.Configuration;
@@ -73,5 +75,26 @@ public class TemplateMailSender {
         confirmationCodeRepository.save(code);
         sendMail(user.getUsername(), "Registration", html);
 
+    }
+
+    public void sendTicket(TicketOrder ticketOrder) {
+
+        String html;
+        try {
+            Template template = freemarkerConfiguration.getTemplate("game_page.ftlh");
+            Map<String, Object> model = new HashMap<>();
+            Game game = ticketOrder.getGame();
+            model.put("image",game.getImage());
+            model.put("title",game.getTitle());
+            model.put("description",game.getDescription());
+            model.put("price",game.getPrice());
+
+            html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (TemplateException e) {
+            throw new RuntimeException(e);
+        }
+        sendMail(ticketOrder.getUser().getEmail(), "Game", html);
     }
 }

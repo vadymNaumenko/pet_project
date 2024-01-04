@@ -37,8 +37,7 @@ public class TicketOrderController {
     @PostMapping("/game/{id}")
     public ResponseEntity<TicketReadDTO> create(@AuthenticationPrincipal UserDetails userDetails,
                                                 @PathVariable Integer id ){
-         //todo add gmail message for user
-//         return ticketOrdersService.save(userDetails,id);
+
         return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketOrdersService.save(userDetails.getUsername(),id));
     }

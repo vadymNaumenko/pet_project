@@ -6,6 +6,7 @@ import de.pet_project.domain.Game;
 import de.pet_project.dto.ticket.TicketReadDTO;
 import de.pet_project.domain.TicketOrder;
 import de.pet_project.dto.user.UserReadDTO;
+import de.pet_project.mail.TemplateMailSender;
 import de.pet_project.repository.GameRepository;
 import de.pet_project.repository.TicketOrdersRepository;
 import de.pet_project.repository.UserRepository;
@@ -32,6 +33,7 @@ public class TicketOrderService {
     private final GameRepository gameRepository;
     private final TicketOrdersRepository ticketOrdersRepository;
     private final UserDtoConvert userDtoConvert;
+    private final TemplateMailSender templateMailSender;
 
 
     public Page<TicketReadDTO> findByPage(Pageable pageable) {
@@ -60,6 +62,8 @@ public class TicketOrderService {
 
         TicketOrder save = ticketOrdersRepository.save(ticketOrder);
         log.info("TicketOrder saved with id: {}", save.getId());
+
+        templateMailSender.sendTicket(ticketOrder);
 
         return ticketDtoConvert.convertToTicketReadDTO(save);
     }
