@@ -20,35 +20,45 @@ public class TicketOrderController {
     private final TicketOrderService ticketOrdersService;
 
     @GetMapping
-    public Page<TicketReadDTO> findByPage(Pageable pageable){
+    public Page<TicketReadDTO> findByPage(Pageable pageable) {
         return ticketOrdersService.findByPage(pageable);
     }
 
     @GetMapping("/{id}")
-    public TicketReadDTO findById(@PathVariable Integer id){
-      return ticketOrdersService.findById(id)
-              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public TicketReadDTO findById(@PathVariable Integer id) {
+        return ticketOrdersService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
     @GetMapping("/{id}/user")
-    public UserReadDTO findUserByTicket(@PathVariable Integer id){
-       return ticketOrdersService.findUserByTicketId(id);
+    public UserReadDTO findUserByTicket(@PathVariable Integer id) {
+        return ticketOrdersService.findUserByTicketId(id);
+    }
+
+    @GetMapping("/buy/{orderID}")
+    public ResponseEntity<?> buyGame(@PathVariable Integer orderID) {
+        if (ticketOrdersService.hasOrder(orderID)) {
+            ticketOrdersService.save(orderID);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order not found");
     }
 
     @PostMapping("/game/{id}")
     public ResponseEntity<TicketReadDTO> create(@AuthenticationPrincipal UserDetails userDetails,
-                                                @PathVariable Integer id ){
+                                                @PathVariable Integer id) {
 
-        return  ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketOrdersService.save(userDetails.getUsername(),id));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ticketOrdersService.save(userDetails.getUsername(), id));
     }
+
     //todo add method update ticket
     @GetMapping("/user/{id}")
-    public Page<TicketReadDTO> findAllByUser(@PathVariable Integer id, Pageable pageable){
+    public Page<TicketReadDTO> findAllByUser(@PathVariable Integer id, Pageable pageable) {
         return ticketOrdersService.findAllByUser(id, pageable);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<TicketReadDTO> cansel(@PathVariable Integer id){
+    public ResponseEntity<TicketReadDTO> cansel(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(ticketOrdersService.cancel(id));
     }
 

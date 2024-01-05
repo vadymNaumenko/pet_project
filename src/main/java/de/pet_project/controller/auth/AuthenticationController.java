@@ -37,18 +37,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-    @GetMapping("/confirm/cod={cod}")
+    @GetMapping("/confirm/{cod}")
     public ResponseEntity<?> checkCod(@PathVariable String cod){
-
-//        Optional<ConfirmationCode> byCode = confirmationCodeRepository.findByCode(cod); // todo mast be service
-//        if (byCode.isPresent()) {
-//            if (userService.codIsValid(cod)){
-//                User user = byCode.get().getUser();
-//                userService.setState(byCode.get());
-//                user.setState(User.State.CONFIRMED);
-//                return  ResponseEntity.status(HttpStatus.OK).body("User: is Confirmed");
-//            };
-//        }
 
        if (confirmationCodeService.setState(cod)){
            return  ResponseEntity.status(HttpStatus.OK).body("User: is Confirmed");
