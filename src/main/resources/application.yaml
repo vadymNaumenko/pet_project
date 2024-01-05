@@ -28,7 +28,7 @@ spring:
           auth: true
           starttls:
             enable: true
-        debug: true
+#        debug: true
 
 
 #springdoc:

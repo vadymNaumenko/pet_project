@@ -1,37 +1,32 @@
 package de.pet_project.service;
 
+import de.pet_project.convertor.UserDtoConvert;
 import de.pet_project.domain.ConfirmationCode;
-import de.pet_project.dto.user.UserCreateDTO;
 import de.pet_project.dto.user.UserDTO;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
-import de.pet_project.mapper.UserCreateEditMapper;
 import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService /*implements UserDetailsService*/ {
     private final UserRepository userRepository;
-    private final UserCreateEditMapper userCreateEditMapper;
     private final ImageService imageService;
     private final ConfirmationCodeRepository confirmationCodeRepository;
+    private final UserDtoConvert userDtoConvert;
 
 
     public Page<UserReadDTO> findAll(Pageable pageable) {
@@ -49,23 +44,14 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     @Transactional
-    public UserReadDTO save(UserCreateDTO userCreateDTO) {
-        return Optional.of(userCreateDTO)
-                .map(userCreateEditMapper::map)
-                .map(userRepository::save)
-                .map(UserReadDTO::getInstance)
-                .orElseThrow();
-    }
-
-    @Transactional
     public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
         return userRepository.findById(userUpdateDTO.getId())
                 .map(user -> {
                     uploadImage(userUpdateDTO.getAvatar());
-                    return userCreateEditMapper.map(userUpdateDTO, user);
+                    return userDtoConvert.convertToUser(userUpdateDTO, user);
                 })
                 .map(userRepository::save)
-                .map(userCreateEditMapper::UserToUserEditeDTO);
+                .map(userDtoConvert::convertToUserEditeDTO);
 
     }
 
