@@ -52,7 +52,7 @@
     <h1>${title}</h1>
     <p>${description}</p>
     <p style="color:#42f5d7">Цена игры: ${price}</p>
-    <a class="confirmation-button" href="as">Купить</a>
+    <a class="confirmation-button" href="${link}">Купить</a>
 </div>
 </body>
 </html>
