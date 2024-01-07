@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public class EventCreateDTO {
     private String title;
     private String imageUrl;
-    private String videoUrl;
     private String text;
     private String dateTime;
 

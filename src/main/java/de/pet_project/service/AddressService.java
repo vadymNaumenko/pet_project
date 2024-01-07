@@ -7,6 +7,7 @@ import de.pet_project.repository.AddressRepository;
 import liquibase.util.Validate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +33,13 @@ public class AddressService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO save(AddressDTO addressDTO) {
         return Optional.of(fillAndSave(addressDTO, new Address())).orElseThrow();
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO update(AddressDTO addressDTO) {
         Validate.notNull(addressDTO.getId(), "Field id can't be null");
         Address address = addressRepository.findById(addressDTO.getId()).orElse(null);
@@ -48,6 +51,7 @@ public class AddressService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO delete(Integer addressId) {
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -117,6 +118,7 @@ public class TicketOrderService {
        return ticketOrdersRepository.existsById(orderId);
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     public UserReadDTO findUserByTicketId(Integer id) {
         return ticketOrdersRepository.findById(id).map(TicketOrder::getUser)
                 .map(userDtoConvert::convertToUserReadDto).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

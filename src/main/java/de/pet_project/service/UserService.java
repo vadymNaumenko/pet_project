@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,7 +36,7 @@ public class UserService /*implements UserDetailsService*/ {
 
     }
 
-    //todo this method for admin
+//    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO findById(Integer id) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getId().equals(id))
@@ -68,7 +69,16 @@ public class UserService /*implements UserDetailsService*/ {
                     return true;
                 }).orElse(false);
     }
-
+    @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
+    public boolean ban(Integer id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setState(User.State.BANNED);
+                    userRepository.save(user);
+                    return true;
+                }).orElse(false);
+    }
     public Optional<byte[]> findAvatar(Integer id) {
         return userRepository.findById(id)
                 .map(User::getAvatar)

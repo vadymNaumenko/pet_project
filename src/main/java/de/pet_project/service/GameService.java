@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -102,12 +103,14 @@ public class GameService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public GameDTO save(GameDTO gameDTO) {
         //return fillAndSave(gameDTO, new Game());
         return Optional.of(fillAndSave(gameDTO, new Game())).orElseThrow();
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public GameDTO update(GameDTO gameDTO) {
         Validate.notNull(gameDTO.getId(), "Field id can't be null");
         Game game = gameRepository.findById(gameDTO.getId()).orElse(null);
@@ -119,6 +122,7 @@ public class GameService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public GameDTO delete(Integer gameId) {
         Game game = gameRepository.findById(gameId).orElse(null);
         if (game != null) {
@@ -130,6 +134,7 @@ public class GameService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAll() {
         gameRepository.deleteAll();
     }
