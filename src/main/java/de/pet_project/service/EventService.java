@@ -5,6 +5,7 @@ import de.pet_project.domain.Event;
 import de.pet_project.dto.event.EventCreateDTO;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.repository.EventRepository;
+import de.pet_project.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,8 +33,7 @@ public class EventService {
     private String site = "https://www.uploadvr.com";
 
 
-    //    private List<EventCreateDTO> readTitle(){
-//    @Scheduled(fixedRate = 2 * 60 * 1000)
+    @Scheduled(fixedRate = 2 * 60 * 1000)
     private void readNews() {
         ArrayList<EventCreateDTO> events = new ArrayList<>();
         try {
@@ -44,7 +43,7 @@ public class EventService {
             for (Element element : elements) {
                 String image = "https://www.uploadvr.com" + element.select(".c-card__image").attr("data-src");//data-src
 
-//                if (checkNews(image)){
+//                if (checkNews(image)){ // todo add check news
 //                    continue;
 //                }
 
@@ -64,7 +63,7 @@ public class EventService {
             event.setTitle(dto.getTitle());
             event.setText(dto.getText());
             event.setImageUrl(dto.getImageUrl());
-//            event.setDateTime(); //todo add convert data time
+            event.setDateTime(DateUtils.convertDate(dto.getDateTime()));
             eventRepository.save(event);
         }
 

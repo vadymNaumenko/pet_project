@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Data
 @Entity
@@ -21,6 +22,6 @@ public class Event {
     private String imageUrl;
     private String text;
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    private LocalDate dateTime;
 
 }
