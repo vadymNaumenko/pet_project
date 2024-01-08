@@ -14,7 +14,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ public class EventService {
     private String site = "https://www.uploadvr.com";
 
 
-    @Scheduled(fixedRate = 2 * 60 * 1000)
+//    @Scheduled(fixedRate = 2 * 60 * 1000)
     private void readNews() {
         ArrayList<EventCreateDTO> events = new ArrayList<>();
         try {
@@ -63,7 +62,7 @@ public class EventService {
             event.setTitle(dto.getTitle());
             event.setText(dto.getText());
             event.setImageUrl(dto.getImageUrl());
-            event.setDateTime(DateUtils.convertDate(dto.getDateTime()));
+            event.setDate(DateUtils.convertDate(dto.getDateTime()));
             eventRepository.save(event);
         }
 

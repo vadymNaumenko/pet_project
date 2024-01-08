@@ -30,7 +30,7 @@ public class EventController {
     @GetMapping("{page}")
     public Page<Event> getAll( @PathVariable Integer page){
         Sort.TypedSort<Event> sort = Sort.sort(Event.class);
-        sort.by(Event::getDateTime);
+        sort.by(Event::getDate);
         PageRequest pageable = PageRequest.of(page,16,sort.descending());
         return eventService.findAll(pageable);
     }

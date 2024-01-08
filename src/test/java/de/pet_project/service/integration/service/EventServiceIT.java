@@ -23,19 +23,19 @@ public class EventServiceIT {
 
     @Test
     void findById() {
-        Optional<EventDTO> actual = eventService.findById(36L);
+        Optional<EventDTO> actual = eventService.findById(1L);
         assertTrue(actual.isPresent());
-        assertEquals(36L,actual.get().getId());
+        assertEquals(1L,actual.get().getId());
     }
     @Test
     void findAllByPageable(){
         Sort.TypedSort<Event> sort = Sort.sort(Event.class);
-        sort.by(Event::getDateTime);
-        PageRequest pageable = PageRequest.of(0,16,sort.descending());
+        sort.by(Event::getDate);
+        PageRequest pageable = PageRequest.of(0,8,sort.descending());
         Page<Event> actual = eventService.findAll(pageable);
         assertTrue(actual.hasContent());
-        assertEquals(16,actual.getContent().size());
-        assertTrue(actual.getContent().get(0).getDateTime().isAfter(actual.getContent().get(15).getDateTime()));
+        assertEquals(8,actual.getContent().size());
+        assertTrue(actual.getContent().get(0).getDate().isAfter(actual.getContent().get(7).getDate()));
     }
 
 }
