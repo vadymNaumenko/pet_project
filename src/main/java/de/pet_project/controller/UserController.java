@@ -27,6 +27,7 @@ public class UserController {
 
     private final UserService userService;
 
+    //todo add filter for user and game
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
         return userService.findAll(pageable);
