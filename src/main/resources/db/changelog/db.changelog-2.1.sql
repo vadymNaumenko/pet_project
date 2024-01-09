@@ -8,7 +8,9 @@ CREATE TABLE events
     title varchar(250),
     image_url varchar(250),
     text text,
+    is_deleted boolean,
     date DATE
+
 );
 
 

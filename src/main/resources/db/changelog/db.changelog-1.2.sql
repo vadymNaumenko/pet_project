@@ -12,18 +12,3 @@ CREATE TABLE IF NOT EXISTS ticket_orders
     number VARCHAR(64),
     create_at timestamp
 );
-
---
--- <!--        private Integer id;-->
---
---         <!--        @ManyToOne-->
---         <!--        @JoinColumn(name = "game_id")-->
---         <!--        private Game game;-->
---
---         <!--        @ManyToOne-->
---         <!--        @JoinColumn(name = "user_id")-->
---         <!--        private User user;-->
---
---         <!--        private String number;-->
---         <!--        private double sum;-->
---         <!--        private LocalDateTime createAt;-->

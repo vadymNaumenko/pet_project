@@ -23,5 +23,7 @@ public class Event {
     private String text;
     @Column(name = "date")
     private LocalDate date;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
 }

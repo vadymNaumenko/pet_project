@@ -5,7 +5,6 @@ import de.pet_project.domain.Event;
 import de.pet_project.dto.event.EventCreateDTO;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.repository.EventRepository;
-import de.pet_project.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -14,11 +13,15 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class EventService {
     private String site = "https://www.uploadvr.com";
 
 
-//    @Scheduled(fixedRate = 2 * 60 * 1000)
+    //    @Scheduled(fixedRate = 2 * 60 * 1000)
     private void readNews() {
         ArrayList<EventCreateDTO> events = new ArrayList<>();
         try {
@@ -50,24 +53,18 @@ public class EventService {
                 String date = element.select(".c-timestamp").text();
                 String urlToNews = "https://www.uploadvr.com" + element.select(".c-card__headline a").attr("href");
                 String[] arr = readText(urlToNews);
-                events.add(new EventCreateDTO(title, image,arr[0], arr[1], date));
+                events.add(new EventCreateDTO(title, image, arr[0], arr[1], date));
             }
 
         } catch (IOException e) {
             log.error(e.getMessage());
         }
 
-        for(EventCreateDTO dto:events ){
-            Event event = new Event();
-            event.setTitle(dto.getTitle());
-            event.setText(dto.getText());
-            event.setImageUrl(dto.getImageUrl());
-            event.setDate(DateUtils.convertDate(dto.getDateTime()));
+        for (EventCreateDTO dto : events) {
+            Event event = eventDtoConvertor.convertToEvent(dto);
             eventRepository.save(event);
         }
 
-//        return events;
-        System.out.println();
     }
 
 
@@ -89,13 +86,52 @@ public class EventService {
         return eventRepository.existsByImageUrl(imageUrl);
     }
 
-    public Page<Event> findAll(Pageable pageable) {
-       return eventRepository.findAll(pageable);
+    public Page<EventDTO> findAll(Pageable pageable) {
+        return eventRepository.findAll(pageable)
+                .map(eventDtoConvertor::convertToEventDTO);
     }
 
     public Optional<EventDTO> findById(Long id) {
         return eventRepository.findById(id)
                 .map(eventDtoConvertor::convertToEventDTO);
     }
+    @Transactional
+    public Optional<EventDTO> update(EventDTO dto)  {
+        if (eventRepository.existsById(dto.getId()))
+            eventRepository.save(eventDtoConvertor.convertToEvent(dto));
 
+        return eventRepository.findById(dto.getId())
+                .map(eventDtoConvertor::convertToEventDTO);
+
+    }
+
+    public List<EventDTO> findAllByTitle(String str) {
+        return eventRepository.findAllByTitle(str)
+                .stream()
+                .map(eventDtoConvertor::convertToEventDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<EventDTO> findByTitle(String str) {
+        return eventRepository.findByTitle(str)
+                .stream()
+                .map(eventDtoConvertor::convertToEventDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
+    public Optional<EventDTO> delete(Long id) {
+        return eventRepository.findById(id).map(event -> {
+            event.setIsDeleted(true);
+          eventRepository.save(event);
+          return eventDtoConvertor.convertToEventDTO(event);
+        });
+
+    }
+
+    public boolean hasEvent(String url) {
+        return eventRepository.existsByImageUrl(url);
+    }
 }
+

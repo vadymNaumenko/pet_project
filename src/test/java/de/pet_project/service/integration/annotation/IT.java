@@ -13,7 +13,8 @@ import java.lang.annotation.Target;
 @SpringBootTest
 @ActiveProfiles("test")
 @Target({ElementType.TYPE})
-@Sql({"classpath:sql/data.sql"})
+@Sql(value = {"classpath:sql/data.sql"})
+@Sql(value = {"classpath:sql/clear_data.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public @interface IT {

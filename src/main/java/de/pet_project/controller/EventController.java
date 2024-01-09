@@ -8,11 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -23,12 +21,12 @@ public class EventController {
 
     private final EventService eventService;
     @GetMapping()
-    public Page<Event> getAll(Pageable pageable){
+    public Page<EventDTO> getAll(Pageable pageable){
 //        pageable.getSortOr()
         return eventService.findAll(pageable);
     }
     @GetMapping("{page}")
-    public Page<Event> getAll( @PathVariable Integer page){
+    public Page<EventDTO> getAll( @PathVariable Integer page){
         Sort.TypedSort<Event> sort = Sort.sort(Event.class);
         sort.by(Event::getDate);
         PageRequest pageable = PageRequest.of(page,16,sort.descending());
@@ -41,4 +39,11 @@ public class EventController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
     //todo add delete method
+
+    @PutMapping
+    public ResponseEntity<EventDTO> update(@RequestBody EventDTO eventDTO){
+       return eventService.update(eventDTO)
+               .map(ResponseEntity::ok)
+               .orElseGet(()-> ResponseEntity.badRequest().build());
+    }
 }
