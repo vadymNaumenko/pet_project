@@ -60,11 +60,11 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) { //todo void or boolean
-        if (!userService.delete(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public void delete(@PathVariable Integer id) { //todo void or UserDTO
+        if (userService.delete(id)) {
+            throw new ResponseStatusException(HttpStatus.OK);
         }
-        throw new ResponseStatusException(HttpStatus.OK);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

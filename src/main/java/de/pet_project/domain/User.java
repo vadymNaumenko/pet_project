@@ -63,7 +63,7 @@ public class User implements UserDetails {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
     @OneToMany(mappedBy = "user")
-    private List<TicketOrder> orders;
+    private List<TicketOrder> orders; //todo make method get all orders from user(id)
 
     public User(String nickname, String email, String password, State state, LocalDateTime createdAt, Role role) {
         this.nickname = nickname;

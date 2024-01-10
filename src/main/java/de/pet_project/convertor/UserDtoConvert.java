@@ -1,6 +1,7 @@
 package de.pet_project.convertor;
 
 import de.pet_project.domain.User;
+import de.pet_project.dto.user.UserDTO;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserReadDTO;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +55,11 @@ public class UserDtoConvert {
                 user.getEmail(), user.getPhone()
         );
     }
-
+    public UserDTO convertToUserDTO(User user) {
+       UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+       userDTO.setRole(user.getRole().name());
+       userDTO.setState(user.getState().name());
+       return userDTO;
+    }
 
 }

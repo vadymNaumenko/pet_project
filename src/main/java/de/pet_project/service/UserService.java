@@ -37,11 +37,10 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
-    public UserDTO findById(Integer id) {
+    public Optional<UserDTO> findById(Integer id) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getId().equals(id))
-                .map(UserDTO::getInstance)
-                .findFirst().orElse(null);
+                .map(UserDTO::getInstance).findFirst();
     }
 
     @Transactional
@@ -102,6 +101,11 @@ public class UserService /*implements UserDetailsService*/ {
             }
             return true;
         }).orElse(false);
+    }
+
+    public Optional<UserDTO> findByEmail(String email) {
+        return  userRepository.findByEmail(email)
+                .map(userDtoConvert::convertToUserDTO);
     }
 
 //    @Override
