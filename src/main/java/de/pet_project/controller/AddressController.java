@@ -13,9 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/address")
 public class AddressController {
-    public final AddressService addressService;
+    private final AddressService addressService;
 
-    @GetMapping("/all/addresses")
+    @GetMapping("/addresses")
     public List<AddressDTO> findAll() {
         return addressService.findAll();
     }
@@ -25,17 +25,17 @@ public class AddressController {
         return addressService.findAllAddressByCity(city);
     }
 
-    @GetMapping("/all/city")
+    @GetMapping("/cities")
     public List<CityDTO> findAllCity() {;
         return addressService.findAllCity();
     }
 
-    @PostMapping("/createNew")
+    @PostMapping()
     public AddressDTO create(@RequestBody AddressDTO addressDTO) {
         return addressService.save(addressDTO);
     }
 
-    @PutMapping("/update")
+    @PutMapping()
     public ResponseEntity<AddressDTO> update(@RequestBody AddressDTO addressDTO) {
         AddressDTO response = addressService.update(addressDTO);
         if (response == null) {
@@ -43,7 +43,7 @@ public class AddressController {
         }
         return ResponseEntity.ok(response);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<AddressDTO> delete(@PathVariable Integer id) {
         AddressDTO response = addressService.delete(id);
         if (response == null) {
@@ -52,3 +52,4 @@ public class AddressController {
         return ResponseEntity.ok(response);
     }
 }
+

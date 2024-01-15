@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pet_project
     username: postgres
-    password: root
+    password: ROOT
 #spring.jpa.hibernate.ddl-auto=update
   jpa:
     database: postgresql
@@ -42,5 +42,5 @@ app:
   sender:
     url: http://localhost:8080/
   image:
-   bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
-#    bucket: C:/myPetProject/back_end/pet_project/images
+    #  bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
+    bucket: C:/myPetProject/back_end/pet_project/images

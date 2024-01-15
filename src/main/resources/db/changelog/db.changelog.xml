@@ -60,6 +60,23 @@
             <column name="state" type="varchar(10)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="#4" author="punisher">
+        <addColumn tableName="addresses">
+            <column name="state" type="varchar(10)"/>
+        </addColumn>
+        <createTable tableName="promotions">
+            <column name="promotion_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="image" type="varchar"/>
+            <column name="title" type="varchar"/>
+            <column name="category" type="varchar(50)"/>
+            <column name="state" type="varchar(10)"/>
+            <column name="description" type="varchar"/>
+            <column name="startTime" type="date"/>
+            <column name="endTime" type="date"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
 
 
