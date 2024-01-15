@@ -40,13 +40,8 @@ public class TicketOrderService {
 
     public Page<TicketReadDTO> findByPage(Pageable pageable) {
         log.info("Executing findByPage method");
-        Page<TicketReadDTO> ticketReadDTOS = Page.empty();
         Page<TicketOrder> result = ticketOrdersRepository.findAll(pageable);
-        if (!result.isEmpty()) {
-            ticketReadDTOS = result.map(ticketDtoConvert::convertToTicketReadDTO);
-            return ticketReadDTOS;
-        }
-        return ticketReadDTOS;
+        return result.map(ticketDtoConvert::convertToTicketReadDTO);
     }
 
     @Transactional
@@ -114,11 +109,11 @@ public class TicketOrderService {
         return ticketOrdersRepository.findById(id).map(ticketDtoConvert::convertToTicketReadDTO);
     }
 
-    public boolean hasOrder(Integer orderId){
-       return ticketOrdersRepository.existsById(orderId);
+    public boolean hasOrder(Integer orderId) {
+        return ticketOrdersRepository.existsById(orderId);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
     public UserReadDTO findUserByTicketId(Integer id) {
         return ticketOrdersRepository.findById(id).map(TicketOrder::getUser)
                 .map(userDtoConvert::convertToUserReadDto).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

@@ -52,7 +52,7 @@ public class SecurityConfiguration {
 
 //                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
 //                            auth.anyRequest().authenticated();
-                            auth.anyRequest().permitAll();
+                            auth.anyRequest().permitAll(); // todo auth.anyRequest().authenticated();
                         }
                 )
                 .authenticationProvider(authenticationProvider)

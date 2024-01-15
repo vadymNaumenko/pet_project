@@ -31,12 +31,12 @@ VALUES ('e43fb7c0-16fb-4c4a-a329-8a731303d7c8',(SELECT users.user_id from users 
 
 
 INSERT INTO ticket_orders (game_id, user_id, price, state, number, create_at)
-VALUES ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT users.user_id from users where nickname = 'kolobok' ),24,'CANCELED','qw234rwfA','20023-10-19 10:23:54'),
-       ((SELECT game_id FROM games where title = 'Portal Strike: Kids'),(SELECT users.user_id from users where nickname = 'kolobok' ),24,'PAID','qw234rwfA','20023-11-12 10:23:54'),
-       ((SELECT game_id FROM games where title = 'Portal Arena Heroes'),(SELECT users.user_id from users where nickname = 'Fishka' ),24,'NEW','qw234rwfA','20023-1-15 10:23:54'),
-       ((SELECT game_id FROM games where title = 'Portal Arena Heroes'),(SELECT users.user_id from users where nickname = 'Stalker' ),24,'CANCELED','qw234rwfA','20023-2-11 10:23:54'),
-       ((SELECT game_id FROM games where title = 'Portal Strike: Kids'),(SELECT users.user_id from users where nickname = 'Stalker' ),24,'PAID','qw234rwfA','20023-5-16 10:23:54'),
-       ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT users.user_id from users where nickname = 'nika88' ),24,'CANCELED','qw234rwfA','20023-6-18 10:23:54');
+VALUES ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT users.user_id from users where nickname = 'kolobok' ),24,'CANCELED','qw234rz2g','20023-10-19 10:23:54'),
+       ((SELECT game_id FROM games where title = 'Portal Strike: Kids'),(SELECT users.user_id from users where nickname = 'kolobok' ),24,'PAID','qw23434fA','20023-11-12 10:23:54'),
+       ((SELECT game_id FROM games where title = 'Portal Arena Heroes'),(SELECT users.user_id from users where nickname = 'Fishka' ),24,'NEW','qw234rw12','20023-1-15 10:23:54'),
+       ((SELECT game_id FROM games where title = 'Portal Arena Heroes'),(SELECT users.user_id from users where nickname = 'Stalker' ),24,'CANCELED','q4234rwfA','20023-2-11 10:23:54'),
+       ((SELECT game_id FROM games where title = 'Portal Strike: Kids'),(SELECT users.user_id from users where nickname = 'Stalker' ),24,'PAID','q1ds4rwfA','20023-5-16 10:23:54'),
+       ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT users.user_id from users where nickname = 'nika88' ),24,'CANCELED','q1234rwfA','20023-6-18 10:23:54');
 
 INSERT INTO events (is_deleted, title, image_url, text, date)
 VALUES
