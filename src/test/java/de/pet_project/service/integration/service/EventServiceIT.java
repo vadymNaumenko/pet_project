@@ -1,6 +1,6 @@
 package de.pet_project.service.integration.service;
 
-import de.pet_project.domain.Event;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.service.EventService;
 import de.pet_project.service.integration.annotation.IT;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package de.pet_project.controller;
 
-import de.pet_project.domain.Event;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

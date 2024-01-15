@@ -1,7 +1,7 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.EventDtoConvertor;
-import de.pet_project.domain.Event;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.event.EventCreateDTO;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.repository.EventRepository;
@@ -13,7 +13,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
