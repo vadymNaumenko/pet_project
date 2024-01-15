@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,10 +42,29 @@ public class TicketOrderService {
         Page<TicketReadDTO> ticketReadDTOS = Page.empty();
         Page<TicketOrder> result = ticketOrdersRepository.findAll(pageable);
         if (!result.isEmpty()) {
-           ticketReadDTOS = result.map(ticketDtoConvert::convertToTicketReadDTO);
-         return ticketReadDTOS;
+            ticketReadDTOS = result.map(ticketDtoConvert::convertToTicketReadDTO);
+            return ticketReadDTOS;
         }
         return ticketReadDTOS;
+    }
+
+    @Transactional
+    public ResponseEntity<?> save(Integer id) {
+        log.info("Executing save method");
+
+        Optional<TicketOrder> order = ticketOrdersRepository.findById(id);
+        if (order.isPresent()) {
+            order.get().setState(TicketOrder.OrderState.PAID);
+            ticketOrdersRepository.save(order.get());
+            log.info("TicketOrder update state: {}, and save with id: {}"
+                    , order.get().getState(), order.get().getId());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(ticketDtoConvert.convertToTicketReadDTO(order.get()));
+        }
+
+        log.info("TicketOrder not found order with id: {}"
+                , order.get().getId());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new TicketOrder());
     }
 
     @Transactional
@@ -59,7 +79,7 @@ public class TicketOrderService {
         ticketOrder.setGame(game);
         ticketOrder.setUser(userRepository.findByEmail(email)
                 .orElseThrow());
-
+        //todo add generate number ticket
         TicketOrder save = ticketOrdersRepository.save(ticketOrder);
         log.info("TicketOrder saved with id: {}", save.getId());
 
@@ -67,9 +87,10 @@ public class TicketOrderService {
 
         return ticketDtoConvert.convertToTicketReadDTO(save);
     }
-    public Page<TicketReadDTO> findAllByUser(Integer id,Pageable pageable){
-      return ticketOrdersRepository.findAllTicketOrderByUserId(id,pageable)
-              .map(ticketDtoConvert::convertToTicketReadDTO);
+
+    public Page<TicketReadDTO> findAllByUser(Integer id, Pageable pageable) {
+        return ticketOrdersRepository.findAllTicketOrderByUserId(id, pageable)
+                .map(ticketDtoConvert::convertToTicketReadDTO);
     }
 
     @Transactional
@@ -83,8 +104,8 @@ public class TicketOrderService {
             log.info("TicketOrder canceled with id: {}", t.getId());
         });
 
-      return ticketDtoConvert.convertToTicketReadDTO(ticketOrder.orElseThrow(()->
-              new NoSuchElementException("Not found ticket with id: " + id)));
+        return ticketDtoConvert.convertToTicketReadDTO(ticketOrder.orElseThrow(() ->
+                new NoSuchElementException("Not found ticket with id: " + id)));
 
     }
 
@@ -92,8 +113,12 @@ public class TicketOrderService {
         return ticketOrdersRepository.findById(id).map(ticketDtoConvert::convertToTicketReadDTO);
     }
 
+    public boolean hasOrder(Integer orderId){
+       return ticketOrdersRepository.existsById(orderId);
+    }
+
     public UserReadDTO findUserByTicketId(Integer id) {
-       return ticketOrdersRepository.findById(id).map(TicketOrder::getUser)
-                .map(userDtoConvert::convertToUserReadDto).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return ticketOrdersRepository.findById(id).map(TicketOrder::getUser)
+                .map(userDtoConvert::convertToUserReadDto).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

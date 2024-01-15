@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TicketOrdersRepository extends JpaRepository<TicketOrder, Integer> {
     Page<TicketOrder> findAllTicketOrderByUserId(Integer id, Pageable pageable);
+    boolean existsById(Integer id);
 }

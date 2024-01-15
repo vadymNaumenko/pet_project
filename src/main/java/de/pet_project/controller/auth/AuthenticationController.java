@@ -1,11 +1,6 @@
 package de.pet_project.controller.auth;
 
-import de.pet_project.domain.ConfirmationCode;
-import de.pet_project.domain.User;
-import de.pet_project.mapper.UserCreateEditMapper;
-import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.service.ConfirmationCodeService;
-import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -24,7 +18,6 @@ import java.util.Optional;
 public class AuthenticationController {
 
     private final AuthenticationService service;
-    private final UserService userService;
     private final ConfirmationCodeService confirmationCodeService;
 
     @PostMapping("/authenticate")
@@ -37,18 +30,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
-    @GetMapping("/confirm/cod={cod}")
+    @GetMapping("/confirm/{cod}")
     public ResponseEntity<?> checkCod(@PathVariable String cod){
-
-//        Optional<ConfirmationCode> byCode = confirmationCodeRepository.findByCode(cod); // todo mast be service
-//        if (byCode.isPresent()) {
-//            if (userService.codIsValid(cod)){
-//                User user = byCode.get().getUser();
-//                userService.setState(byCode.get());
-//                user.setState(User.State.CONFIRMED);
-//                return  ResponseEntity.status(HttpStatus.OK).body("User: is Confirmed");
-//            };
-//        }
 
        if (confirmationCodeService.setState(cod)){
            return  ResponseEntity.status(HttpStatus.OK).body("User: is Confirmed");

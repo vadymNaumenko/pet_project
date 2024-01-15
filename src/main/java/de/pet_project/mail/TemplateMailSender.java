@@ -34,6 +34,8 @@ public class TemplateMailSender {
 
     @Value("${app.sender.url}")
     private String baseUrl;
+    @Value("${app.sender.buy}")
+    private String buyUrl;
 
     @Async
     public void sendMail(String email, String subject, String text) {
@@ -88,6 +90,8 @@ public class TemplateMailSender {
             model.put("title",game.getTitle());
             model.put("description",game.getDescription());
             model.put("price",game.getPrice());
+            model.put("link",buyUrl);
+            //todo mast be put number ticket
 
             html = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
         } catch (IOException e) {
