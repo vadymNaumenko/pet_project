@@ -1,5 +1,7 @@
 package de.pet_project.service;
 
+import de.pet_project.convertor.AddressDtoConvert;
+import de.pet_project.domain.enums.game.State;
 import de.pet_project.dto.address.AddressDTO;
 import de.pet_project.dto.address.CityDTO;
 import de.pet_project.domain.Address;
@@ -19,23 +21,27 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AddressService {
     private final AddressRepository addressRepository;
+    private final AddressDtoConvert addressDtoConverter;
 
     public List<AddressDTO> findAll() {
-        return addressRepository.findAll().stream().map(AddressDTO::getInstance).toList();
+        return addressRepository.findAll().stream()
+                .map(addressDtoConverter::convertToAddressDTO).toList();
     }
 
     public List<AddressDTO> findAllAddressByCity(String city) {
-        return addressRepository.findAllAddressByCity(city).stream().map(AddressDTO::getInstance).toList();
+        return addressRepository.findAllAddressByCity(city).stream()
+                .map(addressDtoConverter::convertToAddressDTO).toList();
     }
 
     public List<CityDTO> findAllCity() {                 //TODO
-        return addressRepository.findAllCity().stream().map(CityDTO::getInstance).toList();
+        return addressRepository.findAllCity().stream()
+                .map(addressDtoConverter::convertToCityDTO).toList();
     }
 
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO save(AddressDTO addressDTO) {
-        return Optional.of(fillAndSave(addressDTO, new Address())).orElseThrow();
+        return Optional.of(addressDtoConverter.convertToAddress(addressDTO)).orElseThrow();
     }
 
     @Transactional
@@ -44,7 +50,7 @@ public class AddressService {
         Validate.notNull(addressDTO.getId(), "Field id can't be null");
         Address address = addressRepository.findById(addressDTO.getId()).orElse(null);
         if (address != null) {
-            return fillAndSave(addressDTO, address);
+            return addressDtoConverter.convertToAddressDTO(address);
         }
         log.error("Item from address table not found, addressId={}", addressDTO.getId());
         return null;
@@ -55,20 +61,11 @@ public class AddressService {
     public AddressDTO delete(Integer addressId) {
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {
-            addressRepository.delete(address);
-            return AddressDTO.getInstance(address);
+            address.setState(State.COMPLETED);
+            addressRepository.save(address);
+            return addressDtoConverter.convertToAddressDTO(address);
         }
         log.error("Item from address table not found, addressId={}", addressId);
         return null;
-    }
-
-    private AddressDTO fillAndSave(AddressDTO addressDTO, Address address) {
-        address.setCountry(addressDTO.getCountry());
-        address.setCity(addressDTO.getCity());
-        address.setStreet(addressDTO.getStreet());
-        address.setStreetNumber(addressDTO.getStreetNumber());
-        address.setHouseNumber(addressDTO.getHouseNumber());
-        address = addressRepository.save(address);
-        return AddressDTO.getInstance(address);
     }
 }

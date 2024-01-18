@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface GameRepository extends  JpaRepository<Game, Integer> {
 
     @Query("SELECT g FROM Game g WHERE g.genre =:genre")
@@ -18,9 +19,6 @@ public interface GameRepository extends  JpaRepository<Game, Integer> {
 
     @Query("SELECT g FROM Game g WHERE g.state =:state")
     Page<Game> findAllByState(@Param("state")State state, Pageable pageable);
-
-    @Query("SELECT g.state FROM Game g WHERE g.id =:id")
-    State findState(@Param("id") Integer id);
 
     @Query("SELECT g FROM Game g WHERE g.minAge =:minAge")
     Page<Game> findAllByMinAge(@Param("minAge")MinAge minAge, Pageable pageable);

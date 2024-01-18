@@ -38,6 +38,4 @@ public class Game {
 
     private String description;
     private LocalDate releaseDate;
-
-
 }

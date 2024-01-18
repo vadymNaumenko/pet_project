@@ -3,18 +3,17 @@ package de.pet_project.dto.game;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class GameDTO {
+public class GameCreateUpdateDTO {
     private Integer id;
-    private String image;
+    private MultipartFile image;
     private String title;
     private Double price;
     private String genre;

@@ -13,9 +13,5 @@ public class AddressDTO {
     private String street;
     private String streetNumber;
     private Integer houseNumber;
-
-    public static AddressDTO getInstance(Address address) {
-        return new AddressDTO(address.getId(), address.getCountry(), address.getCity(),
-                address.getStreet(), address.getStreetNumber(), address.getHouseNumber());
-    }
+    private String state;
 }
