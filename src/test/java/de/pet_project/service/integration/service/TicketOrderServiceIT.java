@@ -2,6 +2,7 @@ package de.pet_project.service.integration.service;
 
 import de.pet_project.domain.TicketOrder;
 import de.pet_project.dto.ticket.TicketReadDTO;
+import de.pet_project.service.GameService;
 import de.pet_project.service.TicketOrderService;
 import de.pet_project.service.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TicketOrderServiceIT {
 
     private final TicketOrderService ticketOrderService;
+    private final GameService gameService;
 
     @Test
     void findByPage() {
@@ -40,8 +42,39 @@ public class TicketOrderServiceIT {
         assertEquals(3,pageable.getPageSize());
     }
 
-
-//    public ResponseEntity<?> save(Integer id) {
+//    void save(){
+//        gameService.findByTitle()
+//
+//    }
+//
+//
+//
+//    @Transactional
+//    public TicketReadDTO save(String email, Integer gameId) {
+//        log.info("Executing save method");
+//
+//        Game game = gameRepository.findById(gameId).orElseThrow();
+//        TicketOrder ticketOrder = new TicketOrder();
+//        ticketOrder.setState(TicketOrder.OrderState.NEW);
+//        ticketOrder.setCreateAt(LocalDateTime.now());
+//        ticketOrder.setPrice(game.getPrice());
+//        ticketOrder.setGame(game);
+//        ticketOrder.setUser(userRepository.findByEmail(email)
+//                .orElseThrow());
+//
+//        TicketOrder save = ticketOrdersRepository.save(ticketOrder);
+//        log.info("TicketOrder saved with id: {}", save.getId());
+//
+//        templateMailSender.sendTicket(ticketOrder);
+//
+//        return ticketDtoConvert.convertToTicketReadDTO(save);
+//    }
+//
+//    public Page<TicketReadDTO> findAllByUser(Integer id, Pageable pageable) {
+//        return ticketOrdersRepository.findAllTicketOrderByUserId(id, pageable)
+//                .map(ticketDtoConvert::convertToTicketReadDTO);
+//    }
+    //    public ResponseEntity<?> save(Integer id) {
 //
 //
 //        Optional<TicketOrder> order = ticketOrdersRepository.findById(id);
@@ -57,32 +90,6 @@ public class TicketOrderServiceIT {
 //        log.info("TicketOrder not found order with id: {}"
 //                , order.get().getId());
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new TicketOrder());
-//    }
-//
-//    @Transactional
-//    public TicketReadDTO save(String email, Integer gameId) {
-//        log.info("Executing save method");
-//
-//        Game game = gameRepository.findById(gameId).orElseThrow();
-//        TicketOrder ticketOrder = new TicketOrder();
-//        ticketOrder.setState(TicketOrder.OrderState.NEW);
-//        ticketOrder.setCreateAt(LocalDateTime.now());
-//        ticketOrder.setPrice(game.getPrice());
-//        ticketOrder.setGame(game);
-//        ticketOrder.setUser(userRepository.findByEmail(email)
-//                .orElseThrow());
-
-//        TicketOrder save = ticketOrdersRepository.save(ticketOrder);
-//        log.info("TicketOrder saved with id: {}", save.getId());
-//
-//        templateMailSender.sendTicket(ticketOrder);
-//
-//        return ticketDtoConvert.convertToTicketReadDTO(save);
-//    }
-//
-//    public Page<TicketReadDTO> findAllByUser(Integer id, Pageable pageable) {
-//        return ticketOrdersRepository.findAllTicketOrderByUserId(id, pageable)
-//                .map(ticketDtoConvert::convertToTicketReadDTO);
 //    }
 //
 //    @Transactional

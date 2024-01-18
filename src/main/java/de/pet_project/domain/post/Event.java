@@ -1,4 +1,4 @@
-package de.pet_project.domain;
+package de.pet_project.domain.post;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,5 +26,7 @@ public class Event {
     private LocalDate date;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+    @OneToMany(mappedBy = "postId")
+    List<CommitForPost> commits;
 
 }

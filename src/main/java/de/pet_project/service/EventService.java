@@ -1,10 +1,12 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.EventDtoConvertor;
-import de.pet_project.domain.Event;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.event.EventCreateDTO;
 import de.pet_project.dto.event.EventDTO;
+import de.pet_project.repository.CommitForPostRepository;
 import de.pet_project.repository.EventRepository;
+import de.pet_project.repository.ReactionToPostCommitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -13,7 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +32,15 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventDtoConvertor eventDtoConvertor;
+    private final CommitForPostRepository commitRepository;
+    private final ReactionToPostCommitRepository reactionRepository;
     private boolean enable = true; // todo mast be add in application.yml
     private String newsPage = "https://www.uploadvr.com/reviews";
     private String site = "https://www.uploadvr.com";
 
 
-    //    @Scheduled(fixedRate = 2 * 60 * 1000)
-    private void readNews() {
+    @Scheduled(fixedRate = 2 * 60 * 60 * 1000)
+     void readNews() {
         ArrayList<EventCreateDTO> events = new ArrayList<>();
         try {
             Document document = Jsoup.connect(newsPage).get();
@@ -45,9 +49,9 @@ public class EventService {
             for (Element element : elements) {
                 String image = "https://www.uploadvr.com" + element.select(".c-card__image").attr("data-src");//data-src
 
-//                if (checkNews(image)){ // todo add check news
-//                    continue;
-//                }
+                if (checkNews(image)) { // todo add check news
+                    continue;
+                }
 
                 String title = element.select(".c-card__headline").text();
                 String date = element.select(".c-timestamp").text();
@@ -95,8 +99,9 @@ public class EventService {
         return eventRepository.findById(id)
                 .map(eventDtoConvertor::convertToEventDTO);
     }
+
     @Transactional
-    public Optional<EventDTO> update(EventDTO dto)  {
+    public Optional<EventDTO> update(EventDTO dto) {
         if (eventRepository.existsById(dto.getId()))
             eventRepository.save(eventDtoConvertor.convertToEvent(dto));
 
@@ -124,8 +129,8 @@ public class EventService {
     public Optional<EventDTO> delete(Long id) {
         return eventRepository.findById(id).map(event -> {
             event.setIsDeleted(true);
-          eventRepository.save(event);
-          return eventDtoConvertor.convertToEventDTO(event);
+            eventRepository.save(event);
+            return eventDtoConvertor.convertToEventDTO(event);
         });
 
     }

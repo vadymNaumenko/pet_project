@@ -1,8 +1,7 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.EventDtoConvertor;
-import de.pet_project.domain.Event;
-import de.pet_project.dto.event.EventDTO;
+import de.pet_project.domain.post.Event;
 import de.pet_project.repository.EventRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

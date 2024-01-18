@@ -1,6 +1,6 @@
 package de.pet_project.convertor;
 
-import de.pet_project.domain.Event;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.event.EventCreateDTO;
 import de.pet_project.dto.event.EventDTO;
 import de.pet_project.utils.DateUtils;
