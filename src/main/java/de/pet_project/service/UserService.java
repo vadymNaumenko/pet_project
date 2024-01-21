@@ -2,8 +2,10 @@ package de.pet_project.service;
 
 import de.pet_project.convertor.UserDtoConvert;
 import de.pet_project.domain.ConfirmationCode;
+import de.pet_project.domain.post.Event;
 import de.pet_project.dto.user.UserDTO;
 import de.pet_project.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserFilter;
 import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.repository.ConfirmationCodeRepository;
@@ -11,7 +13,9 @@ import de.pet_project.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +23,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,6 +113,29 @@ public class UserService /*implements UserDetailsService*/ {
         return  userRepository.findByEmail(email)
                 .map(userDtoConvert::convertToUserDTO);
     }
+
+        public Page<UserReadDTO> findByFilter(UserFilter filter, Integer pageNumber, Integer pageSize) {
+        Sort.TypedSort<User> sort = Sort.sort(User.class);
+        sort.by(User::getFirstname);
+        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
+        return userRepository.findByFilter(filter,pageable)
+                .map(userDtoConvert::convertToUserReadDto);
+    }
+
+
+//    public Page<UserReadDTO> findByFilter(UserFilter filter,Integer pageNumber,Integer pageSize) {
+//        Sort.TypedSort<User> sort = Sort.sort(User.class);
+//        sort.by(User::getFirstname);
+//        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
+//        return userRepository.findByFilter(filter);
+//    }
+
+//    public Page<UserReadDTO> findByFilter(UserFilter filter,Integer pageNumber,Integer pageSize) {
+//        Sort.TypedSort<User> sort = Sort.sort(User.class);
+//        sort.by(User::getFirstname);
+//        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
+////        return userRepository.findByFilter(filter);
+//    }
 
 //    @Override
 //    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

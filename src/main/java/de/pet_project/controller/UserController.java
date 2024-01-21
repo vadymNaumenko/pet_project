@@ -1,6 +1,7 @@
 package de.pet_project.controller;
 
 import de.pet_project.dto.user.UserEditeDTO;
+import de.pet_project.dto.user.UserFilter;
 import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,6 +36,10 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
+    @PostMapping("/filter")
+    public Page<UserReadDTO> findByFilter(@RequestBody UserFilter filter, @RequestParam Integer pageNumber, @RequestParam Integer pageSize){
+        return userService.findByFilter(filter,pageNumber,pageSize);
+    }
     @GetMapping(value = "/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
 
@@ -51,6 +58,7 @@ public class UserController {
 //        if (userService.existsNickname(userEditeDTO.getNickname())){
 //        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
 //        }
+
         Optional<UserEditeDTO> user = userService.update(userEditeDTO);
         if (user.isPresent()){
             return ResponseEntity.status(HttpStatus.OK).body(user.get());
