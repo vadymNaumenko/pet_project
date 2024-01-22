@@ -77,6 +77,54 @@
             <column name="endTime" type="date"/>
         </createTable>
     </changeSet>
+    <changeSet id="#5" author="punisher">
+        <createTable tableName="location_games">
+            <column name="location_game_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="game_id" type="int"/>
+            <column name="address_id" type="int"/>
+        </createTable>
+        <createTable tableName="location_promotions">
+            <column name="location_promotion_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="promotion_id" type="int"/>
+            <column name="address_id" type="int"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="location_games" baseColumnNames="game_id"
+                                 constraintName="fk_location_games_games"
+                                 referencedTableName="games" referencedColumnNames="game_id"/>
+        <addForeignKeyConstraint baseTableName="location_games" baseColumnNames="address_id"
+                                 constraintName="fk_location_games_addresses"
+                                 referencedTableName="addresses" referencedColumnNames="address_id"/>
+        <addForeignKeyConstraint baseTableName="location_promotions" baseColumnNames="promotion_id"
+                                 constraintName="fk_location_promotions_promotions"
+                                 referencedTableName="promotions" referencedColumnNames="promotion_id"/>
+        <addForeignKeyConstraint baseTableName="location_promotions" baseColumnNames="address_id"
+                                 constraintName="fk_location_promotions_addresses"
+                                 referencedTableName="addresses" referencedColumnNames="address_id"/>
+    </changeSet>
+    <changeSet id="#6" author="punisher">
+        <addColumn tableName="location_promotions">
+            <column name="state" type="varchar(15)"/>
+        </addColumn>
+        <addColumn tableName="location_games">
+            <column name="state" type="varchar(15)"/>
+        </addColumn>
+        <dropColumn tableName="promotions">
+            <column name="startTime"/>
+        </dropColumn>
+        <dropColumn tableName="promotions">
+            <column name="endTime"/>
+        </dropColumn>
+        <addColumn tableName="promotions">
+            <column name="start_time" type="date"/>
+        </addColumn>
+        <addColumn tableName="promotions">
+            <column name="end_time" type="date"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 
 

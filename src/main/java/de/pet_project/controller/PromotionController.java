@@ -1,5 +1,8 @@
 package de.pet_project.controller;
 
+import de.pet_project.domain.LocationGame;
+import de.pet_project.domain.LocationPromotion;
+import de.pet_project.dto.location.LocationPromotionDTO;
 import de.pet_project.dto.promotion.PromotionCreateUpdateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
@@ -18,6 +21,19 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/promotions")
 public class PromotionController {
     private final PromotionService promotionService;
+
+    @GetMapping("all/address{addressId}/page/{pageNum}/{pageSize}")
+    public Page<PromotionShortDTO> findAllByAddress(@PathVariable Integer addressId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return promotionService.findAllByAddress(pageable, addressId);
+    }
+
+    @GetMapping("all/city{city}/page/{pageNum}/{pageSize}")
+    public Page<PromotionShortDTO> findAllByCity(@PathVariable String city, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return promotionService.findAllByCity(pageable, city);
+    }
+
 
     //TODO get all categories
     //TODO find by categories
@@ -43,8 +59,13 @@ public class PromotionController {
     }
 
     @PostMapping()
-    public PromotionCreateUpdateDTO create(@RequestBody PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
+    public PromotionCreateUpdateDTO save(@RequestBody PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
         return promotionService.save(promotionCreateUpdateDTO);
+    }
+
+    @PostMapping("location_promotions")
+    public LocationPromotion save(@RequestBody LocationPromotionDTO locationPromotionDTO) {
+        return promotionService.save(locationPromotionDTO);
     }
 
     @PutMapping()
@@ -56,9 +77,27 @@ public class PromotionController {
         return ResponseEntity.ok(response);
     }
 
+    @PutMapping("location_games")
+    public ResponseEntity<LocationPromotion> update(@RequestBody LocationPromotionDTO locationPromotionDTO) {
+        LocationPromotion response = promotionService.update(locationPromotionDTO);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<PromotionDTO> delete(@PathVariable Integer id) {
         PromotionDTO response = promotionService.delete(id);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("location_promotions{locationPromotionId}")
+    public ResponseEntity<LocationPromotion> deleteLocationPromotion(@PathVariable Integer locationPromotionId) {
+        LocationPromotion response = promotionService.deleteLocationPromotion(locationPromotionId);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
