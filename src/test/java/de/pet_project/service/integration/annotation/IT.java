@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @ActiveProfiles("test")
 @Target({ElementType.TYPE})
 @Sql(value = {"classpath:sql/data.sql"})
-@Sql(value = {"classpath:sql/clear_data.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+//@Sql(value = {"classpath:sql/clear_data.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public @interface IT {

@@ -52,7 +52,7 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
 
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         countQuery.select(criteriaBuilder.count(countQuery.from(User.class))).where(predicates.toArray(Predicate[]::new));
-        Long totalResults = entityManager.createQuery(countQuery).getSingleResult();
+        Long totalResults = entityManager.createQuery(countQuery).getSingleResult(); // todo has error
 
         return new PageImpl<>(resultList, pageable, totalResults);
     }

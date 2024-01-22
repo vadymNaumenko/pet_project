@@ -42,7 +42,7 @@ public class UserService /*implements UserDetailsService*/ {
 
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
+    //    @PreAuthorize("hasRole('ADMIN')")
     public Optional<UserDTO> findById(Integer id) {
         return userRepository.findAll().stream()
                 .filter(user -> user.getId().equals(id))
@@ -50,10 +50,10 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     @Transactional
-    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
+    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO, MultipartFile image) {
         return userRepository.findById(userUpdateDTO.getId())
                 .map(user -> {
-                    uploadImage(userUpdateDTO.getAvatar());
+                    userUpdateDTO.setAvatar(uploadImage(image));
                     return userDtoConvert.convertToUser(userUpdateDTO, user);
                 })
                 .map(userRepository::save)
@@ -74,6 +74,7 @@ public class UserService /*implements UserDetailsService*/ {
                     return true;
                 }).orElse(false);
     }
+
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public boolean ban(Integer id) {
@@ -84,6 +85,7 @@ public class UserService /*implements UserDetailsService*/ {
                     return true;
                 }).orElse(false);
     }
+
     public Optional<byte[]> findAvatar(Integer id) {
         return userRepository.findById(id)
                 .map(User::getAvatar)
@@ -92,15 +94,17 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     @SneakyThrows
-    private void uploadImage(MultipartFile image) {
+    private String uploadImage(MultipartFile image) {
         if (!image.isEmpty()) {
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
+            return image.getOriginalFilename();
         }
+        return null;
     }
 
     public boolean codIsValid(String code) {
         Optional<ConfirmationCode> confirmationCode = confirmationCodeRepository.findByCode(code);
-       return confirmationCode.map(c -> {
+        return confirmationCode.map(c -> {
             if (c.getExpiredDateTime().isBefore(LocalDateTime.now())) {
                 c.getUser().setState(User.State.CONFIRMED);
                 userRepository.save(c.getUser());
@@ -110,15 +114,15 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public Optional<UserDTO> findByEmail(String email) {
-        return  userRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .map(userDtoConvert::convertToUserDTO);
     }
 
-        public Page<UserReadDTO> findByFilter(UserFilter filter, Integer pageNumber, Integer pageSize) {
+    public Page<UserReadDTO> findByFilter(UserFilter filter, Integer pageNumber, Integer pageSize) {
         Sort.TypedSort<User> sort = Sort.sort(User.class);
         sort.by(User::getFirstname);
-        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
-        return userRepository.findByFilter(filter,pageable)
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort.descending());
+        return userRepository.findByFilter(filter, pageable)
                 .map(userDtoConvert::convertToUserReadDto);
     }
 

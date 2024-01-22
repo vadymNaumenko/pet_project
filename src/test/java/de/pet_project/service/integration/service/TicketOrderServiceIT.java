@@ -21,6 +21,7 @@ public class TicketOrderServiceIT {
     private final GameService gameService;
 
     @Test
+//    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void findByPage() {
         PageRequest pageable = PageRequest.of(0, 3, Sort.sort(TicketOrder.class));
         Page<TicketReadDTO> actual = ticketOrderService

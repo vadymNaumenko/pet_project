@@ -33,16 +33,14 @@ public class UserMvcController {
 
     }
 
-    @PostMapping("/{id}/update")
-    public void update(@PathVariable Integer id,@ModelAttribute UserEditeDTO userEditeDTO, Model model /*,MethodArgumentNotValidException ex */) {
-        userEditeDTO.setId(id);
-        userService.update(userEditeDTO);
-        System.out.println();
-//        if (userService.existsNickname(userEditeDTO.getNickname())){
-//        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
-//        }
+//    @PostMapping("/{id}/update")
+//    public void update(@PathVariable Integer id,@ModelAttribute UserEditeDTO userEditeDTO, Model model /*,MethodArgumentNotValidException ex */) {
+//        userEditeDTO.setId(id);
+//        userService.update(userEditeDTO);
+//        System.out.println();
+////        if (userService.existsNickname(userEditeDTO.getNickname())){
+////        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
+////        }
 
-    }
-
-
+//    }
 }

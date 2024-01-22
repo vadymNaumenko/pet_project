@@ -40,18 +40,18 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         auth -> {
                             auth.requestMatchers("/mail/cod/**","/user", "/api/v1/auth/**", "/mvc/test/**", "/api/v1/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
-                            auth.requestMatchers("/api/v1/users/admin").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.POST, "/api/game/users/**").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.DELETE, "/api/game/users/**").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.PUT, "/api/game/users/**").hasAuthority("ADMIN");
-
-                            auth.requestMatchers(HttpMethod.POST, "/api/address/**").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.DELETE, "/api/address/**").hasAuthority("ADMIN");
-                            auth.requestMatchers(HttpMethod.PUT, "/api/address/**").hasAuthority("ADMIN");
-
-//                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
-//                            auth.anyRequest().authenticated();
+//                            auth.requestMatchers("/api/v1/users/admin").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.POST, "/api/game/users/**").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.DELETE, "/api/game/users/**").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.PUT, "/api/game/users/**").hasAuthority("ADMIN");
+//
+//                            auth.requestMatchers(HttpMethod.POST, "/api/address/**").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.DELETE, "/api/address/**").hasAuthority("ADMIN");
+//                            auth.requestMatchers(HttpMethod.PUT, "/api/address/**").hasAuthority("ADMIN");
+//
+////                                .requestMatchers("/user/**","**/game/**").hasAnyRole("USER", "ADMIN")
+////                            auth.anyRequest().authenticated();
                             auth.anyRequest().permitAll(); // todo auth.anyRequest().authenticated();
                         }
                 )

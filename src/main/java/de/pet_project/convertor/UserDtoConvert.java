@@ -24,9 +24,9 @@ public class UserDtoConvert {
 
     public User convertToUser(UserEditeDTO userUpdateDTO, User toUser) {
 
-        Optional.ofNullable(userUpdateDTO.getAvatar())
-                .filter(Predicate.not(MultipartFile::isEmpty))
-                .ifPresent(image -> toUser.setAvatar(image.getOriginalFilename()));
+//        Optional.ofNullable(userUpdateDTO.getAvatar())
+//                .filter(Predicate.not(MultipartFile::isEmpty))
+//                .ifPresent(image -> toUser.setAvatar(image.getOriginalFilename()));
 
         if (userUpdateDTO.getEmail() != null)
             toUser.setEmail(userUpdateDTO.getEmail());
