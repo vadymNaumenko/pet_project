@@ -1,11 +1,11 @@
 package de.pet_project.service;
 
-import de.pet_project.convertor.EventDtoConvertor;
-import de.pet_project.domain.post.Event;
-import de.pet_project.dto.event.EventCreateDTO;
-import de.pet_project.dto.event.EventDTO;
+import de.pet_project.convertor.NewsDtoConvertor;
+import de.pet_project.domain.post.News;
+import de.pet_project.dto.event.NewsCreateDTO;
+import de.pet_project.dto.event.NewsDTO;
 import de.pet_project.repository.CommitForPostRepository;
-import de.pet_project.repository.EventRepository;
+import de.pet_project.repository.NewsRepository;
 import de.pet_project.repository.ReactionToPostCommitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,10 +29,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EventService {
+public class NewsService {
 
-    private final EventRepository eventRepository;
-    private final EventDtoConvertor eventDtoConvertor;
+    private final NewsRepository newsRepository;
+    private final NewsDtoConvertor newsDtoConvertor;
     private final CommitForPostRepository commitRepository;
     private final ReactionToPostCommitRepository reactionRepository;
     private boolean enable = true; // todo mast be add in application.yml
@@ -40,8 +41,8 @@ public class EventService {
 
 
     @Scheduled(fixedRate = 2 * 60 * 60 * 1000)
-     void readNews() {
-        ArrayList<EventCreateDTO> events = new ArrayList<>();
+    void readNews() {
+        ArrayList<NewsCreateDTO> events = new ArrayList<>();
         try {
             Document document = Jsoup.connect(newsPage).get();
             Elements elements = document.select(".js-card");
@@ -57,16 +58,21 @@ public class EventService {
                 String date = element.select(".c-timestamp").text();
                 String urlToNews = "https://www.uploadvr.com" + element.select(".c-card__headline a").attr("href");
                 String[] arr = readText(urlToNews);
-                events.add(new EventCreateDTO(title, image, arr[0], arr[1], date));
+                events.add(new NewsCreateDTO(title, image, arr[0], arr[1], date));
             }
 
         } catch (IOException e) {
             log.error(e.getMessage());
         }
 
-        for (EventCreateDTO dto : events) {
-            Event event = eventDtoConvertor.convertToEvent(dto);
-            eventRepository.save(event);
+        for (NewsCreateDTO dto : events) {
+
+            if (dto.getDateTime().equals( "Today")) {
+                String[] str = LocalDate.now().toString().split("-");
+                dto.setDateTime(str[2]+"-"+str[1]+"-"+str[0]);
+            }
+            News news = newsDtoConvertor.convertToNews(dto);
+            newsRepository.save(news);
         }
 
     }
@@ -87,56 +93,56 @@ public class EventService {
 
 
     private boolean checkNews(String imageUrl) {
-        return eventRepository.existsByImageUrl(imageUrl);
+        return newsRepository.existsByImageUrl(imageUrl);
     }
 
-    public Page<EventDTO> findAll(Pageable pageable) {
-        return eventRepository.findAll(pageable)
-                .map(eventDtoConvertor::convertToEventDTO);
+    public Page<NewsDTO> findAll(Pageable pageable) {
+        return newsRepository.findAll(pageable)
+                .map(newsDtoConvertor::convertToNewsDTO);
     }
 
-    public Optional<EventDTO> findById(Long id) {
-        return eventRepository.findById(id)
-                .map(eventDtoConvertor::convertToEventDTO);
+    public Optional<NewsDTO> findById(Long id) {
+        return newsRepository.findById(id)
+                .map(newsDtoConvertor::convertToNewsDTO);
     }
 
     @Transactional
-    public Optional<EventDTO> update(EventDTO dto) {
-        if (eventRepository.existsById(dto.getId()))
-            eventRepository.save(eventDtoConvertor.convertToEvent(dto));
+    public Optional<NewsDTO> update(NewsDTO dto) {
+        if (newsRepository.existsById(dto.getId()))
+            newsRepository.save(newsDtoConvertor.convertToNews(dto));
 
-        return eventRepository.findById(dto.getId())
-                .map(eventDtoConvertor::convertToEventDTO);
+        return newsRepository.findById(dto.getId())
+                .map(newsDtoConvertor::convertToNewsDTO);
 
     }
 
-    public List<EventDTO> findAllByTitle(String str) {
-        return eventRepository.findAllByTitle(str)
+    public List<NewsDTO> findAllByTitle(String str) {
+        return newsRepository.findAllByTitle(str)
                 .stream()
-                .map(eventDtoConvertor::convertToEventDTO)
+                .map(newsDtoConvertor::convertToNewsDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<EventDTO> findByTitle(String str) {
-        return eventRepository.findByTitle(str)
+    public List<NewsDTO> findByTitle(String str) {
+        return newsRepository.findByTitle(str)
                 .stream()
-                .map(eventDtoConvertor::convertToEventDTO)
+                .map(newsDtoConvertor::convertToNewsDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
-    public Optional<EventDTO> delete(Long id) {
-        return eventRepository.findById(id).map(event -> {
+    public Optional<NewsDTO> delete(Long id) {
+        return newsRepository.findById(id).map(event -> {
             event.setIsDeleted(true);
-            eventRepository.save(event);
-            return eventDtoConvertor.convertToEventDTO(event);
+            newsRepository.save(event);
+            return newsDtoConvertor.convertToNewsDTO(event);
         });
 
     }
 
     public boolean hasEvent(String url) {
-        return eventRepository.existsByImageUrl(url);
+        return newsRepository.existsByImageUrl(url);
     }
 }
 

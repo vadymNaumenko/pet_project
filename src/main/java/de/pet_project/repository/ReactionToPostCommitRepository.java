@@ -1,9 +1,9 @@
 package de.pet_project.repository;
 
-import de.pet_project.domain.post.ReactionToPostCommit;
+import de.pet_project.domain.post.ReactionToNewsComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReactionToPostCommitRepository extends JpaRepository<ReactionToPostCommit,Long>{
+public interface ReactionToPostCommitRepository extends JpaRepository<ReactionToNewsComment,Long>{
 }

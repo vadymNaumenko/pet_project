@@ -11,14 +11,14 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "commit_for_post")
-public class CommitForPost {
+@Table(name = "comment_on_news")
+public class CommentOnNews {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    Event postId;
+    News postId;
     @Column(name = "comment_text")
     String text;
     LocalDateTime created_at;

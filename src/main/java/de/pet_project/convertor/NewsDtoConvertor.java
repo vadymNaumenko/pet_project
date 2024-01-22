@@ -1,8 +1,8 @@
 package de.pet_project.convertor;
 
-import de.pet_project.domain.post.Event;
-import de.pet_project.dto.event.EventCreateDTO;
-import de.pet_project.dto.event.EventDTO;
+import de.pet_project.domain.post.News;
+import de.pet_project.dto.event.NewsCreateDTO;
+import de.pet_project.dto.event.NewsDTO;
 import de.pet_project.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EventDtoConvertor {
+public class NewsDtoConvertor {
     private final ModelMapper modelMapper;
 
-    public EventDTO convertToEventDTO(Event event){
-        return modelMapper.map(event,EventDTO.class);
+    public NewsDTO convertToNewsDTO(News event){
+        return modelMapper.map(event, NewsDTO.class);
     }
-    public Event convertToEvent(EventDTO eventDTO){
-        return modelMapper.map(eventDTO,Event.class);
+    public News convertToNews(NewsDTO eventDTO){
+        return modelMapper.map(eventDTO, News.class);
     }
-    public Event convertToEvent(EventCreateDTO eventCreateDTO){
-        Event event = modelMapper.map(eventCreateDTO,Event.class);
-        event.setDate(DateUtils.convertDate(eventCreateDTO.getDateTime()));
-        return event;
+    public News convertToNews(NewsCreateDTO eventCreateDTO){
+        News news = modelMapper.map(eventCreateDTO, News.class);
+        news.setDate(DateUtils.convertDate(eventCreateDTO.getDateTime()));
+        return news;
     }
 }

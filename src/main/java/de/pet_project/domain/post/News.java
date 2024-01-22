@@ -12,8 +12,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
-public class Event {
+@Table(name = "news")
+public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id ;
@@ -27,6 +27,6 @@ public class Event {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
     @OneToMany(mappedBy = "postId")
-    List<CommitForPost> commits;
+    List<CommentOnNews> commits;
 
 }

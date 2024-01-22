@@ -38,7 +38,7 @@ VALUES ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT u
        ((SELECT game_id FROM games where title = 'Portal Strike: Kids'),(SELECT users.user_id from users where nickname = 'Stalker' ),24,'PAID','qw234rwfA','20023-5-16 10:23:54'),
        ((SELECT game_id FROM games where title = 'Resident Evil 4 VR'),(SELECT users.user_id from users where nickname = 'nika88' ),24,'CANCELED','qw234rwfA','20023-6-18 10:23:54');
 
-INSERT INTO events (is_deleted, title, image_url, text, date)
+INSERT INTO news (is_deleted, title, image_url, text, date)
 VALUES
     (false,'Asgard''s Wrath 2 Review: Godly Scale, But At What Cost?', 'https://www.uploadvr.com/content/images/size/w800/format/webp/2023/12/Screenshot-2023-12-14-at-6.45.52-pm.png', 'Asgard''s Wrath 2 is available now, bringing the open world fantasy RPG genre to the VR masses.', DATE'2023-12-20'),
     (false, 'Resident Evil 4 Remake VR Review: The Definitive VR Version Of A Non-Stop, Thrilling Campaign', 'https://www.uploadvr.com/content/images/size/w800/format/webp/2023/12/Resident-Evil-4_20231209110035.png', 'While not completely free of its third-person trappings, this VR version of',DATE'2023-12-16'),

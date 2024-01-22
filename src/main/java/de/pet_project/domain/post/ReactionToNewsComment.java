@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "reaction_to_post_commit")
-public class ReactionToPostCommit {
+@Table(name = "reaction_to_news_comment")
+public class ReactionToNewsComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    CommitForPost commitId;
+    CommentOnNews commitId;
     @ManyToOne
     User userId;
     String reaction;

@@ -1,8 +1,8 @@
 package de.pet_project.service;
 
-import de.pet_project.convertor.EventDtoConvertor;
-import de.pet_project.domain.post.Event;
-import de.pet_project.repository.EventRepository;
+import de.pet_project.convertor.NewsDtoConvertor;
+import de.pet_project.domain.post.News;
+import de.pet_project.repository.NewsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,19 +18,19 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EventServiceTest {
     @Mock
-    private EventRepository eventRepository;
+    private NewsRepository eventRepository;
     @Mock
-    private EventDtoConvertor eventDtoConvertor;
+    private NewsDtoConvertor eventDtoConvertor;
     @InjectMocks
-    private EventService eventService;
+    private NewsService eventService;
     @Test
     void findById() {
         // Arrange
-        Event mockEvent = new Event();
+        News mockEvent = new News();
         Mockito.doReturn(Optional.of(mockEvent))
                 .when(eventRepository).findById(36L);
 
-        Optional<Event> actual = eventRepository.findById(36L);
+        Optional<News> actual = eventRepository.findById(36L);
 
         assertTrue(actual.isPresent());
 
