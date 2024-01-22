@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Integer> {
+public interface UserRepository extends JpaRepository<User,Integer>, FilterUserRepository {
     boolean existsByNickname(String nickname);
     Optional<User> findByNickname(String username);
 
+    Optional<User> findByEmailLike(String e);
     Optional<User> findByEmail(String email);
 
 

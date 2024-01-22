@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UserEditeDTO {
     private Integer id;
-    private MultipartFile avatar;
+    private String avatar;
     @NotBlank(message = "nickname должен быть заполнен")
     @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "Некорректный nickname должна быть не меньше 4 символов и не больше 20")
     private String nickname;

@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -134,6 +135,7 @@ public class GameService {
     }
 
     @Transactional
+//    @PreAuthorize("hasRole('ADMIN')")
     public GameDTO delete(Integer gameId) {
         Game game = gameRepository.findById(gameId).orElse(null);
         if (game != null) {
@@ -144,4 +146,5 @@ public class GameService {
         log.error("Item from game table not found, gameId={}", gameId);
         return null;
     }
+
 }

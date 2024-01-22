@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ConfirmationCodeService {
@@ -16,8 +19,8 @@ public class ConfirmationCodeService {
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final UserRepository userRepository;
 
-    public ConfirmationCode findByCode(String code) {
-        return confirmationCodeRepository.findByCode(code).orElseThrow();
+    public Optional<ConfirmationCode> findByCode(String code) {
+        return confirmationCodeRepository.findByCode(code);
     }
 
     public boolean isValid(String code) {
@@ -28,10 +31,12 @@ public class ConfirmationCodeService {
     public boolean setState(String code) {
 
         if (isValid(code)) {
-            User user = userRepository.findByEmail(findByCode(code).getUser().getEmail())
+           String email = findByCode(code).get().getUser().getEmail();
+            User user = userRepository.findByEmail(email)
                     .orElseThrow();
 
             user.setState(User.State.CONFIRMED);
+            user.setCreatedAt(LocalDateTime.now());
             userRepository.save(user);
 
             return true;

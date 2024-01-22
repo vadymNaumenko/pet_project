@@ -1,11 +1,13 @@
-package de.pet_project.domain;
+package de.pet_project.domain.post;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @Entity
 @AllArgsConstructor
@@ -20,7 +22,11 @@ public class Event {
     @Column(name = "image_url")
     private String imageUrl;
     private String text;
-    @Column(name = "date_time")
-    private LocalDateTime dateTime;
+    @Column(name = "date")
+    private LocalDate date;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+    @OneToMany(mappedBy = "postId")
+    List<CommitForPost> commits;
 
 }
