@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/address")
+@RequestMapping("/api/v1/address")
 public class AddressController {
     private final AddressService addressService;
 
@@ -20,7 +20,7 @@ public class AddressController {
         return addressService.findAll();
     }
 
-    @GetMapping("/address{city}")
+    @GetMapping("/{city}")
     public List<AddressDTO> findAllAddressByCity(@PathVariable String city) {
         return addressService.findAllAddressByCity(city);
     }
