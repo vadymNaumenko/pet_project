@@ -1,6 +1,7 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.GameDtoConvert;
+import de.pet_project.domain.LocationGame;
 import de.pet_project.dto.game.GameCreateUpdateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
@@ -9,7 +10,10 @@ import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.enums.game.State;
+import de.pet_project.dto.location.LocationGameDTO;
+import de.pet_project.repository.AddressRepository;
 import de.pet_project.repository.GameRepository;
+import de.pet_project.repository.LocationGameRepository;
 import liquibase.util.Validate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +35,21 @@ public class GameService {
     private final GameRepository gameRepository;
     private final GameDtoConvert gameDtoConvert;
     private final ImageService imageService;
+    private final LocationGameRepository locationGameRepository;
+    private final AddressRepository addressRepository;
+
+    public Page<GameShortDTO> findAllByAddress(Pageable pageable, Integer addressId) {
+        return new PageImpl<>(locationGameRepository.findAllByAddress(pageable, addressId).stream()
+                .map(gameDtoConvert::convertToGameShortDTO)
+                .toList());
+    }
+
+    public Page<GameShortDTO> findAllByCity(Pageable pageable, String city) {
+        return new PageImpl<>(locationGameRepository.findAllByCity(pageable, city).stream()
+                .map(gameDtoConvert::convertToGameShortDTO)
+                .toList());
+    }
+
 
     public List<String> findAllGenre() {
         return Arrays.stream(Genre.class.getEnumConstants()).map(genre -> genre.genre).toList();
@@ -97,7 +116,6 @@ public class GameService {
                 .flatMap(imageService::get);
     }
 
-    //TODO game or gameDTO????
     @Transactional
     public GameCreateUpdateDTO save(GameCreateUpdateDTO gameCreateUpdateDTO) {
         return Optional.of(gameDtoConvert.convertToGame(gameCreateUpdateDTO))
@@ -105,7 +123,16 @@ public class GameService {
                 .map(gameDtoConvert::convertToGameCreateUpdateDTO).orElseThrow();
     }
 
-    //TODO game or gameDTO????
+    //TODO????
+    @Transactional
+    public LocationGame save(LocationGameDTO locationGameDTO) {
+        LocationGame locationGame = new LocationGame();
+        locationGame.setGame(gameRepository.findById(locationGameDTO.getGameId()).orElseThrow());
+        locationGame.setAddress(addressRepository.findById(locationGameDTO.getAddressId()).orElseThrow());
+        locationGame.setState(State.valueOf(locationGameDTO.getState()));
+        return locationGameRepository.save(locationGame);
+    }
+
     @Transactional
     public GameCreateUpdateDTO update(GameCreateUpdateDTO gameCreateUpdateDTO) {
         Validate.notNull(gameCreateUpdateDTO.getId(), "Field id can't be null");
@@ -118,6 +145,21 @@ public class GameService {
         return null;
     }
 
+    //TODO ????
+    @Transactional
+    public LocationGame update(LocationGameDTO locationGameDTO) {
+        Validate.notNull(locationGameDTO.getId(), "Field id can't be null");
+        LocationGame locationGame = locationGameRepository.findById(locationGameDTO.getId()).orElse(null);
+        if (locationGame != null) {
+            locationGame.setGame(gameRepository.findById(locationGameDTO.getGameId()).orElseThrow());
+            locationGame.setAddress(addressRepository.findById(locationGameDTO.getAddressId()).orElseThrow());
+            locationGame.setState(State.valueOf(locationGameDTO.getState()));
+            return locationGameRepository.save(locationGame);
+        }
+        log.error("Item from locationGame table not found, locationGameId={}", locationGameDTO.getId());
+        return null;
+    }
+
     @Transactional
     public GameDTO delete(Integer gameId) {
         Game game = gameRepository.findById(gameId).orElse(null);
@@ -127,6 +169,17 @@ public class GameService {
             return gameDtoConvert.convertToGameDTO(game);
         }
         log.error("Item from game table not found, gameId={}", gameId);
+        return null;
+    }
+
+    @Transactional
+    public LocationGame deleteLocationGame(Integer locationGameId) {
+        LocationGame locationGame = locationGameRepository.findById(locationGameId).orElse(null);
+        if (locationGame != null) {
+            locationGame.setState(State.COMPLETED);
+            return locationGameRepository.save(locationGame);
+        }
+        log.error("Item from locationGame table not found, locationGameId={}", locationGameId);
         return null;
     }
 }

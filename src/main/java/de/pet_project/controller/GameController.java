@@ -1,5 +1,6 @@
 package de.pet_project.controller;
 
+import de.pet_project.domain.LocationGame;
 import de.pet_project.dto.game.GameCreateUpdateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
@@ -7,6 +8,7 @@ import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.enums.game.State;
+import de.pet_project.dto.location.LocationGameDTO;
 import de.pet_project.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,12 +27,24 @@ import java.util.List;
 public class GameController {
     private final GameService gameService;
 
+    @GetMapping("/address{addressId}/page/{pageNum}/{pageSize}")
+    public Page<GameShortDTO> findAllByAddress(@PathVariable Integer addressId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return gameService.findAllByAddress(pageable, addressId);
+    }
+
+    @GetMapping("/city{city}/page/{pageNum}/{pageSize}")
+    public Page<GameShortDTO> findAllByCity(@PathVariable String city, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return gameService.findAllByCity(pageable, city);
+    }
+
+
     @GetMapping("/genres")
     public List<String> findAllGenres(){
         return gameService.findAllGenre();
     }
 
-    //TODO filter by state???
     @GetMapping("/genre/{genre}/page/{pageNum}/{pageSize}")//added
     public Page<GameShortDTO> findAllByGenre(@PathVariable Genre genre, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -53,7 +67,6 @@ public class GameController {
         return gameService.findAllNumberOfPlayers();
     }
 
-    //TODO filter by state???
     @GetMapping("/numberOfPlayers/{numberOfPlayers}/page/{pageNum}/{pageSize}")//added
     public Page<GameShortDTO> findAllByNumberOfPlayers(@PathVariable NumberOfPlayers numberOfPlayers, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -65,7 +78,6 @@ public class GameController {
         return gameService.findAllMinAge();
     }
 
-    //TODO filter by state???
     @GetMapping("/minAge/{minAge}/page/{pageNum}/{pageSize}")//added
     public Page<GameShortDTO> findAllByMinAge(@PathVariable MinAge minAge, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -73,7 +85,6 @@ public class GameController {
     }
 
     //TODO create top10
-    //TODO filter by state???
     @GetMapping("/lenta/page/{pageNum}/{pageSize}")
     public Page<GameDTO> findTopTen(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -102,8 +113,13 @@ public class GameController {
     }
 
     @PostMapping()
-    public GameCreateUpdateDTO create(@RequestBody GameCreateUpdateDTO gameCreateUpdateDTO) {
+    public GameCreateUpdateDTO save(@RequestBody GameCreateUpdateDTO gameCreateUpdateDTO) {
         return gameService.save(gameCreateUpdateDTO);
+    }
+
+    @PostMapping("location_games")
+    public LocationGame save(@RequestBody LocationGameDTO locationGameDTO) {
+        return gameService.save(locationGameDTO);
     }
 
     @PutMapping()
@@ -114,9 +130,28 @@ public class GameController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("location_games")
+    public ResponseEntity<LocationGame> update(@RequestBody LocationGameDTO locationGameDTO) {
+        LocationGame response = gameService.update(locationGameDTO);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<GameDTO> delete(@PathVariable Integer id) {
         GameDTO response = gameService.delete(id);
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("location_games{locationGameId}")
+    public ResponseEntity<LocationGame> deleteLocationGame(@PathVariable Integer locationGameId) {
+        LocationGame response = gameService.deleteLocationGame(locationGameId);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

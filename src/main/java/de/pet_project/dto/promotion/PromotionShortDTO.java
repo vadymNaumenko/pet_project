@@ -20,6 +20,7 @@ public class PromotionShortDTO {
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate startTime;
 
+
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate endTime;
 }

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Data
 public class GameDTO {
     private Integer id;
-    private String image;
+    private String image;//TODO????
     private String title;
     private Double price;
     private String genre;
