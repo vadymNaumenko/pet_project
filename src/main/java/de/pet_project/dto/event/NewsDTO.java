@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDTO {
+public class NewsDTO {
     private Long id ;
     private String title;
     private String imageUrl;
