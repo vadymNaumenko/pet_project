@@ -1,8 +1,5 @@
 package de.pet_project.controller;
 
-import de.pet_project.domain.LocationGame;
-import de.pet_project.domain.LocationPromotion;
-import de.pet_project.dto.location.LocationPromotionDTO;
 import de.pet_project.dto.promotion.PromotionCreateUpdateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
@@ -18,32 +15,31 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/promotions")
+@RequestMapping("/api/v1/promotions")
 public class PromotionController {
     private final PromotionService promotionService;
 
-    @GetMapping("all/address{addressId}/page/{pageNum}/{pageSize}")
-    public Page<PromotionShortDTO> findAllByAddress(@PathVariable Integer addressId, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+    @GetMapping("/{addressId}")
+    public Page<PromotionShortDTO> findAllByAddress(@PathVariable Integer addressId, @RequestParam("pageNum") Integer pageNum,
+                                                    @RequestParam("pageSize") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return promotionService.findAllByAddress(pageable, addressId);
     }
 
-    @GetMapping("all/city{city}/page/{pageNum}/{pageSize}")
-    public Page<PromotionShortDTO> findAllByCity(@PathVariable String city, @PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+    @GetMapping("/{city}")
+    public Page<PromotionShortDTO> findAllByCity(@PathVariable String city, @RequestParam("pageNum") Integer pageNum,
+                                                 @RequestParam("pageSize") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return promotionService.findAllByCity(pageable, city);
     }
 
-
-    //TODO get all categories
-    //TODO find by categories
-    @GetMapping("/all/page/{pageNum}/{pageSize}")
-    public Page<PromotionShortDTO> findAll(@PathVariable Integer pageNum, @PathVariable Integer pageSize) {
+    @GetMapping()
+    public Page<PromotionShortDTO> findAll(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return promotionService.findAll(pageable);
     }
 
-    @GetMapping("/promotions{id}")
+    @GetMapping("/{id}")
     public PromotionDTO findById(@PathVariable Integer id) {
         return promotionService.findById(id);
     }
@@ -63,11 +59,6 @@ public class PromotionController {
         return promotionService.save(promotionCreateUpdateDTO);
     }
 
-    @PostMapping("location_promotions")
-    public LocationPromotion save(@RequestBody LocationPromotionDTO locationPromotionDTO) {
-        return promotionService.save(locationPromotionDTO);
-    }
-
     @PutMapping()
     public ResponseEntity<PromotionCreateUpdateDTO> update(@RequestBody PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
         PromotionCreateUpdateDTO response = promotionService.update(promotionCreateUpdateDTO);
@@ -77,27 +68,9 @@ public class PromotionController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("location_games")
-    public ResponseEntity<LocationPromotion> update(@RequestBody LocationPromotionDTO locationPromotionDTO) {
-        LocationPromotion response = promotionService.update(locationPromotionDTO);
-        if (response == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(response);
-    }
-
     @DeleteMapping("{id}")
     public ResponseEntity<PromotionDTO> delete(@PathVariable Integer id) {
         PromotionDTO response = promotionService.delete(id);
-        if (response == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping("location_promotions{locationPromotionId}")
-    public ResponseEntity<LocationPromotion> deleteLocationPromotion(@PathVariable Integer locationPromotionId) {
-        LocationPromotion response = promotionService.deleteLocationPromotion(locationPromotionId);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

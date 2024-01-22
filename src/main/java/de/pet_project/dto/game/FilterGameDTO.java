@@ -3,8 +3,8 @@ package de.pet_project.dto.game;
 import lombok.Data;
 
 @Data
-public class GameV2DTO {
-    private String address;
+public class FilterGameDTO {
+    private Integer addressId;
     private String city;
     private String genre;
     private String state;

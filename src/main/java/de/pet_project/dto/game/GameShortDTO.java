@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class GameShortDTO {
     private Integer id;
-    //private String image;
+    private String image;
     private String title;
     private Double price;
     private String state;
