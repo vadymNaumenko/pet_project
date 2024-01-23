@@ -1,6 +1,6 @@
 package de.pet_project.config;
 
-import de.pet_project.repository.UserRepository;
+import de.pet_project.repository.user.UserRepository;
 import freemarker.cache.ClassTemplateLoader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

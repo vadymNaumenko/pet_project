@@ -1,5 +1,6 @@
-package de.pet_project.domain.post;
+package de.pet_project.domain.news;
 
+import de.pet_project.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +12,18 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "commit_for_post")
-public class CommitForPost {
+@Table(name = "reaction_to_news_comment")
+public class ReactionToNewsComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    Event postId;
-    @Column(name = "comment_text")
-    String text;
+    @JoinColumn(name = "comment_id")
+    private CommentOnNews comment;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String reaction;
     LocalDateTime created_at;
-
 }

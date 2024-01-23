@@ -3,7 +3,7 @@ package de.pet_project.controller.auth;
 import de.pet_project.config.JwtService;
 import de.pet_project.domain.User;
 import de.pet_project.mail.TemplateMailSender;
-import de.pet_project.repository.UserRepository;
+import de.pet_project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

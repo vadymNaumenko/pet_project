@@ -28,7 +28,7 @@ public class DateUtils {
      */
     public static LocalDate convertDate(String strDate) {
         LocalDate dateTime = null;
-        String[] dt = strDate.split("[ ,\\.]+");
+        String[] dt = strDate.split("[ ,\\. -]+");
         if (dt.length == 3) {
             dt = new String[]{dt[0], dt[1], dt[2]};
         }

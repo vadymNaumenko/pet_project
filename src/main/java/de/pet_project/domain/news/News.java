@@ -1,4 +1,4 @@
-package de.pet_project.domain.post;
+package de.pet_project.domain.news;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,11 +12,11 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events")
-public class Event {
+@Table(name = "news")
+public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     private String title;
     @Column(name = "image_url")
@@ -26,7 +26,7 @@ public class Event {
     private LocalDate date;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @OneToMany(mappedBy = "postId")
-    List<CommitForPost> commits;
+    @OneToMany(mappedBy = "news")
+    List<CommentOnNews> comment;
 
 }
