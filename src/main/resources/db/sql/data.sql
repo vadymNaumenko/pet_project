@@ -49,3 +49,6 @@ VALUES
     (false, 'Demeo Battles Review: A New Iteration Of A Proven Success', 'https://www.uploadvr.com/content/images/size/w800/format/webp/2023/11/Demeo-Battles-VR-Screenshot-001.jpg', 'When it released in 2021, we named Demeo our  Game of the Year across all VR platforms.', DATE'2023-11-09'),
     (false,'The Foglands Review: A Roguelike Better Left In The Dark', 'https://www.uploadvr.com/content/images/size/w800/format/webp/2023/11/ce8406dc72c1bfe8a03ba0ac86ad1989af0619c8-scaled.webp', 'One might be forgiven for groaning at news of another roguelike shooter landing on Quest headsets.',DATE'2023-11-07'),
     (true, 'New Demeo Battl ccess', 'https://www.uploadvr.com/content/images/size/w800/format/webp/2023/11/Demeo-Battles-VR-Screenshot-001.jpg', 'When it released in 2021, we named Demeo our  Game of the Year across all VR platforms.', DATE'2023-11-09');
+
+insert into comment_on_news (news_id, user_id, comment_text)
+values (1,2,'gut game');

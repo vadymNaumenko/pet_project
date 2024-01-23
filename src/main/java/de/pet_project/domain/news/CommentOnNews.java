@@ -1,5 +1,6 @@
 package de.pet_project.domain.news;
 
+import de.pet_project.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,10 +20,14 @@ public class CommentOnNews {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    News postId;
+    @JoinColumn(name = "user_id")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "news_id")
+    private News news;
     @Column(name = "comment_text")
-    String text;
-    @OneToMany(mappedBy = "commentId")
+    private String text;
+    @OneToMany(mappedBy = "comment")
     private List<ReactionToNewsComment> reactions;
     LocalDateTime created_at;
 

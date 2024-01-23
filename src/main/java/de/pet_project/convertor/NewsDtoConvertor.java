@@ -14,6 +14,7 @@ public class NewsDtoConvertor {
     private final ModelMapper modelMapper;
 
     public NewsDTO convertToNewsDTO(News event){
+
         return modelMapper.map(event, NewsDTO.class);
     }
     public News convertToNews(NewsDTO eventDTO){

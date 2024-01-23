@@ -16,7 +16,7 @@ import java.util.List;
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
     private String title;
     @Column(name = "image_url")
@@ -26,7 +26,7 @@ public class News {
     private LocalDate date;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @OneToMany(mappedBy = "postId")
-    List<CommentOnNews> commits;
+    @OneToMany(mappedBy = "news")
+    List<CommentOnNews> comment;
 
 }

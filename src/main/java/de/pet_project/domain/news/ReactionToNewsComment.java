@@ -19,9 +19,11 @@ public class ReactionToNewsComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    CommentOnNews commentId;
+    @JoinColumn(name = "comment_id")
+    private CommentOnNews comment;
     @ManyToOne
-    User userId;
-    String reaction;
+    @JoinColumn(name = "user_id")
+    private User user;
+    private String reaction;
     LocalDateTime created_at;
 }
