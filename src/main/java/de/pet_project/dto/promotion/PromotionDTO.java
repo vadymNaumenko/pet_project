@@ -1,19 +1,16 @@
 package de.pet_project.dto.promotion;
 
-import lombok.AllArgsConstructor;
+import de.pet_project.dto.image.ImageDTO;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class PromotionDTO {
     private Integer id;
-    private String image;
+    private List<ImageDTO> images;
     private String title;
     private String category;
     private String state;

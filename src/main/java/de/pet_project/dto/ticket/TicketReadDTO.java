@@ -1,8 +1,5 @@
 package de.pet_project.dto.ticket;
 
-import de.pet_project.domain.Game;
-import de.pet_project.domain.TicketOrder;
-import de.pet_project.domain.User;
 import de.pet_project.dto.game.GameDTO;
 import lombok.*;
 

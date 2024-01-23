@@ -1,15 +1,14 @@
 package de.pet_project.dto.game;
 
-import lombok.AllArgsConstructor;
+import de.pet_project.dto.image.ImageDTO;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.List;
+
 @Data
 public class GameShortDTO {
     private Integer id;
-    private String image;
+    private List<ImageDTO> images;
     private String title;
     private Double price;
     private String state;

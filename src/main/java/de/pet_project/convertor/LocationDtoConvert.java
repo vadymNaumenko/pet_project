@@ -1,13 +1,13 @@
 package de.pet_project.convertor;
 
-import de.pet_project.domain.LocationGame;
-import de.pet_project.domain.LocationPromotion;
-import de.pet_project.domain.enums.game.State;
-import de.pet_project.dto.location.LocationGameDTO;
-import de.pet_project.dto.location.LocationPromotionDTO;
+import de.pet_project.domain.enums.State;
+import de.pet_project.domain.game.LocationGame;
+import de.pet_project.domain.promotion.LocationPromotion;
+import de.pet_project.dto.game.LocationGameDTO;
+import de.pet_project.dto.promotion.LocationPromotionDTO;
 import de.pet_project.repository.AddressRepository;
-import de.pet_project.repository.GameRepository;
-import de.pet_project.repository.PromotionRepository;
+import de.pet_project.repository.game.GameRepository;
+import de.pet_project.repository.promotion.PromotionRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

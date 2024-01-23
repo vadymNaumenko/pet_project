@@ -125,6 +125,40 @@
             <column name="end_time" type="date"/>
         </addColumn>
     </changeSet>
+    <changeSet id="#7" author="punisher">
+        <createTable tableName="imades_games">
+            <column name="image_game_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="game_id" type="int"/>
+            <column name="image_id" type="int"/>
+        </createTable>
+        <createTable tableName="images_promotions">
+            <column name="image_promotion_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="promotion_id" type="int"/>
+            <column name="image_id" type="int"/>
+        </createTable>
+        <dropColumn tableName="games">
+            <column name="image"/>
+        </dropColumn>
+        <dropColumn tableName="promotions">
+            <column name="image"/>
+        </dropColumn>
+        <addForeignKeyConstraint baseTableName="images_games" baseColumnNames="game_id"
+                                 constraintName="fk_images_games_games"
+                                 referencedTableName="games" referencedColumnNames="game_id"/>
+        <addForeignKeyConstraint baseTableName="images_games" baseColumnNames="image_id"
+                                 constraintName="fk_images_games_image"
+                                 referencedTableName="images" referencedColumnNames="image_id"/>
+        <addForeignKeyConstraint baseTableName="images_promotions" baseColumnNames="promotion_id"
+                                 constraintName="fk_images_promotions_promotions"
+                                 referencedTableName="promotions" referencedColumnNames="promotion_id"/>
+        <addForeignKeyConstraint baseTableName="images_promotions" baseColumnNames="image_id"
+                                 constraintName="fk_images_promotions_image"
+                                 referencedTableName="images" referencedColumnNames="image_id"/>
+    </changeSet>
 </databaseChangeLog>
 
 

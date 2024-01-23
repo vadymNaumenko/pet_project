@@ -1,5 +1,6 @@
 package de.pet_project.domain;
 
+import de.pet_project.domain.game.Game;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

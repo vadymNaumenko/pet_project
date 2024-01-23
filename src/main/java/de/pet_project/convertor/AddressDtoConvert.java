@@ -1,7 +1,7 @@
 package de.pet_project.convertor;
 
 import de.pet_project.domain.Address;
-import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.State;
 import de.pet_project.dto.address.AddressDTO;
 import de.pet_project.dto.address.CityDTO;
 import lombok.RequiredArgsConstructor;

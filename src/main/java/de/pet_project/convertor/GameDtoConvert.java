@@ -1,24 +1,25 @@
 package de.pet_project.convertor;
 
-import de.pet_project.domain.Game;
+import de.pet_project.domain.enums.State;
+import de.pet_project.domain.game.Game;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
-import de.pet_project.domain.enums.game.State;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
-import de.pet_project.service.ImageService;
+import de.pet_project.dto.image.ImageDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class GameDtoConvert {
     private final ModelMapper modelMapper;
-    private final ImageService imageService;
 
-    public GameDTO convertToGameDTO(Game game){
+    public GameDTO createGameDTO(Game game){
         GameDTO gameDTO = modelMapper.map(game, GameDTO.class);
         gameDTO.setGenre(game.getGenre().genre);
         gameDTO.setState(game.getState().state);
@@ -27,8 +28,19 @@ public class GameDtoConvert {
         return gameDTO;
     }
 
-    public GameShortDTO convertToGameShortDTO(Game game){
+    public GameDTO convertToGameDTO(Game game, List<ImageDTO> images){
+        GameDTO gameDTO = modelMapper.map(game, GameDTO.class);
+        gameDTO.setImages(images);
+        gameDTO.setGenre(game.getGenre().genre);
+        gameDTO.setState(game.getState().state);
+        gameDTO.setNumberOfPlayers(game.getNumberOfPlayers().number);
+        gameDTO.setMinAge(game.getMinAge().age);
+        return gameDTO;
+    }
+
+    public GameShortDTO convertToGameShortDTO(Game game, List<ImageDTO> images){
         GameShortDTO gameShortDTO = modelMapper.map(game, GameShortDTO.class);
+        gameShortDTO.setImages(images);
         gameShortDTO.setState(game.getState().state);
         gameShortDTO.setNumberOfPlayers(game.getNumberOfPlayers().number);
         gameShortDTO.setMinAge(game.getMinAge().age);
@@ -43,6 +55,4 @@ public class GameDtoConvert {
         game.setMinAge(MinAge.valueOf(gameDTO.getMinAge()));
         return game;
     }
-
-
 }

@@ -2,7 +2,7 @@ package de.pet_project.service.integration.service;
 
 import de.pet_project.domain.TicketOrder;
 import de.pet_project.dto.ticket.TicketReadDTO;
-import de.pet_project.service.GameService;
+import de.pet_project.service.game.GameService;
 import de.pet_project.service.TicketOrderService;
 import de.pet_project.service.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;

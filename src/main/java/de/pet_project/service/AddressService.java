@@ -1,7 +1,7 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.AddressDtoConvert;
-import de.pet_project.domain.enums.game.State;
+import de.pet_project.domain.enums.State;
 import de.pet_project.dto.address.AddressDTO;
 import de.pet_project.dto.address.CityDTO;
 import de.pet_project.domain.Address;
@@ -9,7 +9,6 @@ import de.pet_project.repository.AddressRepository;
 import liquibase.util.Validate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

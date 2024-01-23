@@ -15,7 +15,7 @@ public class TicketDtoConvert {
 
     public TicketReadDTO convertToTicketReadDTO(TicketOrder ticketOrder){
         TicketReadDTO ticketReadDTO =  modelMapper.map(ticketOrder,TicketReadDTO.class);
-        ticketReadDTO.setGameDTO(gameDtoConvert.convertToGameDTO(ticketOrder.getGame()));
+        ticketReadDTO.setGameDTO(gameDtoConvert.createGameDTO(ticketOrder.getGame()));
         ticketReadDTO.setFullName(ticketOrder.getUser().getFirstname()+" "+ ticketOrder.getUser().getLastname());
         return ticketReadDTO;
     }

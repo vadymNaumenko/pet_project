@@ -1,20 +1,18 @@
 package de.pet_project.dto.game;
 
-import lombok.AllArgsConstructor;
+import de.pet_project.dto.image.ImageDTO;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.LocalDate;
+import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class GameDTO {
     private Integer id;
-    private String image;//TODO????
+    private List<ImageDTO> images;
     private String title;
     private Double price;
     private String genre;
