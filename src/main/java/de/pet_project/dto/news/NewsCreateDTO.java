@@ -1,13 +1,12 @@
-package de.pet_project.dto.event;
+package de.pet_project.dto.news;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventCreateDTO {
+public class NewsCreateDTO {
     private String title;
     private String imageUrl;
     private String videoUrl;

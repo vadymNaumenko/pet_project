@@ -1,4 +1,4 @@
-package de.pet_project.repository;
+package de.pet_project.repository.user;
 
 import de.pet_project.domain.User;
 import de.pet_project.dto.user.UserFilter;

@@ -2,7 +2,7 @@
 
 
 --changeset vadym:1
-CREATE TABLE events
+CREATE TABLE news
 (
     id BIGSERIAL PRIMARY KEY,
     title varchar(250),

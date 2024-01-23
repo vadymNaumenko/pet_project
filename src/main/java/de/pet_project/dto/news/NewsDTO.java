@@ -1,4 +1,4 @@
-package de.pet_project.dto.event;
+package de.pet_project.dto.news;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDTO {
+public class NewsDTO {
     private Long id ;
     private String title;
     private String imageUrl;

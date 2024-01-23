@@ -1,7 +1,8 @@
-package de.pet_project.repository;
+package de.pet_project.repository.user;
 
 import de.pet_project.domain.User;
 import de.pet_project.dto.user.UserFilter;
+import de.pet_project.repository.user.FilterUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
