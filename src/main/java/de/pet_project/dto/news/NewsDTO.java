@@ -1,4 +1,4 @@
-package de.pet_project.dto.event;
+package de.pet_project.dto.news;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

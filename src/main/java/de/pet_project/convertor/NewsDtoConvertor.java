@@ -1,8 +1,8 @@
 package de.pet_project.convertor;
 
-import de.pet_project.domain.post.News;
-import de.pet_project.dto.event.NewsCreateDTO;
-import de.pet_project.dto.event.NewsDTO;
+import de.pet_project.domain.news.News;
+import de.pet_project.dto.news.NewsCreateDTO;
+import de.pet_project.dto.news.NewsDTO;
 import de.pet_project.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,6 +1,6 @@
-package de.pet_project.repository;
+package de.pet_project.repository.news_and_comment;
 
-import de.pet_project.domain.post.News;
+import de.pet_project.domain.news.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

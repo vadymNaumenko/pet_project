@@ -8,7 +8,7 @@ import de.pet_project.dto.user.UserFilter;
 import de.pet_project.dto.user.UserReadDTO;
 import de.pet_project.domain.User;
 import de.pet_project.repository.ConfirmationCodeRepository;
-import de.pet_project.repository.UserRepository;
+import de.pet_project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;

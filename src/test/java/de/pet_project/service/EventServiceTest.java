@@ -1,8 +1,8 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.NewsDtoConvertor;
-import de.pet_project.domain.post.News;
-import de.pet_project.repository.NewsRepository;
+import de.pet_project.domain.news.News;
+import de.pet_project.repository.news_and_comment.NewsRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

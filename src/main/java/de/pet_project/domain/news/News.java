@@ -1,4 +1,4 @@
-package de.pet_project.domain.post;
+package de.pet_project.domain.news;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

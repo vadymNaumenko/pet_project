@@ -1,27 +1,29 @@
-package de.pet_project.domain.post;
+package de.pet_project.domain.news;
 
-import de.pet_project.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "reaction_to_news_comment")
-public class ReactionToNewsComment {
+@Table(name = "comment_on_news")
+public class CommentOnNews {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    CommentOnNews commitId;
-    @ManyToOne
-    User userId;
-    String reaction;
+    News postId;
+    @Column(name = "comment_text")
+    String text;
+    @OneToMany(mappedBy = "commentId")
+    private List<ReactionToNewsComment> reactions;
     LocalDateTime created_at;
+
 }

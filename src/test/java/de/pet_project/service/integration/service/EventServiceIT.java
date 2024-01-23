@@ -1,7 +1,7 @@
 package de.pet_project.service.integration.service;
 
-import de.pet_project.domain.post.News;
-import de.pet_project.dto.event.NewsDTO;
+import de.pet_project.domain.news.News;
+import de.pet_project.dto.news.NewsDTO;
 import de.pet_project.service.NewsService;
 import de.pet_project.service.integration.annotation.IT;
 import lombok.RequiredArgsConstructor;

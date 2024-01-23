@@ -3,9 +3,8 @@ package de.pet_project.service;
 import de.pet_project.domain.ConfirmationCode;
 import de.pet_project.domain.User;
 import de.pet_project.repository.ConfirmationCodeRepository;
-import de.pet_project.repository.UserRepository;
+import de.pet_project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

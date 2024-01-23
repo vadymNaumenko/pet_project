@@ -1,12 +1,12 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.NewsDtoConvertor;
-import de.pet_project.domain.post.News;
-import de.pet_project.dto.event.NewsCreateDTO;
-import de.pet_project.dto.event.NewsDTO;
-import de.pet_project.repository.CommitForPostRepository;
-import de.pet_project.repository.NewsRepository;
-import de.pet_project.repository.ReactionToPostCommitRepository;
+import de.pet_project.domain.news.News;
+import de.pet_project.dto.news.NewsCreateDTO;
+import de.pet_project.dto.news.NewsDTO;
+import de.pet_project.repository.news_and_comment.CommentOnNewsRepository;
+import de.pet_project.repository.news_and_comment.NewsRepository;
+import de.pet_project.repository.news_and_comment.ReactionToNewsCommitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -33,8 +33,8 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsDtoConvertor newsDtoConvertor;
-    private final CommitForPostRepository commitRepository;
-    private final ReactionToPostCommitRepository reactionRepository;
+    private final CommentOnNewsRepository commitRepository;
+    private final ReactionToNewsCommitRepository reactionRepository;
     private boolean enable = true; // todo mast be add in application.yml
     private String newsPage = "https://www.uploadvr.com/reviews";
     private String site = "https://www.uploadvr.com";
