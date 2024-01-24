@@ -3,12 +3,14 @@ package de.pet_project.service.game;
 import de.pet_project.convertor.GameDtoConvert;
 import de.pet_project.domain.enums.State;
 import de.pet_project.dto.game.FilterGameDTO;
+import de.pet_project.dto.game.GameCreateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.game.Game;
 import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
+import de.pet_project.dto.image.FilterImageDTO;
 import de.pet_project.repository.game.GameRepository;
 import de.pet_project.repository.game.LocationGameRepository;
 import de.pet_project.service.image.ImageService;
@@ -36,6 +38,8 @@ public class GameService {
 
 
     public Page<GameShortDTO> filter(FilterGameDTO filterGameDTO, Pageable pageable) {
+        FilterImageDTO fmDTO = new FilterImageDTO();
+        fmDTO.setMain(true);
         return new PageImpl<>(locationGameRepository.findAllByFilter(filterGameDTO.getAddressId(),
                         filterGameDTO.getCity(),
                         filterGameDTO.getGenre() != null ? Genre.valueOf(filterGameDTO.getGenre()) : null,
@@ -44,7 +48,8 @@ public class GameService {
                                 NumberOfPlayers.valueOf(filterGameDTO.getNumberOfPlayers()) : null,
                         filterGameDTO.getMinAge() != null ? MinAge.valueOf(filterGameDTO.getMinAge()) : null,
                         pageable).stream()
-                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService.findImageByGameId(game.getId())))
+                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService
+                        .findImageForGameByFilter(fmDTO)))
                 .toList());
     }
 
@@ -64,22 +69,28 @@ public class GameService {
         return Arrays.stream(MinAge.class.getEnumConstants()).map(minAge -> minAge.age).toList();
     }
 
-    public Page<GameDTO> findTopTen(Pageable pageable) {
+    public Page<GameDTO> findTopTen(Pageable pageable) {//TODO output only one image avatar!!!!
         return new PageImpl<>(gameRepository.findAll(pageable).stream()
-                .map(gameDtoConvert::createGameDTO)
+                .map(game -> gameDtoConvert.convertToGameDTO(game, imageService.findImageByGameId(game.getId())))
                 .toList());
     }
 
 
     public Page<GameShortDTO> findAll(Pageable pageable) {
+        FilterImageDTO fmDTO = new FilterImageDTO();
+        fmDTO.setMain(true);
         return new PageImpl<>(gameRepository.findAll(pageable).stream()
-                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService.findImageByGameId(game.getId())))
+                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService
+                        .findImageForGameByFilter(fmDTO)))
                 .toList());
     }
 
     public Page<GameShortDTO> findByTitle(String title, Pageable pageable) {
+        FilterImageDTO fmDTO = new FilterImageDTO();
+        fmDTO.setMain(true);
         return new PageImpl<>(gameRepository.findByTitle(title, pageable).stream()
-                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService.findImageByGameId(game.getId())))
+                .map(game -> gameDtoConvert.convertToGameShortDTO(game, imageService
+                        .findImageForGameByFilter(fmDTO)))
                 .toList());
     }
 
@@ -94,33 +105,33 @@ public class GameService {
     }
 
     @Transactional
-    public GameDTO save(GameDTO gameDTO){
-        return Optional.of(gameDtoConvert.convertToGame(gameDTO))
+    public GameCreateDTO save(GameCreateDTO gameCreateDTO){
+        return Optional.of(gameDtoConvert.convertToGame(gameCreateDTO))
                 .map(gameRepository::save)
-                .map(gameDtoConvert::createGameDTO).orElseThrow(() -> new RuntimeException("Failed to save the game"));
+                .map(gameDtoConvert::convertToGameCreateDTO).orElseThrow(() -> new RuntimeException("Failed to save the game"));
     }
 
     @Transactional
-    public GameDTO update(GameDTO gameDTO) {
-        Validate.notNull(gameDTO.getId(), "Field id can't be null");
-        Game game = gameRepository.findById(gameDTO.getId()).orElse(null);
+    public GameCreateDTO update(GameCreateDTO gameCreateDTO) {//TODO ?????
+        Validate.notNull(gameCreateDTO.getId(), "Field id can't be null");
+        Game game = gameRepository.findById(gameCreateDTO.getId()).orElse(null);
         if (game != null) {
-            return Optional.of(gameDtoConvert.convertToGame(gameDTO))
+            return Optional.of(gameDtoConvert.convertToGame(gameCreateDTO))
                     .map(gameRepository::save)
-                    .map(gameDtoConvert::createGameDTO).orElseThrow();
+                    .map(gameDtoConvert::convertToGameCreateDTO).orElseThrow();
         }
-        log.error("Item from game table not found, gameId={}", gameDTO.getId());
+        log.error("Item from game table not found, gameId={}", gameCreateDTO.getId());
         return null;
     }
 
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
-    public GameDTO delete(Integer gameId) {
+    public GameCreateDTO delete(Integer gameId) {
         Game game = gameRepository.findById(gameId).orElse(null);
         if (game != null) {
             game.setState(State.COMPLETED);
             gameRepository.save(game);
-            return gameDtoConvert.createGameDTO(game);
+            return gameDtoConvert.convertToGameCreateDTO(game);//TODO ????
         }
         log.error("Item from game table not found, gameId={}", gameId);
         return null;

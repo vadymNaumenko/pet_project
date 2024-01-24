@@ -1,9 +1,9 @@
 package de.pet_project.convertor;
 
 import de.pet_project.domain.image.Image;
-import de.pet_project.domain.enums.State;
 import de.pet_project.domain.image.ImageGame;
 import de.pet_project.domain.image.ImagePromotion;
+import de.pet_project.dto.image.ImageCreateDTO;
 import de.pet_project.dto.image.ImageDTO;
 import de.pet_project.dto.image.ImageGameDTO;
 import de.pet_project.dto.image.ImagePromotionDTO;
@@ -32,31 +32,33 @@ public class ImageDtoConvert {
     }*/
 
 
-    public ImageDTO convertToImageDTO(Image image){
+    public ImageDTO convertToImageDTO(Image image, byte[] picture){
         ImageDTO imageDTO = modelMapper.map(image, ImageDTO.class);
-        imageDTO.setState(image.getState().state);
-        return imageDTO;
+        imageDTO.setPicture(picture);
+        return null;
     }
 
-    public ImageDTO createImageDTO(String title, String description, String state) {
-        ImageDTO imageDTO = new ImageDTO();
-        imageDTO.setTitle(title);
-        imageDTO.setDescription(description);
-        imageDTO.setState(state);
-        return imageDTO;
+    public ImageCreateDTO createImageCreateDTO(String title, String description) {
+        ImageCreateDTO imageCreateDTO = new ImageCreateDTO();
+        imageCreateDTO.setDeleted(false);
+        imageCreateDTO.setTitle(title);
+        imageCreateDTO.setDescription(description);
+        return imageCreateDTO;
     }
 
-    public Image convertToImage(ImageDTO imageDTO){
-        Image image = modelMapper.map(imageDTO, Image.class);
-        image.setState(State.valueOf(imageDTO.getState()));
-        return image;
+    public ImageCreateDTO convertToImageCreateDTO(Image image){
+        return modelMapper.map(image, ImageCreateDTO.class);
+
+    }
+
+    public Image convertToImage(ImageCreateDTO imageCreateDTO){
+        return modelMapper.map(imageCreateDTO, Image.class);
     }
 
     public ImageGameDTO convertToImageGameDTO(ImageGame imageGame) {
         ImageGameDTO imageGameDTO = modelMapper.map(imageGame, ImageGameDTO.class);
         imageGameDTO.setGameId(imageGame.getGame().getId());
         imageGameDTO.setImageId(imageGame.getImage().getId());
-        imageGameDTO.setState(imageGame.getState().state);
         return imageGameDTO;
     }
 
@@ -64,7 +66,6 @@ public class ImageDtoConvert {
         ImageGame imageGame = modelMapper.map(imageGameDTO, ImageGame.class);
         imageGame.setGame(gameRepository.findById(imageGameDTO.getGameId()).orElseThrow());
         imageGame.setImage(imageRepository.findById(imageGameDTO.getImageId()).orElseThrow());
-        imageGame.setState(State.valueOf(imageGameDTO.getState()));
         return imageGame;
     }
 
@@ -72,7 +73,6 @@ public class ImageDtoConvert {
         ImagePromotionDTO imagePromotionDTO = modelMapper.map(imagePromotion, ImagePromotionDTO.class);
         imagePromotionDTO.setPromotionId(imagePromotion.getPromotion().getId());
         imagePromotionDTO.setImageId(imagePromotion.getImage().getId());
-        imagePromotionDTO.setState(imagePromotion.getState().state);
         return imagePromotionDTO;
     }
 
@@ -84,7 +84,6 @@ public class ImageDtoConvert {
         imagePromotion.setImage(imageRepository.findById(imagePromotionDTO.getImageId())
                 .orElseThrow(() -> new EntityNotFoundException("Image not found with ID: " +
                         imagePromotionDTO.getImageId())));
-        imagePromotion.setState(State.valueOf(imagePromotionDTO.getState()));
         return imagePromotion;
     }
 }

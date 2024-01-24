@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/pet_project
     username: postgres
-    password: root
+    password: ROOT
   #spring.jpa.hibernate.ddl-auto=update
   jpa:
     database: postgresql

@@ -22,6 +22,6 @@ public class ImagePromotion {
     @JoinColumn(name = "image_id")
     private Image image;
 
-    @Enumerated(EnumType.STRING)
-    private State state;
+    private boolean isMain;
+    private boolean isDeleted;
 }

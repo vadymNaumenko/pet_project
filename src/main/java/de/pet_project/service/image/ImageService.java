@@ -1,12 +1,13 @@
 package de.pet_project.service.image;
 
 import de.pet_project.convertor.ImageDtoConvert;
-import de.pet_project.domain.game.Game;
-import de.pet_project.domain.image.Image;
+import de.pet_project.dto.image.FilterImageDTO;
+import de.pet_project.dto.image.ImageCreateDTO;
 import de.pet_project.dto.image.ImageDTO;
 import de.pet_project.repository.image.ImageGameRepository;
 import de.pet_project.repository.image.ImagePromotionRepository;
 import de.pet_project.repository.image.ImageRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -37,36 +38,56 @@ public class ImageService {
 
     @Transactional
     public List<ImageDTO> findImageByGameId(Integer gameId) {
-        return imageGameRepository.findAllByGameId(gameId).stream().map(imageDtoConvert::convertToImageDTO).toList();
+        return imageGameRepository.findAllByGameId(gameId).stream().map(image -> imageDtoConvert
+                .convertToImageDTO(image, getImage(image.getTitle()))).toList();
+    }
+
+    public ImageDTO findImageForGameByFilter(FilterImageDTO filterImageDTO) {
+        return  imageGameRepository.findImageByFilter(filterImageDTO.getEntityId(), filterImageDTO.isMain())
+                .map(image -> imageDtoConvert
+                        .convertToImageDTO(image, getImage(image.getTitle())))
+                .orElseThrow(() -> new EntityNotFoundException("Image not found for entityId: "
+                        + filterImageDTO.getEntityId() + " and isMain: " + filterImageDTO.isMain()));
     }
 
     @Transactional
     public List<ImageDTO> findImageByPromotionId(Integer promotionId) {
-        return imagePromotionRepository.findAllByPromotionId(promotionId).stream().map(imageDtoConvert::convertToImageDTO)
-                .toList();
+        return imagePromotionRepository.findAllByPromotionId(promotionId).stream().map(image -> imageDtoConvert
+                .convertToImageDTO(image, getImage(image.getTitle()))).toList();
     }
 
-    @Transactional
-    public Optional<byte[]> findImage(Integer id) {
-        return imageRepository.findById(id)
-                .map(Image::getTitle)
-                .filter(StringUtils::hasText)
-                .flatMap(this::get);
+    public ImageDTO findImageForPromotionByFilter(FilterImageDTO filterImageDTO) {
+        return  imagePromotionRepository.findImageByFilter(filterImageDTO.getEntityId(), filterImageDTO.isMain())
+                .map(image -> imageDtoConvert
+                        .convertToImageDTO(image, getImage(image.getTitle())))
+                .orElseThrow(() -> new EntityNotFoundException("Image not found for entityId: "
+                        + filterImageDTO.getEntityId() + " and isMain: " + filterImageDTO.isMain()));
     }
+
+    public Optional<ImageDTO> findImage(Integer id) {
+        return imageRepository.findById(id).map(image -> imageDtoConvert
+                .convertToImageDTO(image, getImage(image.getTitle())));
+    }
+
 
     @SneakyThrows
-    public ImageDTO saveImage(MultipartFile image, String description, String state) {
+    public ImageCreateDTO saveImage(MultipartFile image, String description) {
         if (!image.isEmpty()) {
             upload(image.getOriginalFilename(), image.getInputStream());
             return Optional.of(imageDtoConvert.convertToImage(imageDtoConvert
-                            .createImageDTO(image.getOriginalFilename(), description, state)))
-                    .map(imageRepository::save).map(imageDtoConvert::convertToImageDTO)
-                    .orElseThrow(() -> new RuntimeException("Failed to save the image"));
+                            .createImageCreateDTO(image.getOriginalFilename(), description)))
+                    .map(imageRepository::save).map(imageDtoConvert::convertToImageCreateDTO)
+                    .orElseThrow(() -> new RuntimeException("Failed to save the image with description: " + description));
+
         }
         log.error("The image was not saved");
         return null;
     }
 
+
+
+    /* *********************************************************************************************************** */
+//TODO
     @SneakyThrows
     public void upload(String imagePath, InputStream content) {
         Path fullImagePath = Path.of(bucket,imagePath);
@@ -80,5 +101,10 @@ public class ImageService {
     public Optional<byte[]> get(String imagePath){
         Path fullImagePath = Path.of(bucket,imagePath);
         return Files.exists(fullImagePath)? Optional.of(Files.readAllBytes(fullImagePath)) : Optional.empty();
+    }
+
+    public byte[] getImage(String title) {
+        return Optional.of(title).filter(StringUtils::hasText).flatMap(this::get)
+                .orElseThrow(() -> new IllegalStateException("Failed to get byte array for title: " + title));
     }
 }

@@ -5,6 +5,7 @@ import de.pet_project.domain.promotion.LocationPromotion;
 import de.pet_project.domain.enums.State;
 import de.pet_project.dto.promotion.LocationPromotionDTO;
 import de.pet_project.repository.promotion.LocationPromotionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import liquibase.util.Validate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,8 @@ public class LocationPromotionService {
         LocationPromotion locationPromotion = locationPromotionRepository.findById(locationPromotionDTO.getId()).orElse(null);
         if (locationPromotion != null) {
             return Optional.of(locationDtoConvert.convertToLocationPromotion(locationPromotionDTO)).map(locationPromotionRepository::save)
-                    .map(locationDtoConvert::convertToLocationPromotionDTO).orElseThrow();
+                    .map(locationDtoConvert::convertToLocationPromotionDTO)
+                    .orElseThrow(() -> new EntityNotFoundException("LocationPromotion not found with id: " + locationPromotionDTO.getId()));
         }
         log.error("Item from locationGame table not found, locationGameId={}", locationPromotionDTO.getId());
         return null;
@@ -42,7 +44,7 @@ public class LocationPromotionService {
     public LocationPromotionDTO delete(Integer locationPromotionId) {
         LocationPromotion locationPromotion = locationPromotionRepository.findById(locationPromotionId).orElse(null);
         if (locationPromotion != null) {
-            locationPromotion.setState(State.COMPLETED);
+            locationPromotion.setDeleted(true);
             locationPromotionRepository.save(locationPromotion);
             return locationDtoConvert.convertToLocationPromotionDTO(locationPromotion);
         }

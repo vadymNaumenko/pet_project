@@ -42,7 +42,7 @@ public class ImageGameService {
     public ImageGameDTO delete(Integer imageGameId) {
         ImageGame imageGame = imageGameRepository.findById(imageGameId).orElse(null);
         if (imageGame != null) {
-            imageGame.setState(State.COMPLETED);
+            imageGame.setDeleted(true);
             imageGameRepository.save(imageGame);
             return imageDtoConvert.convertToImageGameDTO(imageGame);
         }

@@ -7,5 +7,6 @@ public class ImagePromotionDTO {
     private Integer id;
     private Integer promotionId;
     private Integer imageId;
-    private String state;
+    private boolean isMain;
+    private boolean isDeleted;
 }

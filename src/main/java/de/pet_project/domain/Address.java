@@ -21,8 +21,6 @@ public class Address {//TODO podvyazat game and promo
     private String streetNumber;
     private Integer houseNumber;
 
-    //TODO add to changeSet
-    @Enumerated(EnumType.STRING)
-    private State state;
+    private boolean isDeleted;
 }
 

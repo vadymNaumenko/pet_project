@@ -60,7 +60,7 @@ public class AddressService {
     public AddressDTO delete(Integer addressId) {
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {
-            address.setState(State.COMPLETED);
+            address.setDeleted(true);
             addressRepository.save(address);
             return addressDtoConverter.convertToAddressDTO(address);
         }

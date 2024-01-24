@@ -43,7 +43,7 @@ public class LocationGameService {
     public LocationGameDTO delete(Integer locationGameId) {
         LocationGame locationGame = locationGameRepository.findById(locationGameId).orElse(null);
         if (locationGame != null) {
-            locationGame.setState(State.COMPLETED);
+            locationGame.setDeleted(true);
             locationGameRepository.save(locationGame);
             return locationDtoConvert.convertToLocationGameDTO(locationGame);
         }

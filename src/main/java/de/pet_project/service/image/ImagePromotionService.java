@@ -42,7 +42,7 @@ public class ImagePromotionService {
     public ImagePromotionDTO delete(Integer imagePromotionId) {
         ImagePromotion imagePromotion = imagePromotionRepository.findById(imagePromotionId).orElse(null);
         if (imagePromotion != null) {
-            imagePromotion.setState(State.COMPLETED);
+            imagePromotion.setDeleted(true);
             imagePromotionRepository.save(imagePromotion);
             return imageDtoConvert.convertToImagePromotionDTO(imagePromotion);
         }

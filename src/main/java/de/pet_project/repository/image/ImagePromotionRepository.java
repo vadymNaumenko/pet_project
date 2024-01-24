@@ -7,8 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ImagePromotionRepository extends JpaRepository<ImagePromotion, Integer> {
     @Query("SELECT ip.promotion FROM ImagePromotion ip WHERE ip.promotion.id = :promotionId")
-    List<Image> findAllByPromotionId(@Param("gameId") Integer promotionId);
+    List<Image> findAllByPromotionId(@Param("promotionId") Integer promotionId);
+
+    @Query("SELECT ip.promotion FROM ImagePromotion ip WHERE (:promotionId is null or ip.promotion.id = :promotionId) and " +
+            "(:isMain is null or ip.isMain)")
+    Optional<Image> findImageByFilter(@Param("promotionId") Integer promotionId, @Param("isMain") boolean isMain);
 }

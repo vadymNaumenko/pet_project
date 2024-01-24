@@ -14,5 +14,5 @@ public class Image {
     private Integer id;
     private String title;
     private String description;
-    private State state;
+    private boolean isDeleted;
 }

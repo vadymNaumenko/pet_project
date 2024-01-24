@@ -1,5 +1,6 @@
 package de.pet_project.controller.game;
 
+import de.pet_project.dto.game.GameCreateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.dto.game.FilterGameDTO;
@@ -78,8 +79,8 @@ public class GameController {
     }
 
     @PostMapping()
-    public ResponseEntity<GameDTO> save(@RequestPart GameDTO gameDTO) {
-        GameDTO response = gameService.save(gameDTO);
+    public ResponseEntity<GameCreateDTO> save(@RequestPart GameCreateDTO gameCreateDTO) {//
+        GameCreateDTO response = gameService.save(gameCreateDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -87,8 +88,8 @@ public class GameController {
     }
 
     @PutMapping()
-    public ResponseEntity<GameDTO> update(@RequestBody GameDTO gameDTO) {
-        GameDTO response = gameService.update(gameDTO);
+    public ResponseEntity<GameCreateDTO> update(@RequestBody GameCreateDTO gameCreateDTO) {
+        GameCreateDTO response = gameService.update(gameCreateDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -96,8 +97,8 @@ public class GameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GameDTO> delete(@PathVariable Integer id) {
-        GameDTO response = gameService.delete(id);
+    public ResponseEntity<GameCreateDTO> delete(@PathVariable Integer id) {
+        GameCreateDTO response = gameService.delete(id);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

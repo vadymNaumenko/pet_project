@@ -7,5 +7,5 @@ public class LocationGameDTO {
     private Integer id;
     private Integer gameId;
     private Integer addressId;
-    private String state;
+    private boolean isDeleted;
 }

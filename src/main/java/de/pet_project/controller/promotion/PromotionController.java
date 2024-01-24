@@ -1,5 +1,7 @@
 package de.pet_project.controller.promotion;
 
+import de.pet_project.dto.promotion.FilterPromotionDTO;
+import de.pet_project.dto.promotion.PromotionCreateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
 import de.pet_project.service.promotion.PromotionService;
@@ -18,18 +20,11 @@ import org.springframework.web.bind.annotation.*;
 public class PromotionController {
     private final PromotionService promotionService;
 
-    @GetMapping("/{addressId}")
-    public Page<PromotionShortDTO> findAllByAddress(@PathVariable Integer addressId, @RequestParam("pageNum") Integer pageNum,
+    @GetMapping("/filter")
+    public Page<PromotionShortDTO> findAllByAddress(@RequestBody FilterPromotionDTO filterPromotionDTO, @RequestParam("pageNum") Integer pageNum,
                                                     @RequestParam("pageSize") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-        return promotionService.findAllByAddress(pageable, addressId);
-    }
-
-    @GetMapping("/{city}")
-    public Page<PromotionShortDTO> findAllByCity(@PathVariable String city, @RequestParam("pageNum") Integer pageNum,
-                                                 @RequestParam("pageSize") Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
-        return promotionService.findAllByCity(pageable, city);
+        return promotionService.findAllByFilter(filterPromotionDTO, pageable);
     }
 
     @GetMapping()
@@ -44,13 +39,13 @@ public class PromotionController {
     }
 
     @PostMapping()
-    public PromotionDTO save(@RequestBody PromotionDTO promotionDTO) {
-        return promotionService.save(promotionDTO);
+    public PromotionCreateDTO save(@RequestBody PromotionCreateDTO promotionCreateDTO) {
+        return promotionService.save(promotionCreateDTO);
     }
 
     @PutMapping()
-    public ResponseEntity<PromotionDTO> update(@RequestBody PromotionDTO promotionDTO) {
-        PromotionDTO response = promotionService.update(promotionDTO);
+    public ResponseEntity<PromotionCreateDTO> update(@RequestBody PromotionCreateDTO promotionCreateDTO) {
+        PromotionCreateDTO response = promotionService.update(promotionCreateDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
@@ -58,8 +53,8 @@ public class PromotionController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<PromotionDTO> delete(@PathVariable Integer id) {
-        PromotionDTO response = promotionService.delete(id);
+    public ResponseEntity<PromotionCreateDTO> delete(@PathVariable Integer id) {
+        PromotionCreateDTO response = promotionService.delete(id);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

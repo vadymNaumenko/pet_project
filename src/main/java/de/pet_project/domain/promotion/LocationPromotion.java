@@ -23,6 +23,5 @@ public class LocationPromotion {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @Enumerated(EnumType.STRING)
-    private State state;
+    private boolean isDeleted;
 }

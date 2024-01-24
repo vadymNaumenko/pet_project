@@ -7,5 +7,5 @@ public class LocationPromotionDTO {
     private Integer id;
     private Integer promotionId;
     private Integer addressId;
-    private String state;
+    private boolean isDeleted;
 }

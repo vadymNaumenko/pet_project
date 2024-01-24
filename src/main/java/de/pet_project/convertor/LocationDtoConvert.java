@@ -24,7 +24,6 @@ public class LocationDtoConvert {
         LocationGame locationGame = modelMapper.map(locationGameDTO, LocationGame.class);
         locationGame.setGame(gameRepository.findById(locationGameDTO.getGameId()).orElseThrow());
         locationGame.setAddress(addressRepository.findById(locationGameDTO.getAddressId()).orElseThrow());
-        locationGame.setState(State.valueOf(locationGameDTO.getState()));
         return locationGame;
     }
 
@@ -32,7 +31,6 @@ public class LocationDtoConvert {
         LocationGameDTO locationGameDTO = modelMapper.map(locationGame, LocationGameDTO.class);
         locationGameDTO.setGameId(locationGameDTO.getGameId());
         locationGameDTO.setAddressId(locationGameDTO.getAddressId());
-        locationGameDTO.setState(locationGame.getState().state);
         return locationGameDTO;
     }
 
@@ -40,7 +38,6 @@ public class LocationDtoConvert {
         LocationPromotion locationPromotion = modelMapper.map(locationPromotionDTO, LocationPromotion.class);
         locationPromotion.setPromotion(promotionRepository.findById(locationPromotionDTO.getPromotionId()).orElseThrow());
         locationPromotion.setAddress(addressRepository.findById(locationPromotionDTO.getAddressId()).orElseThrow());
-        locationPromotion.setState(State.valueOf(locationPromotionDTO.getState()));
         return locationPromotion;
     }
 
@@ -48,7 +45,6 @@ public class LocationDtoConvert {
         LocationPromotionDTO locationPromotionDTO = modelMapper.map(locationPromotion, LocationPromotionDTO.class);
         locationPromotionDTO.setPromotionId(locationPromotionDTO.getPromotionId());
         locationPromotionDTO.setAddressId(locationPromotionDTO.getAddressId());
-        locationPromotionDTO.setState(locationPromotion.getState().state);
         return locationPromotionDTO;
     }
 }

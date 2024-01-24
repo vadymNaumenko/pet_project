@@ -1,6 +1,6 @@
 package de.pet_project.dto.ticket;
 
-import de.pet_project.dto.game.GameDTO;
+import de.pet_project.dto.game.GameCreateDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class TicketReadDTO {
 
     private Integer id;
-    private GameDTO gameDTO;
+    private GameCreateDTO gameCreateDTO;
     private String fullName;
     private String number;
     private double price;

@@ -1,8 +1,14 @@
 package de.pet_project.service.promotion;
 
 import de.pet_project.convertor.PromotionDtoConvert;
+import de.pet_project.domain.enums.game.Genre;
+import de.pet_project.domain.enums.game.MinAge;
+import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.promotion.Promotion;
 import de.pet_project.domain.enums.State;
+import de.pet_project.dto.image.FilterImageDTO;
+import de.pet_project.dto.promotion.FilterPromotionDTO;
+import de.pet_project.dto.promotion.PromotionCreateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
 import de.pet_project.repository.promotion.LocationPromotionRepository;
@@ -28,58 +34,65 @@ public class PromotionService {
     private final ImageService imageService;
     private final LocationPromotionRepository locationPromotionRepository;
 
-    public Page<PromotionShortDTO> findAllByAddress(Pageable pageable, Integer addressId) {
-        return null;
-    }
-
-    public Page<PromotionShortDTO> findAllByCity(Pageable pageable, String city) {
-        return null;
+    public Page<PromotionShortDTO> findAllByFilter(FilterPromotionDTO filterPromotionDTO, Pageable pageable) {
+        FilterImageDTO fmDTO = new FilterImageDTO();
+        fmDTO.setMain(true);
+        return new PageImpl<>(locationPromotionRepository.findAllByFilter(filterPromotionDTO.getAddressId(),
+                        filterPromotionDTO.getCity(),
+                        filterPromotionDTO.getState() != null ? State.valueOf(filterPromotionDTO.getState()) : null,
+                        pageable).stream()
+                .map(promotion -> promotionDtoConvert.convertToPromotionShortDTO(promotion, imageService
+                        .findImageForPromotionByFilter(fmDTO)))
+                .toList());
     }
 
     public Page<PromotionShortDTO> findAll(Pageable pageable) {
+        FilterImageDTO fmDTO = new FilterImageDTO();
+        fmDTO.setMain(true);
         return new PageImpl<>(promotionRepository.findAll(pageable).stream()
                 .map(promotion -> promotionDtoConvert.convertToPromotionShortDTO(promotion, imageService
-                        .findImageByPromotionId(promotion.getId()))).toList());
+                        .findImageForGameByFilter(fmDTO)))
+                .toList());
     }
 
     public PromotionDTO findById(Integer promotionId) {
         Optional<Promotion> promotionOptional = promotionRepository.findById(promotionId);
         if (promotionOptional.isPresent()) {
             Promotion promotion = promotionOptional.get();
-            return promotionDtoConvert.createPromotionDTO(promotion);
+            return promotionDtoConvert.convertToPromotionDTO(promotion, imageService
+                    .findImageByPromotionId(promotion.getId()));
         }
         log.error("Item from promotion table not found, promotionId={}", promotionId);
         return null;
     }
 
     @Transactional
-    public PromotionDTO save(PromotionDTO promotionDTO) {
-        return Optional.of(promotionDtoConvert.convertToPromotion(promotionDTO))
+    public PromotionCreateDTO save(PromotionCreateDTO promotionCreateDTO) {
+        return Optional.of(promotionDtoConvert.convertToPromotion(promotionCreateDTO))
                 .map(promotionRepository::save)
-                .map(promotion -> promotionDtoConvert.convertToPromotionDTO(promotion, imageService
-                        .findImageByPromotionId(promotion.getId()))).orElseThrow();
+                .map(promotionDtoConvert::convertToPromotionCreateDTO).orElseThrow();
     }
 
-    @Transactional
-    public PromotionDTO update(PromotionDTO promotionDTO) {
-        Validate.notNull(promotionDTO.getId(), "Field id can't be null");
-        Promotion promotion = promotionRepository.findById(promotionDTO.getId()).orElse(null);
+    @Transactional//TODO
+    public PromotionCreateDTO update(PromotionCreateDTO promotionCreateDTO) {
+        Validate.notNull(promotionCreateDTO.getId(), "Field id can't be null");
+        Promotion promotion = promotionRepository.findById(promotionCreateDTO.getId()).orElse(null);
         if (promotion != null) {
-            return Optional.of(promotionDtoConvert.convertToPromotion(promotionDTO))
+            return Optional.of(promotionDtoConvert.convertToPromotion(promotionCreateDTO))
                     .map(promotionRepository::save)
-                    .map(promotionDtoConvert::createPromotionDTO).orElseThrow();
+                    .map(promotionDtoConvert::convertToPromotionCreateDTO).orElseThrow();
         }
-        log.error("Item from promotion table not found, promotionId={}", promotionDTO.getId());
+        log.error("Item from promotion table not found, promotionId={}", promotionCreateDTO.getId());
         return null;
     }
 
     @Transactional
-    public PromotionDTO delete(Integer promotionId) {
+    public PromotionCreateDTO delete(Integer promotionId) {
         Promotion promotion = promotionRepository.findById(promotionId).orElse(null);
         if (promotion != null) {
             promotion.setState(State.COMPLETED);
             promotionRepository.save(promotion);
-            return promotionDtoConvert.createPromotionDTO(promotion);
+            return promotionDtoConvert.convertToPromotionCreateDTO(promotion);//TODO
         }
         log.error("Item from promotion table not found, promotionId={}", promotionId);
         return null;

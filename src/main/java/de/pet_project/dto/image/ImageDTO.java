@@ -6,6 +6,7 @@ import lombok.Data;
 public class ImageDTO {
     private Integer id;
     private String title;
+    private byte[] picture;
     private String description;
-    private String state;
+    private boolean isDeleted;
 }
