@@ -28,11 +28,11 @@ public class NewsController {
         Page<NewsDTO> news = newsService.findAll(pageable);
         return news;
     }
-    @GetMapping("{page}")
-    public Page<NewsDTO> getAll(@PathVariable Integer page){
+    @GetMapping("/{pageNumber}/{pageSize}")
+    public Page<NewsDTO> getAll(@PathVariable Integer pageNumber,@PathVariable Integer pageSize){
         Sort.TypedSort<News> sort = Sort.sort(News.class);
         sort.by(News::getDate);
-        PageRequest pageable = PageRequest.of(page,16,sort.descending());
+        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
         return newsService.findAll(pageable);
     }
     @GetMapping("/{id}")

@@ -22,6 +22,7 @@ public class NewsDtoConvertor {
     }
     public News convertToNews(NewsCreateDTO eventCreateDTO){
         News news = modelMapper.map(eventCreateDTO, News.class);
+        news.setIsDeleted(false);
         news.setDate(DateUtils.convertDate(eventCreateDTO.getDateTime()));
         return news;
     }

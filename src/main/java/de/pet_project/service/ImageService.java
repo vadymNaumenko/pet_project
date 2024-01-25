@@ -30,4 +30,8 @@ public class ImageService {
         Path fullImagePath = Path.of(bucket,imagePath);
         return Files.exists(fullImagePath)? Optional.of(Files.readAllBytes(fullImagePath)) : Optional.empty();
     }
+
+    public String getPath(String avatar) {
+        return bucket+avatar;
+    }
 }
