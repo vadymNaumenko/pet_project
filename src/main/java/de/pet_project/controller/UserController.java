@@ -66,6 +66,7 @@ public class UserController {
             value = "/avatar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
+        userService.setAvatar(multipartFile,userDetails);
     }
 
 

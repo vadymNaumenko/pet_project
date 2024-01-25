@@ -131,6 +131,11 @@ public class UserService /*implements UserDetailsService*/ {
         return Optional.empty();
     }
 
+    public boolean setAvatar(MultipartFile multipartFile, UserDetails userDetails) {
+//    imageService.
+        return true;
+    }
+
 
 //    public Page<UserReadDTO> findByFilter(UserFilter filter,Integer pageNumber,Integer pageSize) {
 //        Sort.TypedSort<User> sort = Sort.sort(User.class);

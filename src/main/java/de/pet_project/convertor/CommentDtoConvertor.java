@@ -25,6 +25,12 @@ public class CommentDtoConvertor {
         commentDTO.setReactions(reactionDTOList);
         return commentDTO;
     }
+    public CommentDTO convertToNewCommentDTO(CommentOnNews comment){
+        CommentDTO commentDTO = modelMapper.map(comment,CommentDTO.class);
+        commentDTO.setAuthor(comment.getUser().getNickname()); //todo nickname
+
+        return commentDTO;
+    }
     private ReactionDTO convertToReactionDTO(ReactionToNewsComment reaction){
         ReactionDTO reactionDTO = modelMapper.map(reaction,ReactionDTO.class);
         reactionDTO.setPhotoAuthor(reaction.getUser().getAvatar());

@@ -2,14 +2,13 @@ package de.pet_project.domain.news;
 
 import de.pet_project.domain.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,6 +26,7 @@ public class CommentOnNews {
     private News news;
     @Column(name = "comment_text")
     private String text;
+    private boolean isDeleted;
     @OneToMany(mappedBy = "comment")
     private List<ReactionToNewsComment> reactions;
     LocalDateTime created_at;

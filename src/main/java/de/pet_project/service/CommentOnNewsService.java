@@ -45,7 +45,12 @@ public class CommentOnNewsService {
                 commentOnNews.setText(text);
                 commentOnNews.setCreated_at(LocalDateTime.now());
                 CommentOnNews comment = commentOnNewsRepository.save(commentOnNews);
-                return Optional.ofNullable(convertor.convertToCommentDTO(comment));
+                CommentDTO commentDTO = new CommentDTO();
+                commentDTO.setAuthor("user: "+user.get().getNickname()); //todo nickname
+                commentDTO.setCreated_at(comment.getCreated_at());
+                commentDTO.setText(comment.getText());
+                commentDTO.setId(comment.getId());
+                return Optional.of(commentDTO);
             } else {
                 // todo news not found
             }
@@ -55,12 +60,13 @@ public class CommentOnNewsService {
 
         return Optional.empty();
     }
-@Transactional
+
+    @Transactional
     public Optional<CommentDTO> editeComment(Long commentId, String text, UserDetails userDetails) {
         Optional<CommentOnNews> comment = commentOnNewsRepository.findById(commentId);
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-        if (user.isPresent() && comment.isPresent()){
-            if (user.get().getEmail().equals(comment.get().getUser().getEmail())){
+        if (user.isPresent() && comment.isPresent()) {
+            if (user.get().getEmail().equals(comment.get().getUser().getEmail())) {
                 comment.get().setText(text);
                 commentOnNewsRepository.save(comment.get());
                 return Optional.ofNullable(convertor.convertToCommentDTO(comment.get()));
@@ -68,11 +74,32 @@ public class CommentOnNewsService {
                 comment.get().setText(text);
                 commentOnNewsRepository.save(comment.get());
                 return Optional.ofNullable(convertor.convertToCommentDTO(comment.get()));
-            }else {
+            } else {
                 //todo no right to edit comment
                 return Optional.empty();
             }
         }
         return Optional.empty();
+    }
+
+    @Transactional
+    public boolean deleteById(Long commentId, UserDetails userDetails) {
+        Optional<CommentOnNews> comment = commentOnNewsRepository.findById(commentId);
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+        if (user.isPresent() && comment.isPresent()) {
+            if (user.get().getEmail().equals(comment.get().getUser().getEmail())) {
+                comment.get().setDeleted(true);
+                commentOnNewsRepository.save(comment.get());
+                return true;
+            } else if (user.get().getRole().equals(User.Role.ADMIN)) {
+                comment.get().setDeleted(true);
+                commentOnNewsRepository.save(comment.get());
+                return true;
+            } else {
+                //todo no right to edit comment
+                return false;
+            }
+        }
+        return false;
     }
 }

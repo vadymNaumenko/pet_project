@@ -38,11 +38,11 @@ public class CommentOnNewsController {
         return commentDTO.map(dto -> ResponseEntity.status(HttpStatus.OK)
                 .body(dto)).orElseGet(() -> ResponseEntity.badRequest().body(null));
     }
-//    @DeleteMapping
-//    public HttpStatus deleteComment(@RequestParam("id") Long commentId,@AuthenticationPrincipal UserDetails userDetails){
-//        if (commentOnNewsService.deleteById(commentId,userDetails)){
-//            return HttpStatus.OK;
-//        }
-//        return HttpStatus.BAD_REQUEST;
-//    }
+    @DeleteMapping
+    public HttpStatus deleteComment(@RequestParam("id") Long commentId,@AuthenticationPrincipal UserDetails userDetails){
+        if (commentOnNewsService.deleteById(commentId,userDetails)){
+            return HttpStatus.OK;
+        }
+        return HttpStatus.BAD_REQUEST;
+    }
 }
