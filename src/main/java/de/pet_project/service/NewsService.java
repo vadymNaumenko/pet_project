@@ -4,6 +4,7 @@ import de.pet_project.convertor.NewsDtoConvertor;
 import de.pet_project.domain.news.News;
 import de.pet_project.dto.news.NewsCreateDTO;
 import de.pet_project.dto.news.NewsDTO;
+import de.pet_project.dto.news.NewsShortCreateDTO;
 import de.pet_project.repository.news_and_comment.CommentOnNewsRepository;
 import de.pet_project.repository.news_and_comment.NewsRepository;
 import de.pet_project.repository.news_and_comment.ReactionToNewsCommitRepository;
@@ -65,9 +66,9 @@ public class NewsService {
 
         for (NewsCreateDTO dto : events) {
 
-            if (dto.getDateTime().equals( "Today")) {
+            if (dto.getDateTime().equals("Today")) {
                 String[] str = LocalDate.now().toString().split("-");
-                dto.setDateTime(str[2]+"-"+str[1]+"-"+str[0]);
+                dto.setDateTime(str[2] + "-" + str[1] + "-" + str[0]);
             }
             News news = newsDtoConvertor.convertToNews(dto);
             newsRepository.save(news);
@@ -141,6 +142,12 @@ public class NewsService {
 
     public boolean hasEvent(String url) {
         return newsRepository.existsByImageUrl(url);
+    }
+
+    @Transactional
+    public Optional<NewsDTO> createNews(NewsShortCreateDTO createDTO) {
+        News news = newsRepository.save(newsDtoConvertor.convertNewsShortCreateDTOToNews(createDTO));
+        return Optional.ofNullable(newsDtoConvertor.convertToNewsDTO(news));
     }
 }
 
