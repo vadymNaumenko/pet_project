@@ -33,8 +33,6 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsDtoConvertor newsDtoConvertor;
-    private final CommentOnNewsRepository commitRepository;
-    private final ReactionToNewsCommitRepository reactionRepository;
     private boolean enable = true; // todo mast be add in application.yml
     private String newsPage = "https://www.uploadvr.com/reviews";
     private String site = "https://www.uploadvr.com";

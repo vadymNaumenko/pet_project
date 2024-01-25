@@ -17,12 +17,10 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/events")
+@RequestMapping("/api/v1/news")
 public class NewsController {
 
     private final NewsService newsService;
-    private final CommentOnNewsService commentOnNewsService;
-    private final ReactionToNewsCommentService reactionToNewsCommentService;
 
     @GetMapping()
     public Page<NewsDTO> getAll(Pageable pageable){

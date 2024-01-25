@@ -55,8 +55,8 @@ public class UserController {
 
     }
 
-    @PutMapping(
-            value = "/ooopppa",
+    @PostMapping(
+            value = "/avatar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
     }
