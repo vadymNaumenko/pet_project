@@ -3,6 +3,9 @@ package de.pet_project.controller.image;
 import de.pet_project.dto.image.ImageCreateDTO;
 import de.pet_project.dto.image.ImageDTO;
 import de.pet_project.service.image.ImageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +26,8 @@ public class ImageController {
         return imageService.findImage(id);
     }
 
+    @Operation(summary = "Upload image with description",
+            description = "This endpoint allows users to upload an image with an associated description.")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ImageCreateDTO> saveImage(@RequestPart("image") MultipartFile image,//TODO ask Marsel ResponseEntity
                                                     @RequestParam("description") String description) {

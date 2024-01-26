@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class ImageDtoConvert {
@@ -35,7 +37,7 @@ public class ImageDtoConvert {
     public ImageDTO convertToImageDTO(Image image, byte[] picture){
         ImageDTO imageDTO = modelMapper.map(image, ImageDTO.class);
         imageDTO.setPicture(picture);
-        return null;
+        return imageDTO;
     }
 
     public ImageCreateDTO createImageCreateDTO(String title, String description) {

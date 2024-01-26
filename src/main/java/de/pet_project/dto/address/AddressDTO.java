@@ -2,8 +2,10 @@ package de.pet_project.dto.address;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class AddressDTO {
     private Integer id;
@@ -11,6 +13,6 @@ public class AddressDTO {
     private String city;
     private String street;
     private String streetNumber;
-    private Integer houseNumber;
-    private boolean isDeleted;
+    private Integer apartmentNumber;
+    private Boolean isDeleted;
 }

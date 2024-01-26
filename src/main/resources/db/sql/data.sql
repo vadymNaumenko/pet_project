@@ -17,7 +17,7 @@ VALUES
     ('CONFIRMED', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIeBYp5sjm31vMJW2hElma9RFKHVwK2XhQkQ&usqp=CAU', '2023-03-25 10:23:54', DATE'1984-03-14', 'kolobok' ,'Vlad', 'Vladikov', '+38095674405', 'USER', 'vlad@gmail.com', '{noop}1Fishka1!'),
     ('BANNED', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU', '2022-02-24 10:23:54', DATE'1984-03-14', 'nika88' ,'Kate', 'Smith', '+38096114467', 'ADMIN', 'kate@gmail.com', '{noop}1Fishka1!');
 
-INSERT INTO addresses (country, city, street, street_number, house_number)
+INSERT INTO addresses (country, city, street, street_number, apartment_number)
 VALUES ('Deualchland','Berlin','Pariser Platz','1',1),
        ('Deualchland','Berlin','Pariser Platz','2',23),
        ('Deualchland','Berlin','Pariser Platz','3',3);

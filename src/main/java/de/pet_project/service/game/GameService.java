@@ -136,5 +136,4 @@ public class GameService {
         log.error("Item from game table not found, gameId={}", gameId);
         return null;
     }
-
 }

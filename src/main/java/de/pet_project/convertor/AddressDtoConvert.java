@@ -17,11 +17,10 @@ public class AddressDtoConvert {
     }
 
     public CityDTO convertToCityDTO(String address){
-        return modelMapper.map(address, CityDTO.class);
+        return new CityDTO(address);
     }
 
-    public AddressDTO convertToAddress(AddressDTO addressDTO){
-        Address address = modelMapper.map(addressDTO, Address.class);
-        return convertToAddressDTO(address);
+    public Address convertToAddress(AddressDTO addressDTO){
+        return modelMapper.map(addressDTO, Address.class);
     }
 }

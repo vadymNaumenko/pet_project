@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ImageGameRepository extends JpaRepository<ImageGame, Integer> {
-    @Query("SELECT ig.game FROM ImageGame ig WHERE ig.game.id = :gameId")
+    @Query("SELECT ig.image FROM ImageGame ig WHERE ig.game.id = :gameId")
     List<Image> findAllByGameId(@Param("gameId") Integer gameId);
 
-    @Query("SELECT ig.game FROM ImageGame ig WHERE (:gameId is null or ig.game.id = :gameId) and " +
+    @Query("SELECT ig.image FROM ImageGame ig WHERE (:gameId is null or ig.game.id = :gameId) and " +
             "(:isMain is null or ig.isMain)")
     Optional<Image> findImageByFilter(@Param("gameId") Integer gameId, @Param("isMain") boolean isMain);
 }

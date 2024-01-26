@@ -66,7 +66,7 @@ public class GameController {
         return gameService.findAll(pageable);
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/title/{title}")
     public Page<GameShortDTO> findAllByTitle(@PathVariable String title, @RequestParam("pageNum") Integer pageNum,
                                              @RequestParam("pageSize") Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -79,7 +79,7 @@ public class GameController {
     }
 
     @PostMapping()
-    public ResponseEntity<GameCreateDTO> save(@RequestPart GameCreateDTO gameCreateDTO) {//
+    public ResponseEntity<GameCreateDTO> save(@RequestBody GameCreateDTO gameCreateDTO) {//
         GameCreateDTO response = gameService.save(gameCreateDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();

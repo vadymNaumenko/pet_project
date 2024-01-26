@@ -2,12 +2,13 @@ package de.pet_project.domain;
 
 import de.pet_project.domain.enums.State;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "addresses")
-public class Address {//TODO podvyazat game and promo
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
@@ -19,8 +20,8 @@ public class Address {//TODO podvyazat game and promo
     private String city;
     private String street;
     private String streetNumber;
-    private Integer houseNumber;
+    private Integer apartmentNumber;
 
-    private boolean isDeleted;
+    private Boolean isDeleted; //TODO problem with null
 }
 

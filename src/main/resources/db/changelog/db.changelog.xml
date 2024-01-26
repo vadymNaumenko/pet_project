@@ -52,7 +52,7 @@
             <column name="city" type="varchar(20)"/>
             <column name="street" type="varchar(20)"/>
             <column name="street_number" type="varchar(10)"/>
-            <column name="house_number" type="int"/>
+            <column name="apartment_number" type="int"/>
         </createTable>
     </changeSet>
     <changeSet id="#3" author="punisher">

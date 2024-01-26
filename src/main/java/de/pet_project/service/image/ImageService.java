@@ -107,4 +107,12 @@ public class ImageService {
         return Optional.of(title).filter(StringUtils::hasText).flatMap(this::get)
                 .orElseThrow(() -> new IllegalStateException("Failed to get byte array for title: " + title));
     }
+
+    /*@Transactional
+    public Optional<byte[]> findImage(Integer id) {
+        return imageRepository.findById(id)
+                .map(Image::getTitle)
+                .filter(StringUtils::hasText)
+                .flatMap(this::get);
+    }*/
 }

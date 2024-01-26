@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -34,13 +35,15 @@ public class AddressService {
 
     public List<CityDTO> findAllCity() {                 //TODO
         return addressRepository.findAllCity().stream()
-                .map(addressDtoConverter::convertToCityDTO).toList();
+                .map(addressDtoConverter::convertToCityDTO)
+                .toList();
     }
 
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO save(AddressDTO addressDTO) {
-        return Optional.of(addressDtoConverter.convertToAddress(addressDTO)).orElseThrow();
+        return Optional.of(addressDtoConverter.convertToAddress(addressDTO))
+                .map(addressRepository::save).map(addressDtoConverter::convertToAddressDTO).orElseThrow();
     }
 
     @Transactional
@@ -49,7 +52,8 @@ public class AddressService {
         Validate.notNull(addressDTO.getId(), "Field id can't be null");
         Address address = addressRepository.findById(addressDTO.getId()).orElse(null);
         if (address != null) {
-            return addressDtoConverter.convertToAddressDTO(address);
+            return Optional.of(addressDtoConverter.convertToAddress(addressDTO))
+                    .map(addressRepository::save).map(addressDtoConverter::convertToAddressDTO).orElseThrow();
         }
         log.error("Item from address table not found, addressId={}", addressDTO.getId());
         return null;
@@ -60,7 +64,7 @@ public class AddressService {
     public AddressDTO delete(Integer addressId) {
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {
-            address.setDeleted(true);
+            address.setIsDeleted(true);
             addressRepository.save(address);
             return addressDtoConverter.convertToAddressDTO(address);
         }

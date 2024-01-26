@@ -11,6 +11,6 @@ public interface AddressRepository extends JpaRepository<Address, Integer> {
     @Query("SELECT a FROM Address a WHERE a.city = :city")
     List<Address> findAllAddressByCity(@Param("city") String city);
 
-    @Query("SELECT DISTINCT a.city FROM Address a")
+    @Query("SELECT DISTINCT a.city FROM Address a WHERE a.city IS NOT NULL")
     List<String> findAllCity();
 }
