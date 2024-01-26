@@ -65,11 +65,6 @@ public class NewsService {
         }
 
         for (NewsCreateDTO dto : events) {
-
-            if (dto.getDateTime().equals("Today")) {
-                String[] str = LocalDate.now().toString().split("-");
-                dto.setDateTime(str[2] + "-" + str[1] + "-" + str[0]);
-            }
             News news = newsDtoConvertor.convertToNews(dto);
             newsRepository.save(news);
         }
