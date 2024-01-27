@@ -43,7 +43,7 @@ public class LocationPromotionService {
     public LocationPromotionDTO deleteLocationPromotion(Integer locationPromotionId) {
         LocationPromotion locationPromotion = locationPromotionRepository.findById(locationPromotionId).orElse(null);
         if (locationPromotion != null) {
-            locationPromotion.setState(State.COMPLETED);
+            locationPromotion.setIsDeleted(true);
             locationPromotionRepository.save(locationPromotion);
             return locationDtoConvert.convertToLocationPromotionDTO(locationPromotion);
         }

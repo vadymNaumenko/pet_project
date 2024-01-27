@@ -1,6 +1,5 @@
 package de.pet_project.domain;
 
-import de.pet_project.domain.enums.game.State;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,6 +20,5 @@ public class LocationPromotion {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @Enumerated(EnumType.STRING)
-    private State state;
+    private Boolean isDeleted;
 }
