@@ -2,10 +2,7 @@ package de.pet_project.service;
 
 import de.pet_project.convertor.UserDtoConvert;
 import de.pet_project.domain.ConfirmationCode;
-import de.pet_project.dto.user.UserDTO;
-import de.pet_project.dto.user.UserEditeDTO;
-import de.pet_project.dto.user.UserFilter;
-import de.pet_project.dto.user.UserReadDTO;
+import de.pet_project.dto.user.*;
 import de.pet_project.domain.User;
 import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.user.UserRepository;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -120,6 +118,22 @@ public class UserService /*implements UserDetailsService*/ {
         PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort.descending());
         return userRepository.findByFilter(filter, pageable)
                 .map(userDtoConvert::convertToUserReadDto);
+    }
+
+    public Optional<UserThisDTO> findThisUser(UserDetails userDetails) {
+       Optional <User> user = userRepository.findByEmail(userDetails.getUsername());
+        Optional<UserThisDTO> userThisDTO = user.map(userDtoConvert::convertToUserThisDTO);
+        if (userThisDTO.isPresent()){
+            userThisDTO.get().setRole(user.get().getRole().name());
+            userThisDTO.get().setAvatar(imageService.getPath(user.get().getAvatar()));
+            return userThisDTO;
+        }
+        return Optional.empty();
+    }
+
+    public boolean setAvatar(MultipartFile multipartFile, UserDetails userDetails) {
+//    imageService.
+        return true;
     }
 
 

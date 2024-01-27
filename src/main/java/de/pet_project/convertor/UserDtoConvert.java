@@ -4,6 +4,7 @@ import de.pet_project.domain.User;
 import de.pet_project.dto.user.UserDTO;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserReadDTO;
+import de.pet_project.dto.user.UserThisDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -62,4 +63,7 @@ public class UserDtoConvert {
        return userDTO;
     }
 
+    public UserThisDTO convertToUserThisDTO(User user) {
+        return modelMapper.map(user,UserThisDTO.class);
+    }
 }

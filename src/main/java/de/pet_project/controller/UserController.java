@@ -3,6 +3,7 @@ package de.pet_project.controller;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserFilter;
 import de.pet_project.dto.user.UserReadDTO;
+import de.pet_project.dto.user.UserThisDTO;
 import de.pet_project.service.UserService;
 import jakarta.servlet.annotation.MultipartConfig;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,12 @@ public class UserController {
     private final UserService userService;
 
     //todo add filter for user and game
+
+    @GetMapping("/this")
+    public ResponseEntity<UserThisDTO> getThisUser(@AuthenticationPrincipal UserDetails userDetails){
+        Optional<UserThisDTO> user = userService.findThisUser(userDetails);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
         return userService.findAll(pageable);
@@ -55,10 +62,11 @@ public class UserController {
 
     }
 
-    @PutMapping(
-            value = "/ooopppa",
+    @PostMapping(
+            value = "/avatar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
+        userService.setAvatar(multipartFile,userDetails);
     }
 
 
