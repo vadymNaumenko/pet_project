@@ -41,7 +41,8 @@ public class AddressService {
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO save(AddressDTO addressDTO) {
-        return Optional.of(addressDtoConverter.convertToAddress(addressDTO)).orElseThrow();
+        return Optional.of(addressDtoConverter.convertToAddress(addressDTO))
+                .map(addressRepository::save).map(addressDtoConverter::convertToAddressDTO).orElseThrow();
     }
 
     @Transactional
@@ -50,7 +51,8 @@ public class AddressService {
         Validate.notNull(addressDTO.getId(), "Field id can't be null");
         Address address = addressRepository.findById(addressDTO.getId()).orElse(null);
         if (address != null) {
-            return addressDtoConverter.convertToAddressDTO(address);
+            return Optional.of(addressDtoConverter.convertToAddress(addressDTO))
+                    .map(addressRepository::save).map(addressDtoConverter::convertToAddressDTO).orElseThrow();
         }
         log.error("Item from address table not found, addressId={}", addressDTO.getId());
         return null;
@@ -61,7 +63,7 @@ public class AddressService {
     public AddressDTO delete(Integer addressId) {
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {
-            address.setState(State.COMPLETED);
+            address.setIsDeleted(true);
             addressRepository.save(address);
             return addressDtoConverter.convertToAddressDTO(address);
         }

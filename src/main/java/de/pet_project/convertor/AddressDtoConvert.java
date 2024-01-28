@@ -14,18 +14,14 @@ public class AddressDtoConvert {
     private final ModelMapper modelMapper;
 
     public AddressDTO convertToAddressDTO(Address address){
-        AddressDTO addressDTO = modelMapper.map(address, AddressDTO.class);
-        addressDTO.setState(address.getState().name());
-        return addressDTO;
+        return modelMapper.map(address, AddressDTO.class);
     }
 
     public CityDTO convertToCityDTO(String address){
-        return modelMapper.map(address, CityDTO.class);
+        return new CityDTO(address);
     }
 
-    public AddressDTO convertToAddress(AddressDTO addressDTO){
-        Address address = modelMapper.map(addressDTO, Address.class);
-        address.setState(State.valueOf(addressDTO.getState()));
-        return convertToAddressDTO(address);
+    public Address convertToAddress(AddressDTO addressDTO){
+        return modelMapper.map(addressDTO, Address.class);
     }
 }

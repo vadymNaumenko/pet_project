@@ -125,6 +125,26 @@
             <column name="end_time" type="date"/>
         </addColumn>
     </changeSet>
+    <changeSet id="#7" author="punisher">
+        <dropColumn tableName="location_games">
+            <column name="state"/>
+        </dropColumn>
+        <addColumn tableName="location_games">
+            <column name="is_deleted" type="boolean"/>
+        </addColumn>
+        <dropColumn tableName="addresses">
+            <column name="state"/>
+        </dropColumn>
+        <addColumn tableName="addresses">
+            <column name="is_deleted" type="boolean"/>
+        </addColumn>
+        <dropColumn tableName="location_promotions">
+            <column name="state"/>
+        </dropColumn>
+        <addColumn tableName="location_promotions">
+        <column name="is_deleted" type="boolean"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
 
 

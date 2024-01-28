@@ -1,11 +1,5 @@
 package de.pet_project.controller;
 
-import de.pet_project.domain.LocationGame;
-import de.pet_project.domain.enums.game.Genre;
-import de.pet_project.domain.enums.game.MinAge;
-import de.pet_project.domain.enums.game.NumberOfPlayers;
-import de.pet_project.domain.enums.game.State;
-import de.pet_project.dto.game.GameCreateUpdateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.dto.game.FilterGameDTO;

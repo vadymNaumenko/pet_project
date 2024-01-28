@@ -1,6 +1,5 @@
 package de.pet_project.domain;
 
-import de.pet_project.domain.enums.game.State;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,8 +20,6 @@ public class Address {//TODO podvyazat game and promo
     private String streetNumber;
     private Integer houseNumber;
 
-    //TODO add to changeSet
-    @Enumerated(EnumType.STRING)
-    private State state;
+    private Boolean isDeleted;
 }
 

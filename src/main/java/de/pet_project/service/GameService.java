@@ -1,9 +1,7 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.GameDtoConvert;
-import de.pet_project.domain.LocationGame;
 import de.pet_project.dto.game.FilterGameDTO;
-import de.pet_project.dto.game.GameCreateUpdateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.Game;
@@ -11,7 +9,6 @@ import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.enums.game.State;
-import de.pet_project.dto.location.LocationGameDTO;
 import de.pet_project.repository.AddressRepository;
 import de.pet_project.repository.GameRepository;
 import de.pet_project.repository.LocationGameRepository;
@@ -29,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
