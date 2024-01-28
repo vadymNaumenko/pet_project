@@ -121,12 +121,14 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public Optional<UserThisDTO> findThisUser(UserDetails userDetails) {
-       Optional <User> user = userRepository.findByEmail(userDetails.getUsername());
-        Optional<UserThisDTO> userThisDTO = user.map(userDtoConvert::convertToUserThisDTO);
-        if (userThisDTO.isPresent()){
-            userThisDTO.get().setRole(user.get().getRole().name());
-            userThisDTO.get().setAvatar(imageService.getPath(user.get().getAvatar()));
-            return userThisDTO;
+        if (userDetails != null) {
+            Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+            Optional<UserThisDTO> userThisDTO = user.map(userDtoConvert::convertToUserThisDTO);
+            if (userThisDTO.isPresent()) {
+                userThisDTO.get().setRole(user.get().getRole().name());
+                userThisDTO.get().setAvatar(imageService.getPath(user.get().getAvatar()));
+                return userThisDTO;
+            }
         }
         return Optional.empty();
     }
