@@ -134,8 +134,14 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public boolean setAvatar(MultipartFile multipartFile, UserDetails userDetails) {
-//    imageService.
-        return true;
+
+        if (userDetails != null) {
+            Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+            user.get().setAvatar(uploadImage(multipartFile));
+            userRepository.save(user.get());
+            return true;
+        }
+        return false;
     }
 
 

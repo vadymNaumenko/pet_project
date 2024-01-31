@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,10 @@ public class CommentOnNewsService {
     public Page<CommentDTO> findCommentByNewsId(Long newsId, Pageable pageable) {
         Page<CommentOnNews> comments = commentOnNewsRepository.findByNews_Id(newsId, pageable);
         return comments.map(convertor::convertToCommentDTO);
+    }
+    public List<CommentDTO> findCommentByNewsId(Long newsId) {
+        List<CommentOnNews> comments = commentOnNewsRepository.findByNews_Id(newsId);
+        return comments.stream().map(convertor::convertToCommentDTO).toList();
     }
 
     @Transactional

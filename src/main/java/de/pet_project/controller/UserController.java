@@ -1,5 +1,6 @@
 package de.pet_project.controller;
 
+import de.pet_project.domain.User;
 import de.pet_project.dto.user.UserEditeDTO;
 import de.pet_project.dto.user.UserFilter;
 import de.pet_project.dto.user.UserReadDTO;
@@ -38,6 +39,8 @@ public class UserController {
 
     @GetMapping("/this")
     public ResponseEntity<UserThisDTO> getThisUser(@AuthenticationPrincipal UserDetails userDetails){
+        if (userDetails == null)
+            return ResponseEntity.notFound().build();
         Optional<UserThisDTO> user = userService.findThisUser(userDetails);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
@@ -65,10 +68,12 @@ public class UserController {
     @PostMapping(
             value = "/avatar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
-        userService.setAvatar(multipartFile,userDetails);
+    public HttpStatus update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userService.setAvatar(multipartFile,userDetails)) {
+            return HttpStatus.OK;
+        }
+        return HttpStatus.BAD_REQUEST;
     }
-
 
         @PutMapping("/{id}")
 //        @PutMapping(value = "/{id}")

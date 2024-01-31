@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +24,11 @@ public class CommentOnNewsController {
     @GetMapping("/{newsId}")
     public Page<CommentDTO> findCommentByNewsId(@PathVariable Long newsId, Pageable pageable){
         return commentOnNewsService.findCommentByNewsId(newsId,pageable);
+    }
+
+    @GetMapping("/all/{newsId}")
+    public List<CommentDTO> findCommentByNewsId(@PathVariable Long newsId){
+        return commentOnNewsService.findCommentByNewsId(newsId);
     }
     @PostMapping
     public ResponseEntity<CommentDTO> createComment(@RequestParam("news-id") Long newsId,String text, @AuthenticationPrincipal UserDetails userDetails){
