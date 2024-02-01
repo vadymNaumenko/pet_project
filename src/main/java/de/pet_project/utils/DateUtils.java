@@ -32,7 +32,10 @@ public class DateUtils {
             return LocalDate.now();
         }
         String[] dt = strDate.split("[ ,\\.]+");
-        if (dt.length == 3) {
+        if (dt.length == 2) {
+            String year = String.valueOf(LocalDate.now().getYear());
+            dt = new String[]{dt[0], dt[1],year};
+        }else if (dt.length == 3) {
             dt = new String[]{dt[0], dt[1], dt[2]};
         }
 

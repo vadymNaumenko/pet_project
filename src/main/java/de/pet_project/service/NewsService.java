@@ -76,7 +76,8 @@ public class NewsService {
         String[] str = new String[2];
         Document document = Jsoup.connect(urlToNews).get();
         String video = document.select(".fluid-width-video-wrapper iframe").attr("src");
-        Elements elements = document.select(".c-content p");
+//        Elements elements = document.select(".c-content p");
+        Elements elements = document.select(".c-content");
 //        String p = elements.html();
         String p = elements.toString();
 
