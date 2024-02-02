@@ -13,9 +13,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-//    @NotBlank(message = "nickname: должен быть заполнен")
-//    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "nickname: Некорректный должна быть не меньше 4 символов и не больше 20")
-//    private String nickname;
+    @NotBlank(message = "nickname: должен быть заполнен")
+    @Pattern(regexp = "^[a-zA-Z0-9а-яА-Я. _-]{4,20}$",message = "nickname: Некорректный должна быть не меньше 4 символов и не больше 20")
+    private String nickname;
+    private String firstName;
+    private String LastName;
     @NotBlank(message = "email: должен быть заполнен и без пробелов")
     @Email(message = "email: Некорректный")
     private String email;

@@ -117,4 +117,9 @@ public class TicketOrderService {
         return ticketOrdersRepository.findById(id).map(TicketOrder::getUser)
                 .map(userDtoConvert::convertToUserReadDto).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    public Page<TicketReadDTO> findAllByUserEmail(String email,Pageable pageable) {
+        return ticketOrdersRepository.findAllTicketOrderByUser_Email(email,pageable)
+                .map(ticketDtoConvert::convertToTicketReadDTO);
+    }
 }

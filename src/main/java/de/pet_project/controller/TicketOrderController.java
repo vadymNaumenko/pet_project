@@ -20,8 +20,11 @@ public class TicketOrderController {
     private final TicketOrderService ticketOrdersService;
 
     @GetMapping
-    public Page<TicketReadDTO> findByPage(Pageable pageable) {
-        return ticketOrdersService.findByPage(pageable);
+    public Page<TicketReadDTO> findByPage(Pageable pageable, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+       return ticketOrdersService.findAllByUserEmail(userDetails.getUsername(),pageable);
     }
 
     @GetMapping("/{id}")
@@ -35,18 +38,17 @@ public class TicketOrderController {
         return ticketOrdersService.findUserByTicketId(id);
     }
 
-    @GetMapping("/buy/{orderID}")
-    public ResponseEntity<?> buyGame(@PathVariable Integer orderID) {
-        if (ticketOrdersService.hasOrder(orderID)) {
-            ticketOrdersService.save(orderID);
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order not found");
-    }
+//    @GetMapping("/buy/{orderID}")
+//    public ResponseEntity<?> buyGame(@PathVariable Integer orderID) {
+//        if (ticketOrdersService.hasOrder(orderID)) {
+//            ticketOrdersService.save(orderID);
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Order not found");
+//    }
 
-    @PostMapping("/game/{id}")
+    @PostMapping("/game{id}")
     public ResponseEntity<TicketReadDTO> create(@AuthenticationPrincipal UserDetails userDetails,
                                                 @PathVariable Integer id) {
-
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketOrdersService.save(userDetails.getUsername(), id));
     }

@@ -17,5 +17,6 @@ public class NewsDTO {
     private String imageUrl;
     private String text;
     private Boolean isDeleted;
+    private int sizeComments;
     private LocalDate date;
 }

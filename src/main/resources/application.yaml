@@ -30,13 +30,12 @@ spring:
             enable: true
 #        debug: true
 
-
-#springdoc:
-#  swagger-ui:
-#    oauth:
-#      client-id: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
-#      client-secret: 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
-#    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: 782822282585-ptl1qnr0r27819kj0ibushkg85go0r3t.apps.googleusercontent.com
+      client-secret: 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
+    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
 
 app:
   sender:

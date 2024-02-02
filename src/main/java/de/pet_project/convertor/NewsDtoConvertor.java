@@ -4,6 +4,8 @@ import de.pet_project.domain.news.News;
 import de.pet_project.dto.news.NewsCreateDTO;
 import de.pet_project.dto.news.NewsDTO;
 import de.pet_project.dto.news.NewsShortCreateDTO;
+import de.pet_project.repository.news_and_comment.CommentOnNewsRepository;
+import de.pet_project.service.CommentOnNewsService;
 import de.pet_project.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,9 +19,11 @@ import java.time.LocalDateTime;
 public class NewsDtoConvertor {
     private final ModelMapper modelMapper;
 
-    public NewsDTO convertToNewsDTO(News event){
 
-        return modelMapper.map(event, NewsDTO.class);
+    public NewsDTO convertToNewsDTO(News event){
+        NewsDTO newsDTO = modelMapper.map(event, NewsDTO.class);
+        newsDTO.setSizeComments(event.getComment().size());
+        return newsDTO;
     }
     public News convertToNews(NewsDTO eventDTO){
         return modelMapper.map(eventDTO, News.class);
