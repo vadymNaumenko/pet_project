@@ -19,7 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -112,12 +114,11 @@ public class UserService /*implements UserDetailsService*/ {
                 .map(userDtoConvert::convertToUserDTO);
     }
 
-    public Page<UserReadDTO> findByFilter(UserFilter filter, Integer pageNumber, Integer pageSize) {
-        Sort.TypedSort<User> sort = Sort.sort(User.class);
-        sort.by(User::getFirstname);
-        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort.descending());
-        return userRepository.findByFilter(filter, pageable)
-                .map(userDtoConvert::convertToUserReadDto);
+    public List<UserReadDTO> findByFilter(UserFilter filter) {
+
+        return userRepository.findByFilter(filter).stream()
+                .map(userDtoConvert::convertToUserReadDto)
+                .collect(Collectors.toList());
     }
 
     public Optional<UserThisDTO> findThisUser(UserDetails userDetails) {

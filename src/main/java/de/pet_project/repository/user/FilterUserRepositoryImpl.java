@@ -23,7 +23,7 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
     private final EntityManager entityManager;
 
     @Override
-    public Page<User> findByFilter(UserFilter filter, Pageable pageable) {
+    public List<User> findByFilter(UserFilter filter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
         Root<User> user = query.from(User.class);
@@ -31,13 +31,13 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.firstname() != null) {
-            predicates.add(criteriaBuilder.like(user.get("firstname"), "%" + filter.firstname() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(user.get("firstname")), "%" + filter.firstname().toLowerCase() + "%"));
         }
         if (filter.lastname() != null) {
-            predicates.add(criteriaBuilder.like(user.get("lastname"), "%" + filter.lastname() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(user.get("lastname")), "%" + filter.lastname().toLowerCase() + "%"));
         }
         if (filter.nickname() != null) {
-            predicates.add(criteriaBuilder.like(user.get("nickname"), "%" + filter.nickname() + "%"));
+            predicates.add(criteriaBuilder.like(criteriaBuilder.lower(user.get("nickname")), "%" + filter.nickname().toLowerCase() + "%"));
         }
         if (filter.birthDate() != null) {
             predicates.add(criteriaBuilder.lessThan(user.get("birthDate"), filter.birthDate()));
@@ -46,15 +46,8 @@ public class FilterUserRepositoryImpl implements FilterUserRepository {
         query.where(predicates.toArray(Predicate[]::new));
 
         TypedQuery<User> typedQuery = entityManager.createQuery(query);
-        typedQuery.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
-        typedQuery.setMaxResults(pageable.getPageSize());
 
-        List<User> resultList = typedQuery.getResultList();
 
-        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        countQuery.select(criteriaBuilder.count(countQuery.from(User.class))).where(predicates.toArray(Predicate[]::new));
-        Long totalResults = entityManager.createQuery(countQuery).getSingleResult(); // todo has error
-
-        return new PageImpl<>(resultList, pageable, totalResults);
+        return typedQuery.getResultList();
     }
 }

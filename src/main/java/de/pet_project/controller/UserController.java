@@ -50,8 +50,8 @@ public class UserController {
     }
 
     @PostMapping("/filter")
-    public Page<UserReadDTO> findByFilter(@RequestBody UserFilter filter, @RequestParam Integer pageNumber, @RequestParam Integer pageSize){
-        return userService.findByFilter(filter,pageNumber,pageSize);
+    public List<UserReadDTO> findByFilter(@RequestBody UserFilter filter){
+        return userService.findByFilter(filter);
     }
     @GetMapping(value = "/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
