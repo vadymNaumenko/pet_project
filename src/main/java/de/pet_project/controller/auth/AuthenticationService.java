@@ -40,6 +40,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .role(User.Role.USER)
                 .state(User.State.NOT_CONFIRM)
+                .avatar("img.png")
                 .build();
         userRepository.save(user);
 
