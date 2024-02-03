@@ -31,13 +31,20 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgetPassword")
-    public String forgetPassword (@RequestParam("email") String email){
-        return service.forgotPassword(email);
+    public ResponseEntity<String> forgetPassword (@RequestParam("email") String email){
+        boolean b = service.forgotPassword(email);
+        if (b){
+            return ResponseEntity.ok().body("Сheck your mail");
+        }
+        return ResponseEntity.badRequest().body("User with email: " + email + " not found");
     }
 
     @PostMapping("/new-password")
-    public boolean createNewPassword(@RequestBody ForgotRequest forgotRequest){
-        return service.setNewPassword(forgotRequest);
+    public ResponseEntity<?> createNewPassword(@RequestBody ForgotRequest forgotRequest){
+        if (service.setNewPassword(forgotRequest)){
+        return ResponseEntity.ok().body(null);
+        }
+        return ResponseEntity.badRequest().body(null);
     }
 
     @GetMapping("/confirm/{cod}")

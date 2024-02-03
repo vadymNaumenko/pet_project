@@ -66,13 +66,13 @@ public class AuthenticationService {
                 .build();
     }
 
-    public String forgotPassword(String email) {
+    public boolean forgotPassword(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
-            return "User with email: " + email + " not found";
+            return false;
         }
         templateMailSender.forgotPassword(email);
-        return "Сheck your mail";
+       return true;
     }
 
     @Transactional
