@@ -41,6 +41,7 @@ app:
   sender:
     url: http://localhost:8080/api/v1/auth/confirm/
     buy: http://localhost:8080/api/v1/orders/buy/
+    forgotPassword: http://localhost:8080/api/v1/orders/forgotPassword/
   image:
       bucket: C:/Users/Вадим/Desktop/final Project/pet_project/images
 #    bucket: C:/myPetProject/back_end/pet_project/images

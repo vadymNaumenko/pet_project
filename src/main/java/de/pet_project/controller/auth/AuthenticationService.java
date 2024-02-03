@@ -1,15 +1,21 @@
 package de.pet_project.controller.auth;
 
 import de.pet_project.config.JwtService;
+import de.pet_project.domain.ForgotPassword;
 import de.pet_project.domain.User;
 import de.pet_project.mail.TemplateMailSender;
+import de.pet_project.repository.ForgotPasswordRepository;
 import de.pet_project.repository.user.UserRepository;
+import de.pet_project.service.ForgotPasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +26,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final TemplateMailSender templateMailSender;
+    private final ForgotPasswordRepository forgotPasswordRepository;
 
 
     @Transactional
@@ -56,5 +63,32 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public String forgotPassword(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            return "User with email: " + email + " not found";
+        }
+        templateMailSender.forgotPassword(email);
+        return "Сheck your mail";
+    }
+
+    @Transactional
+    public boolean setNewPassword(ForgotRequest forgotRequest) {
+
+        Optional<ForgotPassword> forgotPassword = forgotPasswordRepository.findByCode(forgotRequest.getCode());
+        if (forgotPassword.isPresent() && forgotPassword.get().isActive()) {
+            if (LocalDateTime.now().isAfter(forgotPassword.get().getCreatedAt().plusDays(1))) {
+                //todo check
+                System.out.println();
+            }
+            User user = forgotPassword.get().getUser();
+            user.setPassword(passwordEncoder.encode(forgotRequest.getPassword()));
+            forgotPassword.get().setActive(false);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }

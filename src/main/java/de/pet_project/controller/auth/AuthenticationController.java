@@ -30,6 +30,16 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticate(request));
     }
 
+    @PostMapping("/forgetPassword")
+    public String forgetPassword (@RequestParam("email") String email){
+        return service.forgotPassword(email);
+    }
+
+    @PostMapping("/new-password")
+    public boolean createNewPassword(@RequestBody ForgotRequest forgotRequest){
+        return service.setNewPassword(forgotRequest);
+    }
+
     @GetMapping("/confirm/{cod}")
     public ResponseEntity<?> checkCod(@PathVariable String cod){
 
