@@ -94,8 +94,9 @@ public class GameController {
     }
 
     @PostMapping()
-    public ResponseEntity<GameDTO> save(@RequestBody GameCreateDTO gamecreateDTO) {
-        GameDTO response = gameService.save(gamecreateDTO);
+    public ResponseEntity<GameDTO> save(@RequestBody GameCreateDTO gameCreateDTO) {
+        GameDTO response = gameService.save(gameCreateDTO);
+
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

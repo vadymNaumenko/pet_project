@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,8 +45,10 @@ public class GameService {
 
 
     public Page<GameShortDTO> filter(FilterGameDTO filterGameDTO, Pageable pageable) {
-        return new PageImpl<>(locationGameRepository.findAllByFilter(filterGameDTO.getAddressId(),
-                        filterGameDTO.getCity(),
+
+        return new PageImpl<>(locationGameRepository.findAllByFilter(
+                filterGameDTO.getAddressId() != null? filterGameDTO.getAddressId():null,
+                        filterGameDTO.getCity() != null? filterGameDTO.getCity():null,
                         filterGameDTO.getGenre() != null ? Genre.valueOf(filterGameDTO.getGenre()) : null,
                         filterGameDTO.getState() != null ? State.valueOf(filterGameDTO.getState()) : null,
                         filterGameDTO.getNumberOfPlayers() != null ?

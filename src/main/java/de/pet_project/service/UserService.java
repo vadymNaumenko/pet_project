@@ -46,12 +46,9 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     @Transactional
-    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO, MultipartFile image) {
+    public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
         return userRepository.findById(userUpdateDTO.getId())
-                .map(user -> {
-                    userUpdateDTO.setAvatar(uploadImage(image));
-                    return userDtoConvert.convertToUser(userUpdateDTO, user);
-                })
+                .map(user -> userDtoConvert.convertToUser(userUpdateDTO, user))
                 .map(userRepository::save)
                 .map(userDtoConvert::convertToUserEditeDTO);
 

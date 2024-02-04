@@ -76,17 +76,16 @@ public class UserController {
     }
 
         @PutMapping("/{id}")
-//        @PutMapping(value = "/{id}")
-    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO/*,MethodArgumentNotValidException ex */) {
+    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO) {
 
 //        if (userService.existsNickname(userEditeDTO.getNickname())){
 //        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
 //        }
 
-//        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
-//        if (user.isPresent()){
-//            return ResponseEntity.status(HttpStatus.OK).body(user.get());
-//        }
+        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
+        if (user.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(user.get());
+        }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userEditeDTO);
     }
