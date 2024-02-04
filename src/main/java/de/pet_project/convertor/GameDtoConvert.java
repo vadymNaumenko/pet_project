@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GameDtoConvert {
     private final ModelMapper modelMapper;
-    private final ImageService imageService;
 
     public GameDTO convertToGameDTO(Game game){
         GameDTO gameDTO = modelMapper.map(game, GameDTO.class);
