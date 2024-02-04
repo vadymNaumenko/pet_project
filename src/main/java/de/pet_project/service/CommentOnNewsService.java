@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CommentOnNewsService {
     private final NewsRepository newsRepository;
     private final UserRepository userRepository;
     private final CommentDtoConvertor convertor;
+    private final ImageService imageService;
 
     public Page<CommentDTO> findCommentByNewsId(Long newsId, Pageable pageable) {
         Page<CommentOnNews> comments = commentOnNewsRepository.findByNews_Id(newsId, pageable);
@@ -108,4 +110,11 @@ public class CommentOnNewsService {
         return false;
     }
 
+    public Optional<byte[]> findUserAvatarByCommentId(Long commentId) {
+        Optional<CommentOnNews> comment = commentOnNewsRepository.findById(commentId);
+        return comment
+                .map(commentOnNews -> commentOnNews.getUser().getAvatar())
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
+    }
 }

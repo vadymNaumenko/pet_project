@@ -5,7 +5,9 @@ import de.pet_project.service.CommentOnNewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,16 @@ public class CommentOnNewsController {
     @GetMapping("/{newsId}")
     public Page<CommentDTO> findCommentByNewsId(@PathVariable Long newsId, Pageable pageable){
         return commentOnNewsService.findCommentByNewsId(newsId,pageable);
+    }
+    @GetMapping("/authorAvatar/{commentId}")
+    public ResponseEntity<byte[]> getAuthorAvatar(@PathVariable Long commentId){
+
+            return commentOnNewsService.findUserAvatarByCommentId(commentId)
+                    .map(content -> ResponseEntity.ok()
+                            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                            .contentLength(content.length)
+                            .body(content))
+                    .orElseGet(ResponseEntity.notFound()::build);
     }
 
     @GetMapping("/all/{newsId}")
