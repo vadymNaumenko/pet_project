@@ -7,7 +7,6 @@ import de.pet_project.domain.news.News;
 import de.pet_project.dto.comment_and_reaction_for_news.CommentDTO;
 import de.pet_project.repository.news_and_comment.CommentOnNewsRepository;
 import de.pet_project.repository.news_and_comment.NewsRepository;
-import de.pet_project.repository.news_and_comment.ReactionToNewsCommitRepository;
 import de.pet_project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -69,7 +68,7 @@ public class CommentOnNewsService {
     }
 
     @Transactional
-    public Optional<CommentDTO> editeComment(Long commentId, String text, UserDetails userDetails) {
+    public Optional<CommentDTO> editComment(Long commentId, String text, UserDetails userDetails) {
         Optional<CommentOnNews> comment = commentOnNewsRepository.findById(commentId);
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
         if (user.isPresent() && comment.isPresent()) {
