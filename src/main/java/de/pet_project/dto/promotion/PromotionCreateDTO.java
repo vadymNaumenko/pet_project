@@ -11,9 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class PromotionCreateUpdateDTO {
-    private Integer id;
-    private MultipartFile image;
+public class PromotionCreateDTO {
+    private String image;
     private String title;
     private String category;
     private String state;

@@ -1,5 +1,6 @@
 package de.pet_project.controller;
 
+import de.pet_project.dto.game.GameCreateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.dto.game.FilterGameDTO;
@@ -93,8 +94,8 @@ public class GameController {
     }
 
     @PostMapping()
-    public ResponseEntity<GameDTO> save(@RequestPart GameDTO gameDTO) {
-        GameDTO response = gameService.save(gameDTO);
+    public ResponseEntity<GameDTO> save(@RequestPart GameCreateDTO gameCreateDTO) {
+        GameDTO response = gameService.save(gameCreateDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }
