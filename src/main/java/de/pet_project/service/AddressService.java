@@ -24,16 +24,19 @@ public class AddressService {
     private final AddressDtoConvert addressDtoConverter;
 
     public List<AddressDTO> findAll() {
+        log.info("Fetching all addresses");
         return addressRepository.findAll().stream()
                 .map(addressDtoConverter::convertToAddressDTO).toList();
     }
 
     public List<AddressDTO> findAllAddressByCity(String city) {
+        log.info("Fetching all addresses by city: {}", city);
         return addressRepository.findAllAddressByCity(city).stream()
                 .map(addressDtoConverter::convertToAddressDTO).toList();
     }
 
-    public List<CityDTO> findAllCity() {                 //TODO
+    public List<CityDTO> findAllCity() {
+        log.info("Fetching all cities");
         return addressRepository.findAllCity().stream()
                 .map(addressDtoConverter::convertToCityDTO).toList();
     }
@@ -41,6 +44,7 @@ public class AddressService {
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO save(AddressDTO addressDTO) {
+        log.info("Saving new address: {}", addressDTO);
         return Optional.of(addressDtoConverter.convertToAddress(addressDTO))
                 .map(addressRepository::save).map(addressDtoConverter::convertToAddressDTO).orElseThrow();
     }
@@ -48,6 +52,7 @@ public class AddressService {
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO update(AddressDTO addressDTO) {
+        log.info("Updating address: {}", addressDTO);
         Validate.notNull(addressDTO.getId(), "Field id can't be null");
         Address address = addressRepository.findById(addressDTO.getId()).orElse(null);
         if (address != null) {
@@ -61,6 +66,7 @@ public class AddressService {
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public AddressDTO delete(Integer addressId) {
+        log.info("Deleting address with ID: {}", addressId);
         Address address = addressRepository.findById(addressId).orElse(null);
         if (address != null) {
             address.setIsDeleted(true);

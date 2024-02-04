@@ -8,10 +8,9 @@ import de.pet_project.repository.ConfirmationCodeRepository;
 import de.pet_project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,41 +24,41 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService /*implements UserDetailsService*/ {
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final UserDtoConvert userDtoConvert;
 
-
     public Page<UserReadDTO> findAll(Pageable pageable) {
-
+        log.info("Fetching all users with pageable: {}", pageable);
         return userRepository.findAll(pageable).map(UserReadDTO::getInstance);
-
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
     public Optional<UserDTO> findById(Integer id) {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getId().equals(id))
-                .map(UserDTO::getInstance).findFirst();
+        log.info("Fetching user by ID: {}", id);
+        return userRepository.findById(id)
+                .map(UserDTO::getInstance);
     }
 
     @Transactional
     public Optional<UserEditeDTO> update(UserEditeDTO userUpdateDTO) {
+        log.info("Updating user: {}", userUpdateDTO);
         return userRepository.findById(userUpdateDTO.getId())
                 .map(user -> userDtoConvert.convertToUser(userUpdateDTO, user))
                 .map(userRepository::save)
                 .map(userDtoConvert::convertToUserEditeDTO);
-
     }
 
-    public boolean existsNickname(String nickname) { // todo mast be add check nickname
+    public boolean existsNickname(String nickname) {
+        log.info("Checking if nickname exists: {}", nickname);
         return userRepository.existsByNickname(nickname);
     }
 
     @Transactional
     public boolean delete(Integer id) {
+        log.info("Deleting user by ID: {}", id);
         return userRepository.findById(id)
                 .map(user -> {
                     user.setState(User.State.DELETED);
@@ -69,8 +68,8 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     @Transactional
-//    @PreAuthorize("hasRole('ADMIN')")
     public boolean ban(Integer id) {
+        log.info("Banning user by ID: {}", id);
         return userRepository.findById(id)
                 .map(user -> {
                     user.setState(User.State.BANNED);
@@ -80,6 +79,7 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public Optional<byte[]> findAvatar(Integer id) {
+        log.info("Fetching avatar for user ID: {}", id);
         return userRepository.findById(id)
                 .map(User::getAvatar)
                 .filter(StringUtils::hasText)
@@ -89,6 +89,7 @@ public class UserService /*implements UserDetailsService*/ {
     @SneakyThrows
     private String uploadImage(MultipartFile image) {
         if (!image.isEmpty()) {
+            log.info("Uploading image: {}", image.getOriginalFilename());
             imageService.upload(image.getOriginalFilename(), image.getInputStream());
             return image.getOriginalFilename();
         }
@@ -96,6 +97,7 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public boolean codIsValid(String code) {
+        log.info("Validating confirmation code: {}", code);
         Optional<ConfirmationCode> confirmationCode = confirmationCodeRepository.findByCode(code);
         return confirmationCode.map(c -> {
             if (c.getExpiredDateTime().isBefore(LocalDateTime.now())) {
@@ -107,12 +109,13 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public Optional<UserDTO> findByEmail(String email) {
+        log.info("Fetching user by email: {}", email);
         return userRepository.findByEmail(email)
                 .map(userDtoConvert::convertToUserDTO);
     }
 
     public List<UserReadDTO> findByFilter(UserFilter filter) {
-
+        log.info("Fetching users by filter: {}", filter);
         return userRepository.findByFilter(filter).stream()
                 .map(userDtoConvert::convertToUserReadDto)
                 .collect(Collectors.toList());
@@ -120,6 +123,7 @@ public class UserService /*implements UserDetailsService*/ {
 
     public Optional<UserThisDTO> findThisUser(UserDetails userDetails) {
         if (userDetails != null) {
+            log.info("Fetching current user details for: {}", userDetails.getUsername());
             Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
             Optional<UserThisDTO> userThisDTO = user.map(userDtoConvert::convertToUserThisDTO);
             if (userThisDTO.isPresent()) {
@@ -132,45 +136,15 @@ public class UserService /*implements UserDetailsService*/ {
     }
 
     public boolean setAvatar(MultipartFile multipartFile, UserDetails userDetails) {
-
         if (userDetails != null) {
+            log.info("Setting avatar for user: {}", userDetails.getUsername());
             Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
-            user.get().setAvatar(uploadImage(multipartFile));
-            userRepository.save(user.get());
+            if (user.isPresent()) {
+                user.get().setAvatar(uploadImage(multipartFile));
+                userRepository.save(user.get());
+            }
             return true;
         }
         return false;
     }
-
-
-//    public Page<UserReadDTO> findByFilter(UserFilter filter,Integer pageNumber,Integer pageSize) {
-//        Sort.TypedSort<User> sort = Sort.sort(User.class);
-//        sort.by(User::getFirstname);
-//        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
-//        return userRepository.findByFilter(filter);
-//    }
-
-//    public Page<UserReadDTO> findByFilter(UserFilter filter,Integer pageNumber,Integer pageSize) {
-//        Sort.TypedSort<User> sort = Sort.sort(User.class);
-//        sort.by(User::getFirstname);
-//        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
-////        return userRepository.findByFilter(filter);
-//    }
-
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//
-//        return userRepository.findByEmail(email) // todo nickname
-//                .map(user -> new org.springframework.security.core.userdetails.User(
-//                        user.getUsername(),
-//                        user.getPassword(),
-//                        Collections.singleton(user.getRole())
-//                )).orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user with email: " + email));
-//    }
-
-//    public Optional<UserDTO> update(Integer id, UserDTO user){
-//        return userRepository.findById(id)
-//                .map()
-//    }
-
 }
