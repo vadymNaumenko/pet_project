@@ -1,6 +1,6 @@
 package de.pet_project.controller;
 
-import de.pet_project.dto.promotion.PromotionCreateUpdateDTO;
+import de.pet_project.dto.promotion.PromotionCreateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
 import de.pet_project.service.PromotionService;
@@ -55,13 +55,13 @@ public class PromotionController {
     }
 
     @PostMapping()
-    public PromotionCreateUpdateDTO save(@RequestBody PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
-        return promotionService.save(promotionCreateUpdateDTO);
+    public PromotionDTO save(@RequestBody PromotionCreateDTO promotionCreateDTO) {
+        return promotionService.save(promotionCreateDTO);
     }
 
     @PutMapping()
-    public ResponseEntity<PromotionCreateUpdateDTO> update(@RequestBody PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
-        PromotionCreateUpdateDTO response = promotionService.update(promotionCreateUpdateDTO);
+    public ResponseEntity<PromotionDTO> update(@RequestBody PromotionDTO promotionDTO) {
+        PromotionDTO response = promotionService.update(promotionDTO);
         if (response == null) {
             return ResponseEntity.notFound().build();
         }

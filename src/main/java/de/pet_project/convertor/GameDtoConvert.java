@@ -5,9 +5,9 @@ import de.pet_project.domain.enums.game.Genre;
 import de.pet_project.domain.enums.game.MinAge;
 import de.pet_project.domain.enums.game.NumberOfPlayers;
 import de.pet_project.domain.enums.game.State;
+import de.pet_project.dto.game.GameCreateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
-import de.pet_project.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class GameDtoConvert {
     private final ModelMapper modelMapper;
-    private final ImageService imageService;
 
     public GameDTO convertToGameDTO(Game game){
         GameDTO gameDTO = modelMapper.map(game, GameDTO.class);
@@ -33,6 +32,15 @@ public class GameDtoConvert {
         gameShortDTO.setNumberOfPlayers(game.getNumberOfPlayers().number);
         gameShortDTO.setMinAge(game.getMinAge().age);
         return gameShortDTO;
+    }
+
+    public Game convertToGameCreate(GameCreateDTO gameCreateDTO){
+        Game game = modelMapper.map(gameCreateDTO, Game.class);
+        game.setGenre(Genre.valueOf(gameCreateDTO.getGenre()));
+        game.setState(State.valueOf(gameCreateDTO.getState()));
+        game.setNumberOfPlayers(NumberOfPlayers.valueOf(gameCreateDTO.getNumberOfPlayers()));
+        game.setMinAge(MinAge.valueOf(gameCreateDTO.getMinAge()));
+        return game;
     }
 
     public Game convertToGame(GameDTO gameDTO){
