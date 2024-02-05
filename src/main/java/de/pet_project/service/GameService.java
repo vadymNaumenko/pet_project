@@ -2,6 +2,7 @@ package de.pet_project.service;
 
 import de.pet_project.convertor.GameDtoConvert;
 import de.pet_project.dto.game.FilterGameDTO;
+import de.pet_project.dto.game.GameCreateDTO;
 import de.pet_project.dto.game.GameDTO;
 import de.pet_project.dto.game.GameShortDTO;
 import de.pet_project.domain.Game;
@@ -116,8 +117,8 @@ public class GameService {
     }
 
     @Transactional
-    public GameDTO save(GameDTO gameDTO){
-        return Optional.of(gameDtoConvert.convertToGame(gameDTO))
+    public GameDTO save(GameCreateDTO gameCreateDTO){
+        return Optional.of(gameDtoConvert.convertToGameCreate(gameCreateDTO))
                 .map(gameRepository::save)
                 .map(gameDtoConvert::convertToGameDTO).orElseThrow(() -> new RuntimeException("Failed to save the game"));
     }

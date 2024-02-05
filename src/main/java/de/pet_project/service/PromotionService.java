@@ -1,15 +1,11 @@
 package de.pet_project.service;
 
 import de.pet_project.convertor.PromotionDtoConvert;
-import de.pet_project.domain.LocationGame;
-import de.pet_project.domain.LocationPromotion;
 import de.pet_project.domain.Promotion;
 import de.pet_project.domain.enums.game.State;
-import de.pet_project.dto.location.LocationPromotionDTO;
-import de.pet_project.dto.promotion.PromotionCreateUpdateDTO;
+import de.pet_project.dto.promotion.PromotionCreateDTO;
 import de.pet_project.dto.promotion.PromotionDTO;
 import de.pet_project.dto.promotion.PromotionShortDTO;
-import de.pet_project.repository.AddressRepository;
 import de.pet_project.repository.LocationPromotionRepository;
 import de.pet_project.repository.PromotionRepository;
 import liquibase.util.Validate;
@@ -69,22 +65,22 @@ public class PromotionService {
     }
 
     @Transactional
-    public PromotionCreateUpdateDTO save(PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
-        return Optional.of(promotionDtoConvert.convertToPromotion(promotionCreateUpdateDTO))
+    public PromotionDTO save(PromotionCreateDTO promotionCreateDTO) {
+        return Optional.of(promotionDtoConvert.convertToPromotionCreate(promotionCreateDTO))
                 .map(promotionRepository::save)
-                .map(promotionDtoConvert::convertToPromotionCreateUpdateDTO).orElseThrow();
+                .map(promotionDtoConvert::convertToPromotionDTO).orElseThrow();
     }
 
     @Transactional
-    public PromotionCreateUpdateDTO update(PromotionCreateUpdateDTO promotionCreateUpdateDTO) {
-        Validate.notNull(promotionCreateUpdateDTO.getId(), "Field id can't be null");
-        Promotion promotion = promotionRepository.findById(promotionCreateUpdateDTO.getId()).orElse(null);
+    public PromotionDTO update(PromotionDTO promotionDTO) {
+        Validate.notNull(promotionDTO.getId(), "Field id can't be null");
+        Promotion promotion = promotionRepository.findById(promotionDTO.getId()).orElse(null);
         if (promotion != null) {
-            return Optional.of(promotionDtoConvert.convertToPromotion(promotionCreateUpdateDTO))
+            return Optional.of(promotionDtoConvert.convertToPromotion(promotionDTO))
                     .map(promotionRepository::save)
-                    .map(promotionDtoConvert::convertToPromotionCreateUpdateDTO).orElseThrow();
+                    .map(promotionDtoConvert::convertToPromotionDTO).orElseThrow();
         }
-        log.error("Item from promotion table not found, promotionId={}", promotionCreateUpdateDTO.getId());
+        log.error("Item from promotion table not found, promotionId={}", promotionDTO.getId());
         return null;
     }
 

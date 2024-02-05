@@ -8,6 +8,7 @@ import de.pet_project.dto.user.UserThisDTO;
 import de.pet_project.service.UserService;
 import jakarta.servlet.annotation.MultipartConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -31,68 +32,67 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
+@Slf4j
 public class UserController {
 
     private final UserService userService;
 
-    //todo add filter for user and game
-
     @GetMapping("/this")
     public ResponseEntity<UserThisDTO> getThisUser(@AuthenticationPrincipal UserDetails userDetails){
+        log.info("Fetching information for current user: {}", userDetails.getUsername());
         if (userDetails == null)
             return ResponseEntity.notFound().build();
         Optional<UserThisDTO> user = userService.findThisUser(userDetails);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
     @GetMapping()
     public Page<UserReadDTO> getUsers(Pageable pageable) {
+        log.info("Fetching all users");
         return userService.findAll(pageable);
     }
 
     @PostMapping("/filter")
     public List<UserReadDTO> findByFilter(@RequestBody UserFilter filter){
+        log.info("Fetching users by filter: {}", filter);
         return userService.findByFilter(filter);
     }
+
     @GetMapping(value = "/{id}/avatar")
     public ResponseEntity<byte[]> findAvatar(@PathVariable Integer id) {
-
+        log.info("Fetching avatar for user with ID: {}", id);
         return userService.findAvatar(id)
                 .map(content -> ResponseEntity.ok()
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
                         .contentLength(content.length)
                         .body(content))
                 .orElseGet(ResponseEntity.notFound()::build);
-
     }
 
     @PostMapping(
             value = "/avatar",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpStatus update2( @RequestPart MultipartFile multipartFile, @AuthenticationPrincipal UserDetails userDetails) {
+        log.info("Updating avatar for user: {}", userDetails.getUsername());
         if (userService.setAvatar(multipartFile,userDetails)) {
             return HttpStatus.OK;
         }
         return HttpStatus.BAD_REQUEST;
     }
 
-        @PutMapping("/{id}")
-//        @PutMapping(value = "/{id}")
-    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO/*,MethodArgumentNotValidException ex */) {
+    @PutMapping("/{id}")
+    public ResponseEntity<UserEditeDTO> update(@Validated @RequestBody UserEditeDTO userEditeDTO) {
+        log.info("Updating user with ID: {}", userEditeDTO.getId());
 
-//        if (userService.existsNickname(userEditeDTO.getNickname())){
-//        ex.getBindingResult().addError( new ObjectError(userEditeDTO.getNickname(),"nickname: уже существует") );
-//        }
+        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
+        return user.map(editeDTO -> ResponseEntity.status(HttpStatus.OK).body(editeDTO))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(userEditeDTO));
 
-//        Optional<UserEditeDTO> user = userService.update(userEditeDTO);
-//        if (user.isPresent()){
-//            return ResponseEntity.status(HttpStatus.OK).body(user.get());
-//        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(userEditeDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) { //todo void or UserDTO
+    public void delete(@PathVariable Integer id) {
+        log.info("Deleting user with ID: {}", id);
         if (userService.delete(id)) {
             throw new ResponseStatusException(HttpStatus.OK);
         }
@@ -102,7 +102,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handlerValidationExceptions(MethodArgumentNotValidException ex) {
-
+        log.error("Validation error in user request", ex);
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -112,5 +112,4 @@ public class UserController {
         });
         return errors;
     }
-
 }

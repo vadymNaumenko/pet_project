@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ForgotPasswordService {
@@ -19,13 +22,24 @@ public class ForgotPasswordService {
 
     @Transactional
     public void save(String email, String code) {
-        User user = userRepository.findByEmail(email).get();
-        ForgotPassword forgotPassword
-                = ForgotPassword.builder()
-                .active(true)
-                .user(user)
-                .code(code)
-                .createdAt(LocalDateTime.now()).build();
-        forgotPasswordRepository.save(forgotPassword);
+        log.info("Saving forgot password request for email: {}", email);
+
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            ForgotPassword forgotPassword = ForgotPassword.builder()
+                    .active(true)
+                    .user(user)
+                    .code(code)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            forgotPasswordRepository.save(forgotPassword);
+
+            log.info("Forgot password request saved successfully for email: {}", email);
+        } else {
+            log.warn("User not found for email: {}", email);
+        }
     }
 }
