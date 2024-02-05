@@ -30,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -43,56 +42,110 @@ public class GameService {
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
 
-    // ... (предыдущие методы)
+
+    public Page<GameShortDTO> filter(FilterGameDTO filterGameDTO, Pageable pageable) {
+        return new PageImpl<>(locationGameRepository.findAllByFilter(filterGameDTO.getAddressId(),
+                        filterGameDTO.getCity(),
+                        filterGameDTO.getGenre() != null ? Genre.valueOf(filterGameDTO.getGenre()) : null,
+                        filterGameDTO.getState() != null ? State.valueOf(filterGameDTO.getState()) : null,
+                        filterGameDTO.getNumberOfPlayers() != null ?
+                                NumberOfPlayers.valueOf(filterGameDTO.getNumberOfPlayers()) : null,
+                        filterGameDTO.getMinAge() != null ? MinAge.valueOf(filterGameDTO.getMinAge()) : null,
+                        pageable).stream()
+                .map(gameDtoConvert::convertToGameShortDTO).toList());
+    }
+
+    public List<String> findAllGenre() {
+        return Arrays.stream(Genre.class.getEnumConstants()).map(genre -> genre.genre).toList();
+    }
+
+    public List<String> findAllState() {
+        return Arrays.stream(State.class.getEnumConstants()).map(state -> state.state).toList();
+    }
+
+    public List<String> findAllNumberOfPlayers() {
+        return Arrays.stream(NumberOfPlayers.class.getEnumConstants()).map(number -> number.number).toList();
+    }
+
+    public List<String> findAllMinAge() {
+        return Arrays.stream(MinAge.class.getEnumConstants()).map(minAge -> minAge.age).toList();
+    }
+
+    public Page<GameDTO> findTopTen(Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAll(pageable).stream()
+                .map(gameDtoConvert::convertToGameDTO)
+                .toList());
+    }
+
+
+    public Page<GameShortDTO> findAll(Pageable pageable) {
+        return new PageImpl<>(gameRepository.findAll(pageable).stream()
+                .map(gameDtoConvert::convertToGameShortDTO)
+                .toList());
+    }
+
+    public Page<GameShortDTO> findByTitle(String title, Pageable pageable) {
+        return new PageImpl<>(gameRepository.findByTitle(title, pageable).stream()
+                .map(gameDtoConvert::convertToGameShortDTO)
+                .toList());
+    }
+
+    public GameDTO findById(Integer gameId) {
+        Optional<Game> gameOptional = gameRepository.findById(gameId);
+        if (gameOptional.isPresent()) {
+            Game game = gameOptional.get();
+            return gameDtoConvert.convertToGameDTO(game);
+        }
+        log.error("Item from game table not found, gameId={}", gameId);
+        return null;
+    }
+
+    public Optional<byte[]> findImage(Integer id) {
+        return gameRepository.findById(id)
+                .map(Game::getImage)
+                .filter(StringUtils::hasText)
+                .flatMap(imageService::get);
+    }
+
+    @SneakyThrows
+    public String uploadImage(MultipartFile image) {
+        if (!image.isEmpty()) {
+            imageService.upload(image.getOriginalFilename(), image.getInputStream());
+            return image.getOriginalFilename();
+        }
+        return null;
+    }
 
     @Transactional
     public GameDTO save(GameCreateDTO gameCreateDTO){
-        log.info("Saving new game: {}", gameCreateDTO.getTitle());
-
-        Game game = gameDtoConvert.convertToGameCreate(gameCreateDTO);
-        game = gameRepository.save(game);
-
-        log.info("New game saved successfully: {}", game.getTitle());
-
-        return gameDtoConvert.convertToGameDTO(game);
+        return Optional.of(gameDtoConvert.convertToGameCreate(gameCreateDTO))
+                .map(gameRepository::save)
+                .map(gameDtoConvert::convertToGameDTO).orElseThrow(() -> new RuntimeException("Failed to save the game"));
     }
 
     @Transactional
     public GameDTO update(GameDTO gameDTO) {
         Validate.notNull(gameDTO.getId(), "Field id can't be null");
-        log.info("Updating game with id: {}", gameDTO.getId());
-
-        Optional<Game> gameOptional = gameRepository.findById(gameDTO.getId());
-        if (gameOptional.isPresent()) {
-            Game game = gameDtoConvert.convertToGame(gameDTO);
-            game = gameRepository.save(game);
-
-            log.info("Game updated successfully: {}", game.getTitle());
-
-            return gameDtoConvert.convertToGameDTO(game);
-        } else {
-            log.error("Game not found for id: {}", gameDTO.getId());
-            return null;
+        Game game = gameRepository.findById(gameDTO.getId()).orElse(null);
+        if (game != null) {
+            game =gameDtoConvert.convertToGame(gameDTO);
+            return gameDtoConvert.convertToGameDTO(gameRepository.save(game));
         }
+        log.error("Item from game table not found, gameId={}", gameDTO.getId());
+        return null;
     }
 
     @Transactional
 //    @PreAuthorize("hasRole('ADMIN')")
     public GameDTO delete(Integer gameId) {
-        log.info("Deleting game with id: {}", gameId);
-
-        Optional<Game> gameOptional = gameRepository.findById(gameId);
-        if (gameOptional.isPresent()) {
-            Game game = gameOptional.get();
+        Game game = gameRepository.findById(gameId).orElse(null);
+        if (game != null) {
             game.setState(State.COMPLETED);
             gameRepository.save(game);
-
-            log.info("Game deleted successfully: {}", game.getTitle());
-
             return gameDtoConvert.convertToGameDTO(game);
-        } else {
-            log.error("Game not found for id: {}", gameId);
-            return null;
         }
+        log.error("Item from game table not found, gameId={}", gameId);
+        return null;
     }
+
 }
