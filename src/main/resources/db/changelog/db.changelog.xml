@@ -35,10 +35,10 @@
             <column name="image" type="varchar"/>
             <column name="title" type="varchar"/>
             <column name="price" type="numeric(10,2)"/>
-            <column name="genre" type="varchar(20)"/>
+            <column name="genre" type="varchar"/>
             <column name="session" type="varchar(20)"/>
-            <column name="number_of_players" type="varchar(20)"/>
-            <column name="min_age" type="varchar(20)"/>
+            <column name="number_of_players" type="varchar"/>
+            <column name="min_age" type="varchar"/>
             <column name="description" type="varchar"/>
             <column name="release_date" type="date"/>
         </createTable>
@@ -52,7 +52,7 @@
             <column name="city" type="varchar(20)"/>
             <column name="street" type="varchar(20)"/>
             <column name="street_number" type="varchar(10)"/>
-            <column name="house_number" type="int"/>
+            <column name="apartment_number" type="int"/>
         </createTable>
     </changeSet>
     <changeSet id="#3" author="punisher">

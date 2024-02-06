@@ -14,6 +14,6 @@ public class AddressDTO {
     private String city;
     private String street;
     private String streetNumber;
-    private Integer houseNumber;
+    private Integer apartmentNumber;
     private Boolean isDeleted;
 }

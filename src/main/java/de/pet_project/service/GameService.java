@@ -39,8 +39,6 @@ public class GameService {
     private final GameDtoConvert gameDtoConvert;
     private final ImageService imageService;
     private final LocationGameRepository locationGameRepository;
-    private final AddressRepository addressRepository;
-    private final ModelMapper modelMapper;
 
 
     public Page<GameShortDTO> filter(FilterGameDTO filterGameDTO, Pageable pageable) {
@@ -52,6 +50,7 @@ public class GameService {
                                 NumberOfPlayers.valueOf(filterGameDTO.getNumberOfPlayers()) : null,
                         filterGameDTO.getMinAge() != null ? MinAge.valueOf(filterGameDTO.getMinAge()) : null,
                         pageable).stream()
+                .filter(game -> game.getState().equals(State.ACTIVE) | game.getState().equals(State.PENDING))
                 .map(gameDtoConvert::convertToGameShortDTO).toList());
     }
 
@@ -73,13 +72,16 @@ public class GameService {
 
     public Page<GameDTO> findTopTen(Pageable pageable) {
         return new PageImpl<>(gameRepository.findAll(pageable).stream()
+                .filter(game -> game.getState().equals(State.ACTIVE) | game.getState().equals(State.PENDING))
                 .map(gameDtoConvert::convertToGameDTO)
                 .toList());
     }
 
 
+    //TODO no completed
     public Page<GameShortDTO> findAll(Pageable pageable) {
         return new PageImpl<>(gameRepository.findAll(pageable).stream()
+                .filter(game -> game.getState().equals(State.ACTIVE) | game.getState().equals(State.PENDING))
                 .map(gameDtoConvert::convertToGameShortDTO)
                 .toList());
     }
