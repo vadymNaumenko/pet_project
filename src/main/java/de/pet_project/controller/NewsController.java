@@ -32,6 +32,13 @@ public class NewsController {
         return news;
     }
 
+    @GetMapping("/{pageNumber}/{pageSize}")
+    public Page<NewsDTO> getAll(@PathVariable Integer pageNumber,@PathVariable Integer pageSize){
+        Sort.TypedSort<News> sort = Sort.sort(News.class);
+        sort.by(News::getDate);
+        PageRequest pageable = PageRequest.of(pageNumber,pageSize,sort.descending());
+        return newsService.findAll(pageable);
+    }
     @PostMapping
     public ResponseEntity<NewsDTO> createNews(@RequestBody NewsShortCreateDTO createDTO) {
         log.info("Creating news");

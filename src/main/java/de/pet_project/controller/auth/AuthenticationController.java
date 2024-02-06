@@ -48,14 +48,14 @@ public class AuthenticationController {
     }
 
     @GetMapping("/confirm/{cod}")
-    public ResponseEntity<?> checkCod(@PathVariable String cod){
+    public ResponseEntity<Boolean> checkCod(@PathVariable String cod){
 
        if (confirmationCodeService.setState(cod)){
-           return  ResponseEntity.status(HttpStatus.OK).body("User: is Confirmed");
+           return  ResponseEntity.status(HttpStatus.OK).body(true);
        }
         // todo jwt token
         return  ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("User is not Confirmed: The verification code has expired, please register again");
+                .body(false);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
