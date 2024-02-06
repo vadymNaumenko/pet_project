@@ -98,10 +98,13 @@ public class GameController {
                 .orElseGet(ResponseEntity.notFound()::build);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, path = "/images")
-    public String uploadImage(@RequestPart("image") MultipartFile image) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, path = "/{id}/images")
+    public boolean uploadImage(@PathVariable Integer id, @RequestPart("image") MultipartFile image) {
         log.info("Uploading image");
-        return gameService.uploadImage(image);
+        if (gameService.setImageForGame(id, gameService.uploadImage(image))) {
+            return true;
+        }
+        return false;
     }
 
     @PostMapping()

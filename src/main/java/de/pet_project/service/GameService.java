@@ -148,4 +148,13 @@ public class GameService {
         return null;
     }
 
+    public boolean setImageForGame(Integer id, String s) {
+        Optional<Game> game = gameRepository.findById(id);
+        if(game.isPresent()){
+            game.get().setImage(s);
+            gameRepository.save(game.get());
+            return true;
+        }
+        return false;
+    }
 }
