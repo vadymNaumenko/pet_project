@@ -6,10 +6,6 @@ VALUES
     ('CONFIRMED', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIeBYp5sjm31vMJW2hElma9RFKHVwK2XhQkQ&usqp=CAU', '2023-03-25 10:23:54', DATE'1984-03-14', 'kolobok' ,'Vlad', 'Vladikov', '+38095674405', 'USER', 'vlad@gmail.com', '{noop}1Fishka1!'),
     ('BANNED', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAqAZG7zLGhZIxSUV6EVLfQX3WEUawmvM-eA&usqp=CAU', '2022-02-24 10:23:54', DATE'1984-03-14', 'nika88' ,'Kate', 'Smith', '+38096114467', 'ADMIN', 'kate@gmail.com', '{noop}1Fishka1!');
 
-INSERT INTO addresses (country, city, street, street_number, house_number)
-VALUES ('Deualchland','Berlin','Pariser Platz','1',1),
-       ('Deualchland','Berlin','Pariser Platz','2',23),
-       ('Deualchland','Berlin','Pariser Platz','3',3);
 
 INSERT INTO confirmation_code (code, user_id, date_time)
 VALUES ('e43fb7c0-16fb-4c4a-a329-8a731303d7c8',(SELECT users.user_id from users where nickname = 'Fishka' ),'20029-10-19 10:23:54'),
