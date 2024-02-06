@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 public class GameCreateDTO {
-    private String image;
     private String title;
     private Double price;
     private String genre;
